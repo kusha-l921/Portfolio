@@ -11,7 +11,7 @@ export default function Hero() {
       className="hero-section"
       style={{
         position: 'relative',
-        minHeight: '640px',
+        minHeight: '660px',
         display: 'flex',
         alignItems: 'center',
         paddingTop: '3.5rem',
@@ -19,9 +19,9 @@ export default function Hero() {
         overflow: 'hidden',
       }}
     >
-      <div className="container" style={{ position: 'relative', zIndex: 2 }}>
+      <div className="hero-container">
         {/* Left Hero Content: ~42-45% width on desktop */}
-        <div className="hero-content" style={{ maxWidth: '580px', width: '100%' }}>
+        <div className="hero-content">
           {/* Terminal prompt label */}
           <div className="terminal-label" style={{ marginBottom: '1rem' }}>
             <span>{PERSONAL_DATA.terminalPrompt}</span>
@@ -31,11 +31,11 @@ export default function Hero() {
           <div>
             <h1
               style={{
-                fontSize: 'clamp(2.5rem, 5vw, 3.8rem)',
+                fontSize: 'clamp(2.5rem, 5vw, 4rem)',
                 fontWeight: 700,
                 letterSpacing: '-0.03em',
                 color: '#FFFFFF',
-                lineHeight: 1.08,
+                lineHeight: 1.06,
               }}
             >
               {PERSONAL_DATA.fullName}
@@ -57,12 +57,12 @@ export default function Hero() {
           {/* Strong statement */}
           <h2
             style={{
-              fontSize: 'clamp(1.35rem, 2.5vw, 1.85rem)',
+              fontSize: 'clamp(1.35rem, 2.5vw, 1.95rem)',
               fontWeight: 600,
               color: '#EEEEEE',
               letterSpacing: '-0.02em',
               lineHeight: 1.3,
-              marginTop: '1.25rem',
+              marginTop: '1.35rem',
               maxWidth: '560px',
             }}
           >
@@ -83,11 +83,11 @@ export default function Hero() {
           {/* Supporting paragraph */}
           <p
             style={{
-              fontSize: '0.98rem',
+              fontSize: '1rem',
               color: '#969696',
               lineHeight: 1.7,
               marginTop: '1rem',
-              maxWidth: '520px',
+              maxWidth: '540px',
             }}
           >
             {PERSONAL_DATA.supportingParagraph}
@@ -99,7 +99,7 @@ export default function Hero() {
               display: 'flex',
               flexWrap: 'wrap',
               gap: '0.5rem',
-              marginTop: '1.15rem',
+              marginTop: '1.25rem',
             }}
           >
             <div className="pill">
@@ -123,7 +123,7 @@ export default function Hero() {
               alignItems: 'center',
               flexWrap: 'wrap',
               gap: '0.85rem',
-              marginTop: '1.5rem',
+              marginTop: '1.75rem',
             }}
           >
             <a href="#projects" className="btn btn-primary">
@@ -141,66 +141,6 @@ export default function Hero() {
             </a>
           </div>
 
-          {/* Terminal mini-widget: Currently Working On */}
-          <div
-            style={{
-              marginTop: '1.25rem',
-              padding: '0.75rem 1rem',
-              borderRadius: '8px',
-              backgroundColor: '#0D0D0D',
-              border: '1px solid #1C1C1C',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              maxWidth: '460px',
-            }}
-          >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
-              <span
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  width: '22px',
-                  height: '22px',
-                  borderRadius: '4px',
-                  backgroundColor: '#171717',
-                  color: '#A5A5A5',
-                  fontSize: '0.75rem',
-                }}
-              >
-                ⚙
-              </span>
-              <div style={{ display: 'flex', flexDirection: 'column' }}>
-                <span className="font-mono" style={{ fontSize: '0.68rem', color: '#666666' }}>
-                  &gt; currently_working_on
-                </span>
-                <span
-                  style={{
-                    fontSize: '0.82rem',
-                    fontWeight: 500,
-                    color: '#EEEEEE',
-                  }}
-                >
-                  {PERSONAL_DATA.currentlyBuilding}
-                </span>
-              </div>
-            </div>
-
-            {/* Minimal SVG Sparkline */}
-            <div style={{ opacity: 0.75 }}>
-              <svg width="74" height="24" viewBox="0 0 74 24" fill="none">
-                <path
-                  d="M1 16L12 16L18 8L24 19L30 5L36 17L44 11L50 15L58 7L64 16L73 16"
-                  stroke="#8A8A8A"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </div>
-          </div>
-
           {/* Social Links */}
           <div
             className="font-mono"
@@ -208,9 +148,9 @@ export default function Hero() {
               display: 'flex',
               alignItems: 'center',
               gap: '1.25rem',
-              fontSize: '0.8rem',
+              fontSize: '0.82rem',
               color: '#666666',
-              marginTop: '1rem',
+              marginTop: '1.35rem',
             }}
           >
             <a
@@ -244,76 +184,51 @@ export default function Hero() {
               email ↗
             </a>
           </div>
-
-          {/* Personal Meta Data (Cleanly separated from card container) */}
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))',
-              gap: '1.25rem',
-              marginTop: '1.5rem',
-              paddingTop: '1.25rem',
-              borderTop: '1px solid #161616',
-              fontFamily: 'var(--font-mono)',
-              fontSize: '0.72rem',
-            }}
-          >
-            <div>
-              <span style={{ color: '#555555', display: 'block', marginBottom: '0.2rem' }}>
-                &gt; specialization
-              </span>
-              <span style={{ color: '#B5B5B5', fontWeight: 500 }}>
-                {PERSONAL_DATA.specialization}
-              </span>
-            </div>
-
-            <div>
-              <span style={{ color: '#555555', display: 'block', marginBottom: '0.2rem' }}>
-                &gt; dev_loop()
-              </span>
-              <span style={{ color: '#8A8A8A' }}>
-                {PERSONAL_DATA.devLoop}
-              </span>
-            </div>
-
-            <div>
-              <span style={{ color: '#555555', display: 'block', marginBottom: '0.2rem' }}>
-                &gt; daily_focus
-              </span>
-              <span style={{ color: '#8A8A8A' }}>
-                learn() → build() [78%]
-              </span>
-            </div>
-          </div>
         </div>
       </div>
 
-      {/* Integrated Editorial Anime Artwork (No Card, No Border, Fades Into Background) */}
+      {/* Integrated Anime Artwork (Large visual scale, closer to text, blends into dark background) */}
       <div className="hero-artwork-wrapper" aria-hidden="true">
         <div className="hero-artwork-inner">
           <Image
-            src={PERSONAL_DATA.animeArtwork}
-            alt="Kushal Patel Editorial Illustration"
+            src="/images/inverted_pfp.jpeg"
+            alt="Kushal Patel Anime Illustration"
             fill
             priority
             sizes="(max-width: 900px) 100vw, 55vw"
             className="hero-artwork-image"
           />
-          <div className="hero-artwork-quote">
-            &ldquo;{PERSONAL_DATA.quote}&rdquo;
-          </div>
         </div>
       </div>
 
       <style jsx global>{`
-        /* Desktop Hero: Artwork occupies remaining 48-55% width, absolutely positioned, edge-feathered */
+        /* Hero Container: Begins 40-60px from viewport edge on desktop */
+        .hero-container {
+          width: 94vw;
+          max-width: 1560px;
+          margin-left: auto;
+          margin-right: auto;
+          padding-left: clamp(12px, 1.5vw, 24px);
+          padding-right: clamp(12px, 1.5vw, 24px);
+          position: relative;
+          z-index: 2;
+        }
+
+        .hero-content {
+          max-width: 580px;
+          width: 100%;
+          position: relative;
+          z-index: 3;
+        }
+
+        /* Desktop Hero: Artwork spans 48-55vw, positioned closer to text */
         .hero-artwork-wrapper {
           position: absolute;
-          right: clamp(2%, 5vw, 8%);
+          right: clamp(1vw, 2.5vw, 4vw);
           top: 50%;
           transform: translateY(-50%);
-          width: clamp(480px, 46vw, 720px);
-          height: clamp(460px, 44vw, 660px);
+          width: clamp(560px, 50vw, 840px);
+          height: clamp(540px, 48vw, 760px);
           pointer-events: none;
           z-index: 1;
         }
@@ -322,42 +237,29 @@ export default function Hero() {
           position: relative;
           width: 100%;
           height: 100%;
-          /* Feather edges into deep dark background - zero rectangular boundary */
+          /* Smoothly soften outer edges into deep background */
           mask-image: radial-gradient(
-            ellipse at 54% 48%,
-            rgba(0, 0, 0, 1) 32%,
-            rgba(0, 0, 0, 0.75) 52%,
-            rgba(0, 0, 0, 0.25) 70%,
-            transparent 88%
+            ellipse at 52% 50%,
+            rgba(0, 0, 0, 1) 45%,
+            rgba(0, 0, 0, 0.85) 65%,
+            rgba(0, 0, 0, 0.3) 84%,
+            transparent 96%
           );
           -webkit-mask-image: radial-gradient(
-            ellipse at 54% 48%,
-            rgba(0, 0, 0, 1) 32%,
-            rgba(0, 0, 0, 0.75) 52%,
-            rgba(0, 0, 0, 0.25) 70%,
-            transparent 88%
+            ellipse at 52% 50%,
+            rgba(0, 0, 0, 1) 45%,
+            rgba(0, 0, 0, 0.85) 65%,
+            rgba(0, 0, 0, 0.3) 84%,
+            transparent 96%
           );
         }
 
         .hero-artwork-image {
           object-fit: contain !important;
           object-position: center right !important;
-          filter: grayscale(100%) contrast(1.14) brightness(0.92) !important;
-          opacity: 0.92;
-          transition: filter 0.4s ease, opacity 0.4s ease;
-        }
-
-        .hero-artwork-quote {
-          position: absolute;
-          bottom: 8%;
-          left: 14%;
-          font-size: 0.85rem;
-          font-style: italic;
-          color: rgba(238, 238, 238, 0.65);
-          font-family: Georgia, serif;
-          letter-spacing: 0.02em;
-          text-shadow: 0 2px 10px rgba(0, 0, 0, 0.9);
-          pointer-events: none;
+          mix-blend-mode: screen !important;
+          filter: contrast(1.15) brightness(1.0) !important;
+          opacity: 0.96;
         }
 
         /* Responsive Tablet & Mobile Stacking */
@@ -366,6 +268,11 @@ export default function Hero() {
             min-height: auto !important;
             padding-top: 2.5rem !important;
             padding-bottom: 2.5rem !important;
+          }
+          .hero-container {
+            width: 100% !important;
+            padding-left: 20px !important;
+            padding-right: 20px !important;
           }
           .hero-content {
             max-width: 100% !important;
@@ -383,25 +290,19 @@ export default function Hero() {
           .hero-artwork-inner {
             mask-image: radial-gradient(
               ellipse at 50% 50%,
-              rgba(0, 0, 0, 1) 30%,
-              rgba(0, 0, 0, 0.6) 55%,
-              transparent 85%
+              rgba(0, 0, 0, 1) 40%,
+              rgba(0, 0, 0, 0.7) 65%,
+              transparent 90%
             ) !important;
             -webkit-mask-image: radial-gradient(
               ellipse at 50% 50%,
-              rgba(0, 0, 0, 1) 30%,
-              rgba(0, 0, 0, 0.6) 55%,
-              transparent 85%
+              rgba(0, 0, 0, 1) 40%,
+              rgba(0, 0, 0, 0.7) 65%,
+              transparent 90%
             ) !important;
           }
           .hero-artwork-image {
             object-position: center !important;
-          }
-          .hero-artwork-quote {
-            left: 50% !important;
-            transform: translateX(-50%) !important;
-            bottom: 4% !important;
-            white-space: nowrap !important;
           }
         }
       `}</style>

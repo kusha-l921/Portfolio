@@ -30,7 +30,7 @@ export const PERSONAL_DATA = {
   specialization: 'Vision Transformers & Edge AI',
   devLoop: 'learn() → build() → improve()',
   metaVersion: 'v2026.09',
-  animeArtwork: '/images/character_composite.png',
+  animeArtwork: '/images/inverted_pfp.jpeg',
   avatarImage: '/images/character_illustration.jpg',
   quote: 'A better version of myself, everyday.',
   dailyLog: [
