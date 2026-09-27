@@ -11,7 +11,7 @@ export interface Project {
   problem: string;
   approach: string;
   dataset: string;
-  architecture: string[];
+  architecture?: string[];
   model: string;
   results: { metric: string; value: string; detail: string }[];
   techStack: string[];
@@ -25,7 +25,7 @@ export interface Project {
 export interface SkillItem {
   id: string;
   name: string;
-  category: 'Programming' | 'AI / ML' | 'Web & Backend' | 'Systems & DevOps';
+  category: 'Programming' | 'AI / ML' | 'Web & Backend' | 'Systems & DevOps' | 'Web' | 'Tools' | string;
   description: string;
   relatedProjects: string[];
   relatedTech: string[];

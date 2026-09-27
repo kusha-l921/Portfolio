@@ -1,124 +1,76 @@
-@import url('https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500;600&family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Architects+Daughter&family=Geist:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --bg-primary: #080A0D;
-  --bg-secondary: #0D1117;
-  --panel: #11161D;
-  --panel-elevated: #161D26;
-  --primary-text: #F2F5F8;
-  --secondary-text: #9AA6B2;
-  --muted-text: #5E6975;
-  --border-subtle: rgba(255, 255, 255, 0.10);
-  --accent: #2F9BFF;
-  --accent-bright: #5CB5FF;
-  --success: #35C982;
-  --font-geist: 'Geist', 'Inter', -apple-system, sans-serif;
-  --font-jetbrains: 'JetBrains Mono', monospace;
+  --bg-dark: #05080E;
+  --bg-card: #0A0F17;
+  --bg-panel: #0D131D;
+  --cyan-accent: #00E5FF;
+  --cyan-bright: #2DE2E6;
+  --cyan-glow: rgba(0, 229, 255, 0.35);
+  --border-cyan: rgba(0, 229, 255, 0.22);
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --text-primary: #FFFFFF;
+  --text-secondary: #90A2B5;
+  --text-muted: #546578;
+  --font-main: 'Inter', -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --font-handwriting: 'Architects Daughter', cursive, sans-serif;
 }
 
 * {
   box-sizing: border-box;
 }
 
-html {
-  scroll-behavior: smooth;
-  background-color: var(--bg-primary);
-  color: var(--primary-text);
-  font-family: var(--font-geist);
-}
-
-body {
-  background-color: var(--bg-primary);
-  color: var(--primary-text);
-  overflow-x: hidden;
+html, body {
+  background-color: var(--bg-dark);
+  color: var(--text-primary);
+  font-family: var(--font-main);
   margin: 0;
   padding: 0;
+  overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
-/* Minimal Custom Scrollbar */
+/* Custom Cyan Scrollbar */
 ::-webkit-scrollbar {
   width: 5px;
   height: 5px;
 }
-
 ::-webkit-scrollbar-track {
-  background: #080A0D;
+  background: #05080E;
 }
-
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.15);
-  border-radius: 3px;
+  background: rgba(0, 229, 255, 0.25);
+  border-radius: 2px;
 }
-
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(47, 155, 255, 0.4);
+  background: rgba(0, 229, 255, 0.6);
 }
 
-/* Very faint technical grid (barely visible) */
-.bg-minimal-grid {
-  background-size: 32px 32px;
-  background-image: 
-    linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+/* Cyan glowing styles */
+.cyan-glow {
+  text-shadow: 0 0 12px rgba(0, 229, 255, 0.5);
 }
 
-/* Clean Card Surface */
-.clean-card {
-  background-color: #11161D;
-  border: 1px solid rgba(255, 255, 255, 0.10);
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+.box-cyan-glow {
+  box-shadow: 0 0 20px rgba(0, 229, 255, 0.15);
 }
 
-.clean-card:hover {
-  border-color: rgba(47, 155, 255, 0.35);
-  background-color: #141B24;
-}
-
-/* Subtle light sweep across border on hover */
-.light-sweep-card {
-  position: relative;
-  overflow: hidden;
-}
-
-.light-sweep-card::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -150%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(92, 181, 255, 0.08) 50%,
-    transparent 100%
-  );
-  pointer-events: none;
-  transition: transform 0.6s ease;
-}
-
-.light-sweep-card:hover::after {
-  transform: translateX(250%);
+.cyan-border-glow {
+  border-color: rgba(0, 229, 255, 0.45);
+  box-shadow: 0 0 14px rgba(0, 229, 255, 0.2);
 }
 
 /* Selection */
 ::selection {
-  background: rgba(47, 155, 255, 0.25);
-  color: #F2F5F8;
+  background: rgba(0, 229, 255, 0.35);
+  color: #FFFFFF;
 }
 
-/* Accessibility: Reduced Motion */
-@media (prefers-reduced-motion: reduce) {
-  * {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
+.font-handwritten {
+  font-family: var(--font-handwriting);
 }
