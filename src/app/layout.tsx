@@ -1,34 +1,33 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import './globals.css';
-import AppShell from '@/components/layout/AppShell';
-
-export const viewport = {
-  themeColor: '#05070B',
-};
+import CustomCursor from '../components/CustomCursor';
 
 export const metadata: Metadata = {
-  title: 'Kushal — AI/ML Engineer & Systems Builder',
+  title: 'Kushal Patel — AI/ML Engineer · Systems Builder',
   description:
-    'Digital environment of Kushal, AI/ML engineering student and developer at DJ Sanghvi College of Engineering, University of Mumbai. Building intelligent systems, deep learning architectures, and distributed computer vision.',
+    'Portfolio of Kushal Patel, AI/ML Engineer based in Mumbai, India. Specializing in Vision Transformers, Edge Computing, and practical intelligent systems.',
   keywords: [
-    'AI Engineer',
+    'Kushal Patel',
+    'AI/ML Engineer',
     'Machine Learning',
-    'Deep Learning',
     'Computer Vision',
-    'PyTorch',
-    'Kushal',
+    'Vision Transformers',
+    'Edge AI',
     'Solar Flare Prediction',
-    'DJ Sanghvi',
-    'Autonomous Systems',
-    '3D WebGL Portfolio',
+    'FieldSight Lite',
+    'FirSeFile',
   ],
-  authors: [{ name: 'Kushal' }],
-  openGraph: {
-    title: 'Kushal — AI/ML Engineer & Systems Builder',
-    description:
-      'Digital environment and 3D scientific portfolio exploring intelligent systems, computer vision, and distributed ML pipelines.',
-    type: 'website',
+  authors: [{ name: 'Kushal Patel' }],
+  icons: {
+    icon: '/images/character_illustration.jpg',
   },
+};
+
+export const viewport: Viewport = {
+  themeColor: '#050505',
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
 };
 
 export default function RootLayout({
@@ -37,9 +36,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="dark">
-      <body className="bg-background text-primary-text antialiased">
-        <AppShell>{children}</AppShell>
+    <html lang="en">
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
+          rel="stylesheet"
+        />
+      </head>
+      <body>
+        <CustomCursor />
+        {children}
       </body>
     </html>
   );

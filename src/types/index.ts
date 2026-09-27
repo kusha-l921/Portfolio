@@ -1,52 +1,40 @@
+export interface ProjectResult {
+  metric: string;
+  value: string;
+  detail: string;
+}
+
 export interface Project {
   id: string;
-  slug: string;
-  number: string; // e.g. "01", "02"
+  number: string;
   title: string;
   tagline: string;
-  category: 'AI/ML' | 'Computer Vision' | 'Distributed Systems';
-  featured?: boolean;
-  gridSpan?: string;
+  tags: string[];
+  category: 'AI / ML' | 'Computer Vision' | 'Systems';
+  period: string;
+  image?: string;
+  githubUrl: string;
+  demoUrl?: string;
   overview: string;
   problem: string;
   approach: string;
-  dataset: string;
-  architecture?: string[];
-  model: string;
-  results: { metric: string; value: string; detail: string }[];
-  techStack: string[];
-  challenges: string[];
-  futureWork: string[];
-  githubUrl: string;
-  demoUrl?: string;
-  illustrationType: 'solar' | 'fleet' | 'rewear' | 'vision' | 'swarm' | 'pipeline';
+  dataset?: string;
+  architecture: string[];
+  results: ProjectResult[];
+  highlights: string[];
 }
 
-export interface SkillItem {
+export interface SkillCategory {
+  title: string;
   id: string;
-  name: string;
-  category: 'Programming' | 'AI / ML' | 'Web & Backend' | 'Systems & DevOps' | 'Web' | 'Tools' | string;
-  description: string;
-  relatedProjects: string[];
-  relatedTech: string[];
+  skills: string[];
 }
 
-export interface ExperienceItem {
-  id: string;
-  year: string;
-  role: string;
-  organization: string;
-  location: string;
-  period: string;
-  description: string;
-  achievements: string[];
-  technologies: string[];
-}
-
-export interface AchievementItem {
+export interface Achievement {
   id: string;
   title: string;
-  issuer: string;
+  award: string;
+  organizer: string;
   date: string;
   badge: string;
   description: string;
