@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Briefcase, ArrowUpRight, Cpu, Layers, Terminal } from 'lucide-react';
+import { Briefcase, Trophy, Users, Award } from 'lucide-react';
 import { RESUME_DATA } from '@/data/portfolioData';
 
 export default function ExperienceSection() {
@@ -53,23 +53,28 @@ export default function ExperienceSection() {
     },
   ];
 
+  const { achievements } = RESUME_DATA;
+
   return (
-    <section className="py-12 border-t border-border-subtle scroll-mt-20">
-      <div className="space-y-6">
+    <section id="experience" className="py-16 scroll-mt-24">
+      {/* Requirement 8: Animated Subtle Section Divider */}
+      <div className="section-divider mb-12 divider-active" />
+
+      <div className="space-y-8">
         {/* Terminal label */}
-        <div className="flex items-center gap-2 font-mono text-xs text-text-muted">
-          <span className="text-cyan-accent">&gt;</span>
-          <span className="text-text-secondary">experience.log</span>
-          <span className="text-border-cyan">/</span>
-          <span className="text-text-muted">technical-journey</span>
+        <div className="flex items-center gap-2 font-mono text-xs text-[#666666]">
+          <span className="text-[#888888]">&gt;</span>
+          <span className="text-[#A0A0A0]">experience.log</span>
+          <span className="text-[#262626]">/</span>
+          <span className="text-[#555555]">technical-journey</span>
         </div>
 
         <div>
-          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-text-primary">
+          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#F1F1F1]">
             Engineering &amp; Research Journey
           </h2>
-          <p className="mt-1 text-sm text-text-secondary">
-            Practical systems, deep learning architectures, and edge deployments.
+          <p className="mt-1 text-sm text-[#888888]">
+            Applied machine learning, deep learning architectures, and edge systems.
           </p>
         </div>
 
@@ -78,45 +83,45 @@ export default function ExperienceSection() {
           {experiences.map((exp) => (
             <div
               key={exp.id}
-              className="p-6 rounded-xl bg-[#0B1016] border border-border-subtle hover:border-border-cyan/40 transition-all duration-300 shadow-card"
+              className="p-6 rounded-xl bg-[#0D0D0D] border border-[#1C1C1C] hover:border-[#2C2C2C] transition-all duration-300 shadow-[0_4px_20px_rgba(0,0,0,0.5)] group"
             >
-              <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2 pb-3 border-b border-border-subtle/50">
+              <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2 pb-3 border-b border-[#161616]">
                 <div>
-                  <div className="flex items-center gap-2">
-                    <h3 className="text-base sm:text-lg font-bold text-text-primary">
+                  <div className="flex items-center gap-2.5">
+                    <h3 className="text-base sm:text-lg font-bold text-[#F1F1F1] group-hover:text-white transition-colors">
                       {exp.role}
                     </h3>
-                    <span className="px-2 py-0.5 rounded text-[11px] font-mono bg-cyan-accent/10 border border-border-cyan text-cyan-accent">
+                    <span className="px-2 py-0.5 rounded text-[10.5px] font-mono bg-[#141414] border border-[#222222] text-[#A0A0A0]">
                       {exp.badge}
                     </span>
                   </div>
-                  <p className="text-xs sm:text-sm text-text-secondary mt-0.5">
+                  <p className="text-xs sm:text-sm text-[#888888] mt-0.5">
                     {exp.domain}
                   </p>
                 </div>
-                <span className="font-mono text-xs text-text-muted shrink-0">
+                <span className="font-mono text-xs text-[#555555] shrink-0">
                   {exp.period}
                 </span>
               </div>
 
-              <p className="text-xs sm:text-sm text-text-secondary leading-relaxed mt-4">
+              <p className="text-xs sm:text-sm text-[#999999] leading-relaxed mt-4">
                 {exp.description}
               </p>
 
-              <ul className="mt-3 space-y-1.5 text-xs text-text-secondary">
+              <ul className="mt-3 space-y-1.5 text-xs text-[#888888]">
                 {exp.highlights.map((h, i) => (
                   <li key={i} className="flex items-start gap-2">
-                    <span className="text-cyan-accent mt-0.5">&bull;</span>
+                    <span className="text-[#555555] mt-0.5">&bull;</span>
                     <span>{h}</span>
                   </li>
                 ))}
               </ul>
 
-              <div className="mt-4 pt-3 border-t border-border-subtle/40 flex flex-wrap gap-1.5">
+              <div className="mt-4 pt-3 border-t border-[#161616] flex flex-wrap gap-1.5">
                 {exp.technologies.map((tech) => (
                   <span
                     key={tech}
-                    className="px-2 py-0.5 rounded bg-[#05070A] border border-border-subtle font-mono text-[11px] text-text-muted hover:text-cyan-accent transition-colors"
+                    className="px-2 py-0.5 rounded bg-[#070707] border border-[#1A1A1A] font-mono text-[11px] text-[#666666] group-hover:text-[#A0A0A0] transition-colors"
                   >
                     {tech}
                   </span>
@@ -124,6 +129,60 @@ export default function ExperienceSection() {
               </div>
             </div>
           ))}
+        </div>
+
+        {/* Hackathon Honors & Wins Subsection */}
+        <div className="pt-6 space-y-4">
+          <div className="flex items-center gap-2 font-mono text-xs text-[#666666]">
+            <span className="text-[#888888]">&gt;</span>
+            <span className="text-[#A0A0A0]">honors.list</span>
+            <span className="text-[#262626]">/</span>
+            <span className="text-[#555555]">hackathons</span>
+          </div>
+
+          <h3 className="text-xl font-bold tracking-tight text-[#E0E0E0]">
+            National Hackathon Wins
+          </h3>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {achievements.map((item) => (
+              <div
+                key={item.id}
+                className="p-5 rounded-xl bg-[#0D0D0D] border border-[#1C1C1C] hover:border-[#2C2C2C] transition-all duration-300 shadow-[0_4px_20px_rgba(0,0,0,0.5)] flex flex-col justify-between"
+              >
+                <div className="space-y-2.5">
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded bg-[#141414] border border-[#222222] font-mono text-xs text-[#E0E0E0] font-medium">
+                      <Trophy className="w-3.5 h-3.5 text-[#888888]" />
+                      {item.award}
+                    </span>
+                    <span className="font-mono text-xs text-[#555555]">{item.date}</span>
+                  </div>
+
+                  <div>
+                    <h4 className="text-base font-bold text-[#F1F1F1]">
+                      {item.title}
+                    </h4>
+                    <p className="font-mono text-xs text-[#666666] mt-0.5">
+                      {item.organizer}
+                    </p>
+                  </div>
+
+                  <p className="text-xs text-[#888888] leading-relaxed">
+                    {item.description}
+                  </p>
+                </div>
+
+                <div className="mt-4 pt-3 border-t border-[#161616] flex items-center justify-between font-mono text-xs text-[#666666]">
+                  <span className="flex items-center gap-1 text-[#888888]">
+                    <Users className="w-3.5 h-3.5 text-[#666666]" />
+                    <span>{item.award.includes('Winner') ? '1,000+ Participants' : '250+ Teams'}</span>
+                  </span>
+                  <span className="text-[#888888]">National Level</span>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </section>

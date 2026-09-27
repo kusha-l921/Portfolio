@@ -5,7 +5,7 @@ import CustomCursor from '@/components/navigation/CustomCursor';
 
 export default function AppShell({ children }: { children: React.ReactNode }) {
   return (
-    <div className="relative min-h-screen bg-[#05070A] text-text-primary font-sans antialiased overflow-x-hidden selection:bg-cyan-accent/20 selection:text-white">
+    <div className="relative min-h-screen bg-[#050505] text-[#F1F1F1] font-sans antialiased overflow-x-hidden selection:bg-[#262626] selection:text-white">
       {/* Precision custom cursor */}
       <CustomCursor />
 

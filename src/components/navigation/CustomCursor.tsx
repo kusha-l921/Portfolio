@@ -58,21 +58,21 @@ export default function CustomCursor() {
         transform: `translate3d(${pos.x}px, ${pos.y}px, 0)`,
       }}
     >
-      {/* Tiny Blue Dot (Requirement 32) */}
+      {/* Tiny Silver Dot */}
       {mode === 'dot' && (
-        <div className="-translate-x-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-accent shadow-[0_0_8px_#2F9BFF]" />
+        <div className="-translate-x-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-white/70 shadow-[0_0_4px_rgba(255,255,255,0.3)]" />
       )}
 
       {/* Slightly Expanded Interactive Reticle */}
       {mode === 'hover' && (
-        <div className="-translate-x-1/2 -translate-y-1/2 w-6 h-6 rounded-full border border-accent/60 bg-accent/10 transition-all duration-150 flex items-center justify-center">
-          <div className="w-1 h-1 rounded-full bg-accent" />
+        <div className="-translate-x-1/2 -translate-y-1/2 w-5 h-5 rounded-full border border-white/40 bg-white/5 transition-all duration-150 flex items-center justify-center">
+          <div className="w-1 h-1 rounded-full bg-white/80" />
         </div>
       )}
 
-      {/* Project Card Tiny VIEW → Indicator (Requirement 32) */}
+      {/* Project Card Tiny VIEW → Indicator */}
       {mode === 'view' && (
-        <div className="-translate-x-1/2 -translate-y-1/2 px-2 py-0.5 rounded bg-[#161D26] border border-accent/70 text-[9px] font-mono text-accent font-semibold tracking-wider shadow-sm flex items-center gap-1">
+        <div className="-translate-x-1/2 -translate-y-1/2 px-2 py-0.5 rounded bg-[#111111] border border-[#2A2A2A] text-[9px] font-mono text-white/90 font-medium tracking-wider shadow-sm flex items-center gap-1">
           <span>VIEW →</span>
         </div>
       )}
