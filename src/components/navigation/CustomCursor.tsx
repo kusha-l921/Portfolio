@@ -4,51 +4,39 @@ import React, { useEffect, useState } from 'react';
 
 export default function CustomCursor() {
   const [pos, setPos] = useState({ x: -100, y: -100 });
-  const [cursorType, setCursorType] = useState<'normal' | 'hover' | 'view' | 'open'>('normal');
-  const [isVisible, setIsVisible] = useState(false);
-  const [isTouch, setIsTouch] = useState(true);
+  const [mode, setMode] = useState<'dot' | 'hover' | 'view'>('dot');
+  const [visible, setVisible] = useState(false);
+  const [enabled, setEnabled] = useState(false);
 
   useEffect(() => {
-    // Check if device supports fine hover
-    const finePointer = window.matchMedia('(pointer: fine)').matches;
-    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    // Only enable on desktop fine pointer devices without reduced motion
+    const hasFinePointer = window.matchMedia('(pointer: fine)').matches;
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    if (!finePointer || reducedMotion) {
-      setIsTouch(true);
+    if (!hasFinePointer || prefersReducedMotion) {
+      setEnabled(false);
       return;
     }
-    setIsTouch(false);
+    setEnabled(true);
 
     const handleMouseMove = (e: MouseEvent) => {
       setPos({ x: e.clientX, y: e.clientY });
-      if (!isVisible) setIsVisible(true);
+      if (!visible) setVisible(true);
 
-      // Detect hover target
       const target = e.target as HTMLElement | null;
       if (!target) return;
 
-      const closestInteractive = target.closest(
-        'button, a, input, textarea, select, [role="button"], [data-cursor]'
-      ) as HTMLElement | null;
-
-      if (closestInteractive) {
-        const customType = closestInteractive.getAttribute('data-cursor');
-        if (customType === 'view') {
-          setCursorType('view');
-        } else if (customType === 'open') {
-          setCursorType('open');
-        } else {
-          setCursorType('hover');
-        }
-      } else if (target.closest('canvas')) {
-        setCursorType('view');
+      if (target.closest('[data-cursor="open"]') || target.closest('.light-sweep-card')) {
+        setMode('view');
+      } else if (target.closest('button, a, input, textarea, [role="button"]')) {
+        setMode('hover');
       } else {
-        setCursorType('normal');
+        setMode('dot');
       }
     };
 
-    const handleMouseLeave = () => setIsVisible(false);
-    const handleMouseEnter = () => setIsVisible(true);
+    const handleMouseLeave = () => setVisible(false);
+    const handleMouseEnter = () => setVisible(true);
 
     window.addEventListener('mousemove', handleMouseMove, { passive: true });
     document.addEventListener('mouseleave', handleMouseLeave);
@@ -59,38 +47,33 @@ export default function CustomCursor() {
       document.removeEventListener('mouseleave', handleMouseLeave);
       document.removeEventListener('mouseenter', handleMouseEnter);
     };
-  }, [isVisible]);
+  }, [visible]);
 
-  if (isTouch || !isVisible) return null;
+  if (!enabled || !visible) return null;
 
   return (
     <div
-      className="fixed top-0 left-0 pointer-events-none z-50 transition-transform duration-75 ease-out"
+      className="fixed top-0 left-0 pointer-events-none z-50 transition-transform duration-75 ease-out select-none"
       style={{
         transform: `translate3d(${pos.x}px, ${pos.y}px, 0)`,
       }}
     >
-      {cursorType === 'normal' && (
-        <div className="-translate-x-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full bg-electric-blue shadow-[0_0_8px_#1687FF]" />
+      {/* Tiny Blue Dot (Requirement 32) */}
+      {mode === 'dot' && (
+        <div className="-translate-x-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-accent shadow-[0_0_8px_#2F9BFF]" />
       )}
 
-      {cursorType === 'hover' && (
-        <div className="-translate-x-1/2 -translate-y-1/2 w-7 h-7 border border-bright-blue/80 rounded-sm bg-electric-blue/10 backdrop-blur-[1px] flex items-center justify-center transition-all duration-150">
-          <div className="w-1 h-1 bg-electric-blue rounded-full" />
+      {/* Slightly Expanded Interactive Reticle */}
+      {mode === 'hover' && (
+        <div className="-translate-x-1/2 -translate-y-1/2 w-6 h-6 rounded-full border border-accent/60 bg-accent/10 transition-all duration-150 flex items-center justify-center">
+          <div className="w-1 h-1 rounded-full bg-accent" />
         </div>
       )}
 
-      {cursorType === 'view' && (
-        <div className="-translate-x-1/2 -translate-y-1/2 px-2 py-0.5 rounded-sm bg-panel-elevated/90 border border-electric-blue/70 text-[9px] font-mono text-bright-blue font-bold tracking-wider shadow-[0_0_12px_rgba(22,135,255,0.4)] whitespace-nowrap flex items-center gap-1">
-          <span className="w-1 h-1 rounded-full bg-electric-blue animate-ping" />
-          VIEW
-        </div>
-      )}
-
-      {cursorType === 'open' && (
-        <div className="-translate-x-1/2 -translate-y-1/2 px-2 py-0.5 rounded-sm bg-panel-elevated/90 border border-success/70 text-[9px] font-mono text-success font-bold tracking-wider shadow-[0_0_12px_rgba(50,213,131,0.4)] whitespace-nowrap flex items-center gap-1">
-          <span className="w-1 h-1 rounded-full bg-success animate-ping" />
-          OPEN
+      {/* Project Card Tiny VIEW → Indicator (Requirement 32) */}
+      {mode === 'view' && (
+        <div className="-translate-x-1/2 -translate-y-1/2 px-2 py-0.5 rounded bg-[#161D26] border border-accent/70 text-[9px] font-mono text-accent font-semibold tracking-wider shadow-sm flex items-center gap-1">
+          <span>VIEW →</span>
         </div>
       )}
     </div>

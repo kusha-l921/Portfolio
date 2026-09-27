@@ -13,26 +13,26 @@ export default function HomePage() {
   const [isTerminalModalOpen, setIsTerminalModalOpen] = useState(false);
 
   return (
-    <div className="flex flex-col space-y-12">
-      {/* 00: Hero Workstation & Live Waveform */}
+    <div className="flex flex-col">
+      {/* Hero Section with Editorial Layout & System Architecture Sketch */}
       <HeroSection onOpenTerminal={() => setIsTerminalModalOpen(true)} />
 
-      {/* 01: About & Interactive 3D Neural Network */}
+      {/* About Section */}
       <AboutSection />
 
-      {/* 02: Selected Work & 3D Scientific Visualizations */}
+      {/* Selected Work (Projects) */}
       <ProjectsSection />
 
-      {/* 03: Skills & 3D Orbital Knowledge Universe */}
+      {/* Skills & Tools */}
       <SkillsSection />
 
-      {/* 04: The Journey Timeline & Honors */}
+      {/* Experience & Milestones */}
       <ExperienceSection />
 
-      {/* 05: Contact & 3D Quantum Prism Communication Node */}
+      {/* Contact */}
       <ContactSection />
 
-      {/* Embedded Terminal trigger if needed */}
+      {/* Optional Interactive Terminal Drawer */}
       <TerminalDrawer
         isOpen={isTerminalModalOpen}
         onClose={() => setIsTerminalModalOpen(false)}

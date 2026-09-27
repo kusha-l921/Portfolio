@@ -1,24 +1,21 @@
-@import url('https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500;600&family=Inter:wght@300;400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --bg-primary: #05070B;
-  --bg-secondary: #080C12;
-  --panel: #0B1118;
-  --panel-elevated: #101722;
-  --primary-text: #F4F8FF;
-  --secondary-text: #91A4B8;
-  --muted-text: #536579;
-  --border-subtle: rgba(90, 160, 230, 0.18);
-  --electric-blue: #1687FF;
-  --bright-blue: #38A3FF;
-  --soft-blue: #75C2FF;
-  --blue-glow: rgba(22, 135, 255, 0.35);
-  --success: #32D583;
-  --warning: #FFB84D;
+  --bg-primary: #080A0D;
+  --bg-secondary: #0D1117;
+  --panel: #11161D;
+  --panel-elevated: #161D26;
+  --primary-text: #F2F5F8;
+  --secondary-text: #9AA6B2;
+  --muted-text: #5E6975;
+  --border-subtle: rgba(255, 255, 255, 0.10);
+  --accent: #2F9BFF;
+  --accent-bright: #5CB5FF;
+  --success: #35C982;
   --font-geist: 'Geist', 'Inter', -apple-system, sans-serif;
   --font-jetbrains: 'JetBrains Mono', monospace;
 }
@@ -44,69 +41,52 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Custom Scrollbar */
+/* Minimal Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #05070B;
+  background: #080A0D;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(22, 135, 255, 0.25);
+  background: rgba(255, 255, 255, 0.15);
   border-radius: 3px;
-  border: 1px solid rgba(22, 135, 255, 0.4);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(56, 163, 255, 0.5);
+  background: rgba(47, 155, 255, 0.4);
 }
 
-/* Technical Subtle Grid */
-.bg-tech-grid {
-  background-size: 40px 40px;
+/* Very faint technical grid (barely visible) */
+.bg-minimal-grid {
+  background-size: 32px 32px;
   background-image: 
-    linear-gradient(to right, rgba(90, 160, 230, 0.04) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(90, 160, 230, 0.04) 1px, transparent 1px);
+    linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
 }
 
-.bg-radial-gradient {
-  background: radial-gradient(circle at 50% 20%, rgba(22, 135, 255, 0.08) 0%, transparent 70%);
+/* Clean Card Surface */
+.clean-card {
+  background-color: #11161D;
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Glass panel */
-.glass-panel {
-  background: rgba(11, 17, 24, 0.75);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(90, 160, 230, 0.18);
+.clean-card:hover {
+  border-color: rgba(47, 155, 255, 0.35);
+  background-color: #141B24;
 }
 
-.glass-panel-elevated {
-  background: rgba(16, 23, 34, 0.85);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(90, 160, 230, 0.25);
-}
-
-/* Electric Blue Glows */
-.glow-text-blue {
-  text-shadow: 0 0 16px rgba(22, 135, 255, 0.45);
-}
-
-.glow-box-blue {
-  box-shadow: 0 0 24px rgba(22, 135, 255, 0.25);
-}
-
-/* Blue light sweep effect for cards */
-.light-sweep-container {
+/* Subtle light sweep across border on hover */
+.light-sweep-card {
   position: relative;
   overflow: hidden;
 }
 
-.light-sweep-container::after {
+.light-sweep-card::after {
   content: '';
   position: absolute;
   top: 0;
@@ -116,34 +96,24 @@ body {
   background: linear-gradient(
     90deg,
     transparent 0%,
-    rgba(56, 163, 255, 0.15) 50%,
+    rgba(92, 181, 255, 0.08) 50%,
     transparent 100%
   );
   pointer-events: none;
   transition: transform 0.6s ease;
 }
 
-.light-sweep-container:hover::after {
+.light-sweep-card:hover::after {
   transform: translateX(250%);
 }
 
-/* Monospace Technical Headers */
-.font-mono-tech {
-  font-family: var(--font-jetbrains);
-}
-
-/* Custom Selection */
+/* Selection */
 ::selection {
-  background: rgba(22, 135, 255, 0.35);
-  color: #F4F8FF;
+  background: rgba(47, 155, 255, 0.25);
+  color: #F2F5F8;
 }
 
-/* Canvas fix */
-canvas {
-  touch-action: none;
-}
-
-/* Reduced Motion Override */
+/* Accessibility: Reduced Motion */
 @media (prefers-reduced-motion: reduce) {
   * {
     animation-duration: 0.01ms !important;

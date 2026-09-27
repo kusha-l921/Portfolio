@@ -1,31 +1,17 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import dynamic from 'next/dynamic';
 import Navbar from '@/components/navigation/Navbar';
 import Footer from '@/components/navigation/Footer';
 import CustomCursor from '@/components/navigation/CustomCursor';
 import ScrollProgress from '@/components/navigation/ScrollProgress';
 import TerminalDrawer from '@/components/terminal/TerminalDrawer';
-import SystemInitLoader from '@/components/loading/SystemInitLoader';
-
-const GlobalBackgroundCanvas = dynamic(
-  () => import('@/components/three/GlobalBackgroundCanvas'),
-  { ssr: false }
-);
 
 export default function AppShell({ children }: { children: React.ReactNode }) {
-  const [isLoaded, setIsLoaded] = useState(false);
   const [isTerminalOpen, setIsTerminalOpen] = useState(false);
 
   useEffect(() => {
-    // Check if user has already seen loader in session
-    const hasSeen = sessionStorage.getItem('kushal_portfolio_initialized');
-    if (hasSeen === 'true') {
-      setIsLoaded(true);
-    }
-
-    // Keyboard shortcut for terminal: Backquote (`) or Ctrl+K
+    // Keyboard shortcut for developer terminal: Backquote (`) or Ctrl+K
     const handleKeyDown = (e: KeyboardEvent) => {
       if (
         (e.key === '`' && !['INPUT', 'TEXTAREA'].includes((e.target as HTMLElement).tagName)) ||
@@ -40,27 +26,18 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
-  const handleInitComplete = () => {
-    sessionStorage.setItem('kushal_portfolio_initialized', 'true');
-    setIsLoaded(true);
-  };
-
   return (
-    <div className="relative min-h-screen bg-background text-primary-text selection:bg-electric-blue/30 selection:text-white overflow-x-hidden">
-      {/* System Initialization on first session visit */}
-      {!isLoaded && <SystemInitLoader onComplete={handleInitComplete} />}
+    <div className="relative min-h-screen bg-background text-primary-text font-sans antialiased overflow-x-hidden selection:bg-accent/20 selection:text-white">
+      {/* Very subtle minimal grid background (almost invisible - Requirement 11) */}
+      <div className="fixed inset-0 bg-minimal-grid pointer-events-none z-0" />
 
-      {/* Subtle Global Background Grid & Constellation 3D Canvas */}
-      <div className="fixed inset-0 bg-tech-grid opacity-25 pointer-events-none z-0" />
-      <GlobalBackgroundCanvas />
-
-      {/* Desktop Custom Precision Cursor */}
+      {/* Tiny precision cursor */}
       <CustomCursor />
 
-      {/* Right Edge Scroll Progress */}
+      {/* Top scroll progress line */}
       <ScrollProgress />
 
-      {/* Floating Navigation */}
+      {/* Clean Navbar (Requirement 7) */}
       <Navbar
         onToggleTerminal={() => setIsTerminalOpen(!isTerminalOpen)}
         isTerminalOpen={isTerminalOpen}
@@ -69,10 +46,10 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
       {/* Main Content Area */}
       <main className="relative z-10">{children}</main>
 
-      {/* Minimal Footer */}
+      {/* Minimal Footer (Requirement 27 & 48) */}
       <Footer onOpenTerminal={() => setIsTerminalOpen(true)} />
 
-      {/* Secondary Interactive Terminal HUD */}
+      {/* Interactive Developer Terminal (Requirement 27) */}
       <TerminalDrawer
         isOpen={isTerminalOpen}
         onClose={() => setIsTerminalOpen(false)}

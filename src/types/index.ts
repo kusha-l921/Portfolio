@@ -1,11 +1,12 @@
 export interface Project {
   id: string;
   slug: string;
+  number: string; // e.g. "01", "02"
   title: string;
   tagline: string;
-  category: 'AI/ML' | 'Computer Vision' | 'Distributed Systems' | 'Robotics & IoT';
+  category: 'AI/ML' | 'Computer Vision' | 'Distributed Systems';
   featured?: boolean;
-  gridSpan?: string; // e.g. 'col-span-12 lg:col-span-8'
+  gridSpan?: string;
   overview: string;
   problem: string;
   approach: string;
@@ -18,19 +19,13 @@ export interface Project {
   futureWork: string[];
   githubUrl: string;
   demoUrl?: string;
-  stats: { label: string; value: string }[];
-  sceneType: 'solar' | 'fleet' | 'rewear' | 'vision' | 'swarm';
+  illustrationType: 'solar' | 'fleet' | 'rewear' | 'vision' | 'swarm' | 'pipeline';
 }
 
-export interface SkillNode {
+export interface SkillItem {
   id: string;
   name: string;
-  category: 'PROGRAMMING' | 'AI / ML' | 'BACKEND' | 'SYSTEMS' | 'TOOLS';
-  orbitRadius: number;
-  speed: number;
-  color: string;
-  size: number;
-  proficiency: number;
+  category: 'Programming' | 'AI / ML' | 'Web & Backend' | 'Systems & DevOps';
   description: string;
   relatedProjects: string[];
   relatedTech: string[];
@@ -43,11 +38,9 @@ export interface ExperienceItem {
   organization: string;
   location: string;
   period: string;
-  status?: 'COMPLETED' | 'IN_PROGRESS' | 'UPCOMING';
   description: string;
   achievements: string[];
   technologies: string[];
-  signalStrength: number; // 0 to 100
 }
 
 export interface AchievementItem {
@@ -55,15 +48,6 @@ export interface AchievementItem {
   title: string;
   issuer: string;
   date: string;
-  category: 'HACKATHON' | 'CERTIFICATION' | 'RESEARCH' | 'ACADEMIC';
-  credentialId?: string;
   badge: string;
   description: string;
-  highlights: string[];
-}
-
-export interface NavLink {
-  label: string;
-  path: string;
-  id: string;
 }

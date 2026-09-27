@@ -1,205 +1,119 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import { EXPERIENCES, ACHIEVEMENTS } from '@/data/portfolioData';
-import SectionHeader from '@/components/ui/SectionHeader';
-import CardTilt from '@/components/ui/CardTilt';
-import { Briefcase, Award, CheckCircle2, ChevronRight, Sparkles, Terminal, FileText, ExternalLink } from 'lucide-react';
-import { sound } from '@/utils/sound';
+import { Check } from 'lucide-react';
 
 export default function ExperienceSection() {
-  const [activeExpId, setActiveExpId] = useState<string>(EXPERIENCES[0].id);
-
   return (
-    <section id="experience" className="relative py-24 sm:py-32 overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <SectionHeader
-          index="04 / EXPERIENCE"
-          tag="CAREER TRAJECTORY"
-          title="The Journey & Signals"
-          subtitle="Engineering timeline spanning autonomous AI research leadership, high-scale machine learning systems internships, and scientific research."
-        />
-
-        {/* Vertical Signal Path Timeline (Requirement 36) */}
-        <div className="relative mt-12 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          {/* Vertical Signal Line & Milestones (Left Column) */}
-          <div className="lg:col-span-4 relative pl-6 border-l-2 border-border/50 space-y-10">
-            {/* Animated Travelling Signal Beam along line */}
-            <div className="absolute -left-[3px] top-0 w-1.5 h-16 bg-gradient-to-b from-transparent via-bright-blue to-transparent rounded-full shadow-[0_0_12px_#38A3FF] animate-scanline" />
-
-            {EXPERIENCES.map((exp) => {
-              const isActive = exp.id === activeExpId;
-
-              return (
-                <div
-                  key={exp.id}
-                  onClick={() => {
-                    sound.playClick();
-                    setActiveExpId(exp.id);
-                  }}
-                  className={`group cursor-pointer relative transition-all duration-200 ${
-                    isActive ? 'scale-[1.02]' : 'opacity-70 hover:opacity-100'
-                  }`}
-                >
-                  {/* Waypoint Indicator on Line */}
-                  <div
-                    className={`absolute -left-[31px] top-1.5 w-4 h-4 rounded-full border-2 transition-all duration-300 ${
-                      isActive
-                        ? 'bg-electric-blue border-white shadow-[0_0_12px_#1687FF]'
-                        : 'bg-panel border-border/80 group-hover:border-electric-blue'
-                    }`}
-                  />
-
-                  {/* Year & Role Heading */}
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className="text-xs font-mono font-bold text-electric-blue">
-                      [{exp.year}]
-                    </span>
-                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-panel-elevated border border-border/40 text-muted-text">
-                      {exp.status}
-                    </span>
-                  </div>
-
-                  <h4 className="text-base font-bold text-primary-text group-hover:text-bright-blue transition-colors">
-                    {exp.role}
-                  </h4>
-                  <p className="text-xs text-secondary-text font-mono">
-                    {exp.organization}
-                  </p>
-                </div>
-              );
-            })}
+    <section id="experience" className="py-20 sm:py-28 border-t border-white/5">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6">
+        {/* Section Header (Requirement 22) */}
+        <div className="mb-14">
+          <div className="flex items-center gap-2 font-mono text-xs text-muted-text mb-2">
+            <span className="text-accent">&gt;</span>
+            <span className="text-secondary-text">./experience</span>
           </div>
-
-          {/* Expanded Experience Detail Viewport (Right Column) */}
-          <div className="lg:col-span-8">
-            {EXPERIENCES.map((exp) => {
-              if (exp.id !== activeExpId) return null;
-
-              return (
-                <CardTilt
-                  key={exp.id}
-                  className="p-6 sm:p-8 rounded-2xl border border-electric-blue/40 bg-panel-elevated/70 backdrop-blur-xl shadow-glass light-sweep-container"
-                >
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-border/40">
-                    <div>
-                      <div className="flex items-center gap-2 text-xs font-mono text-electric-blue mb-1">
-                        <span>{exp.period}</span>
-                        <span className="text-muted-text">•</span>
-                        <span>{exp.location}</span>
-                      </div>
-                      <h3 className="text-2xl font-extrabold text-primary-text">
-                        {exp.role}
-                      </h3>
-                      <p className="text-sm font-mono text-bright-blue mt-0.5">
-                        {exp.organization}
-                      </p>
-                    </div>
-
-                    <div className="text-right font-mono">
-                      <span className="text-[10px] text-muted-text block">SIGNAL STRENGTH</span>
-                      <span className="text-xl font-bold text-success">
-                        {exp.signalStrength}%
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Role Narrative */}
-                  <p className="mt-6 text-sm text-secondary-text leading-relaxed">
-                    {exp.description}
-                  </p>
-
-                  {/* Key Contributions / Impact */}
-                  <div className="mt-6 space-y-3">
-                    <h5 className="text-xs font-mono text-muted-text uppercase tracking-wider flex items-center gap-2">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-success" />
-                      KEY VERIFIED CONTRIBUTIONS & MILESTONES:
-                    </h5>
-                    <ul className="space-y-2 text-xs sm:text-sm text-secondary-text">
-                      {exp.achievements.map((item, idx) => (
-                        <li key={idx} className="flex items-start gap-2.5">
-                          <span className="text-electric-blue font-bold mt-0.5">•</span>
-                          <span>{item}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-
-                  {/* Tech Stack Employed */}
-                  <div className="mt-8 pt-6 border-t border-border/30">
-                    <span className="text-[10px] font-mono text-muted-text uppercase tracking-widest block mb-2">
-                      ENVIRONMENT & TOOLING:
-                    </span>
-                    <div className="flex flex-wrap gap-1.5">
-                      {exp.technologies.map((t) => (
-                        <span
-                          key={t}
-                          className="px-2.5 py-1 rounded bg-panel border border-border/40 text-xs font-mono text-secondary-text"
-                        >
-                          {t}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                </CardTilt>
-              );
-            })}
-          </div>
+          <div className="w-12 h-px bg-white/20 mb-4" />
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-primary-text">
+            The journey so far.
+          </h2>
+          <p className="mt-3 text-secondary-text text-sm sm:text-base max-w-xl">
+            A chronological timeline of engineering leadership, internships, and applied research.
+          </p>
         </div>
 
-        {/* Achievements / Certifications Section (Requirement 37) */}
-        <div className="mt-24">
-          <div className="flex items-center justify-between mb-8">
-            <div>
-              <div className="flex items-center gap-2 font-mono text-xs text-electric-blue mb-1">
-                <span>04.1 // RECOGNITION</span>
+        {/* Simple Vertical Timeline (Requirement 22) */}
+        <div className="relative pl-6 sm:pl-8 border-l border-white/10 space-y-12 my-10">
+          {EXPERIENCES.map((exp) => (
+            <div key={exp.id} className="relative group">
+              {/* Small Blue Node on Timeline */}
+              <div className="absolute -left-[31px] sm:-left-[39px] top-1.5 w-3.5 h-3.5 rounded-full border-2 border-[#080A0D] bg-accent transition-transform duration-200 group-hover:scale-125" />
+
+              {/* Date & Organization Header */}
+              <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1 mb-2 font-mono text-xs">
+                <span className="text-accent font-semibold">
+                  [{exp.year}] {exp.period}
+                </span>
+                <span className="text-muted-text">
+                  {exp.location}
+                </span>
               </div>
-              <h3 className="text-2xl sm:text-3xl font-extrabold text-primary-text">
-                Certifications & Research Honors
+
+              {/* Role & Company */}
+              <h3 className="text-xl font-bold text-primary-text mb-0.5">
+                {exp.role}
               </h3>
+              <p className="text-xs sm:text-sm font-mono text-secondary-text mb-3">
+                {exp.organization}
+              </p>
+
+              {/* Description */}
+              <p className="text-xs sm:text-sm text-secondary-text leading-relaxed mb-4 max-w-2xl">
+                {exp.description}
+              </p>
+
+              {/* Key Contributions */}
+              <ul className="space-y-1.5 text-xs text-secondary-text mb-4">
+                {exp.achievements.map((item, i) => (
+                  <li key={i} className="flex items-start gap-2">
+                    <span className="text-accent font-bold">•</span>
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+
+              {/* Tooling Tags */}
+              <div className="flex flex-wrap gap-1.5 font-mono text-[11px]">
+                {exp.technologies.map((tech) => (
+                  <span
+                    key={tech}
+                    className="px-2 py-0.5 rounded bg-[#11161D] border border-white/5 text-muted-text"
+                  >
+                    {tech}
+                  </span>
+                ))}
+              </div>
             </div>
+          ))}
+        </div>
+
+        {/* Achievements / Certifications Grid (Requirement 24) */}
+        <div className="pt-16 mt-16 border-t border-white/5">
+          <div className="mb-8">
+            <span className="text-xs font-mono text-muted-text uppercase tracking-widest block mb-1">
+              RECOGNITION & HONORS
+            </span>
+            <h3 className="text-2xl font-bold text-primary-text">
+              Certifications & Milestones
+            </h3>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {ACHIEVEMENTS.map((ach) => (
-              <CardTilt
+              <div
                 key={ach.id}
-                className="p-6 rounded-2xl border border-border/40 bg-panel/60 hover:border-electric-blue/60 transition-all light-sweep-container flex flex-col justify-between"
+                className="p-5 rounded-lg border border-white/10 bg-[#11161D] hover:border-accent/40 hover:-translate-y-1 transition-all duration-200 group font-mono"
               >
-                <div>
-                  <div className="flex items-center justify-between mb-4">
-                    <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-semibold bg-electric-blue/15 text-bright-blue border border-electric-blue/30">
-                      {ach.badge}
-                    </span>
-                    <span className="text-xs font-mono text-muted-text">
-                      {ach.date}
-                    </span>
-                  </div>
-
-                  <h4 className="text-lg font-bold text-primary-text mb-1">
-                    {ach.title}
-                  </h4>
-                  <p className="text-xs font-mono text-secondary-text mb-3">
-                    Issued by: <span className="text-primary-text">{ach.issuer}</span>
-                    {ach.credentialId && (
-                      <span className="text-muted-text ml-2">[{ach.credentialId}]</span>
-                    )}
-                  </p>
-
-                  <p className="text-xs text-secondary-text leading-relaxed mb-4">
-                    {ach.description}
-                  </p>
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-[10px] text-accent font-semibold px-2 py-0.5 rounded bg-accent/10 border border-accent/20">
+                    {ach.badge}
+                  </span>
+                  <span className="text-[11px] text-muted-text">
+                    {ach.date}
+                  </span>
                 </div>
 
-                <div className="pt-3 border-t border-border/30 space-y-1">
-                  {ach.highlights.map((h, i) => (
-                    <div key={i} className="text-[11px] text-muted-text flex items-center gap-1.5">
-                      <span className="w-1 h-1 rounded-full bg-electric-blue" />
-                      <span>{h}</span>
-                    </div>
-                  ))}
-                </div>
-              </CardTilt>
+                <h4 className="text-sm font-sans font-bold text-primary-text group-hover:text-white transition-colors mb-1">
+                  {ach.title}
+                </h4>
+                <p className="text-[11px] text-muted-text mb-2">
+                  Issuer: {ach.issuer}
+                </p>
+                <p className="text-xs text-secondary-text font-sans leading-relaxed">
+                  {ach.description}
+                </p>
+              </div>
             ))}
           </div>
         </div>

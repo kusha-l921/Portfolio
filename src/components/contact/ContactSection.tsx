@@ -1,186 +1,140 @@
 'use client';
 
 import React, { useState } from 'react';
-import dynamic from 'next/dynamic';
 import { PERSONAL_INFO } from '@/data/portfolioData';
-import SectionHeader from '@/components/ui/SectionHeader';
-import CardTilt from '@/components/ui/CardTilt';
-import { Send, CheckCircle2, Mail, Github, Linkedin, MessageSquare, Sparkles } from 'lucide-react';
-import { sound } from '@/utils/sound';
-
-const ContactScene = dynamic(() => import('@/components/three/ContactScene'), {
-  ssr: false,
-  loading: () => (
-    <div className="w-full h-[360px] md:h-[460px] rounded-2xl border border-border/40 bg-panel/30 flex items-center justify-center">
-      <div className="flex items-center gap-2 text-xs font-mono text-muted-text">
-        <span className="w-2 h-2 rounded-full bg-electric-blue animate-ping" />
-        <span>BOOTING_QUANTUM_RECEIVER...</span>
-      </div>
-    </div>
-  ),
-});
+import { Mail, Github, Linkedin, Check } from 'lucide-react';
 
 export default function ContactSection() {
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
-  const [isFocused, setIsFocused] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [status, setStatus] = useState<'idle' | 'sending' | 'sent'>('idle');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.name || !formData.email || !formData.message) return;
 
-    sound.playClick();
-    setIsSubmitting(true);
+    setStatus('sending');
 
-    // Simulate cryptographic transmission
     setTimeout(() => {
-      setIsSubmitting(false);
-      setIsSubmitted(true);
-      sound.playSuccess();
+      setStatus('sent');
+      setFormData({ name: '', email: '', message: '' });
+      setTimeout(() => setStatus('idle'), 4000);
     }, 1200);
   };
 
   return (
-    <section id="contact" className="relative py-24 sm:py-32 overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <SectionHeader
-          index="05 / CONTACT"
-          tag="COMMUNICATION PROTOCOL"
-          title="Let's build something."
-          subtitle="Have a research inquiry, high-impact engineering role, or ambitious distributed AI project? Let's connect."
-        />
+    <section id="contact" className="py-20 sm:py-28 border-t border-white/5">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+          {/* Left Column: Heading & Description (Requirement 25) */}
+          <div className="lg:col-span-6">
+            <div className="flex items-center gap-2 font-mono text-xs text-muted-text mb-2">
+              <span className="text-accent">&gt;</span>
+              <span className="text-secondary-text">./contact</span>
+            </div>
+            <div className="w-12 h-px bg-white/20 mb-4" />
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-primary-text mb-4">
+              Let's build something.
+            </h2>
+            <p className="text-sm sm:text-base text-secondary-text leading-relaxed max-w-md mb-8">
+              Have a project, research collaboration, or engineering opportunity in mind? Feel free to reach out.
+            </p>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center mt-10">
-          {/* Left Column: Interactive 3D Communication Prism Object (Requirement 40) */}
-          <div className="lg:col-span-6 space-y-4">
-            <ContactScene isFocused={isFocused} isSubmitted={isSubmitted} />
-
-            {/* Direct Connect Quick Channels */}
-            <div className="grid grid-cols-2 gap-3 font-mono text-xs">
+            {/* Direct Links */}
+            <div className="space-y-3 font-mono text-xs">
               <a
                 href={`mailto:${PERSONAL_INFO.socials.email}`}
-                className="p-3.5 rounded-xl border border-border/40 bg-panel/60 hover:border-electric-blue/60 transition-colors flex items-center gap-2.5 text-secondary-text hover:text-primary-text"
+                className="flex items-center gap-2 text-secondary-text hover:text-accent transition-colors"
               >
-                <Mail className="w-4 h-4 text-electric-blue" />
-                <span className="truncate">EMAIL DIRECT</span>
+                <Mail className="w-4 h-4 text-muted-text" />
+                <span>{PERSONAL_INFO.socials.email}</span>
               </a>
-
+              <a
+                href={PERSONAL_INFO.socials.github}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 text-secondary-text hover:text-accent transition-colors"
+              >
+                <Github className="w-4 h-4 text-muted-text" />
+                <span>github.com/kushal-engineer</span>
+              </a>
               <a
                 href={PERSONAL_INFO.socials.linkedin}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-3.5 rounded-xl border border-border/40 bg-panel/60 hover:border-electric-blue/60 transition-colors flex items-center gap-2.5 text-secondary-text hover:text-primary-text"
+                className="flex items-center gap-2 text-secondary-text hover:text-accent transition-colors"
               >
-                <Linkedin className="w-4 h-4 text-bright-blue" />
-                <span>LINKEDIN</span>
+                <Linkedin className="w-4 h-4 text-muted-text" />
+                <span>linkedin.com/in/kushal-ai</span>
               </a>
             </div>
           </div>
 
-          {/* Right Column: Encrypted Transmission Form */}
+          {/* Right Column: Clean Minimal Form (Requirement 25 & 26) */}
           <div className="lg:col-span-6">
-            <CardTilt className="p-6 sm:p-8 rounded-2xl border border-border/50 bg-panel-elevated/70 backdrop-blur-xl shadow-glass light-sweep-container">
-              {isSubmitted ? (
-                <div className="py-12 flex flex-col items-center text-center space-y-4">
-                  <div className="w-16 h-16 rounded-full bg-success/15 border border-success/40 flex items-center justify-center text-success shadow-[0_0_20px_rgba(50,213,131,0.3)]">
-                    <CheckCircle2 className="w-8 h-8 animate-pulse" />
-                  </div>
-                  <h3 className="text-2xl font-bold text-primary-text font-mono">
-                    CONNECTION ESTABLISHED
-                  </h3>
-                  <p className="text-sm text-secondary-text max-w-sm">
-                    Transmission securely routed. Kushal will decrypt and respond to{' '}
-                    <span className="text-bright-blue font-semibold">{formData.email}</span> within 24 hours.
-                  </p>
-                  <button
-                    onClick={() => {
-                      setIsSubmitted(false);
-                      setFormData({ name: '', email: '', message: '' });
-                    }}
-                    className="mt-4 px-4 py-2 rounded-lg border border-border/60 bg-panel text-xs font-mono text-secondary-text hover:text-primary-text"
-                  >
-                    SEND ANOTHER PACKET
-                  </button>
-                </div>
-              ) : (
-                <form onSubmit={handleSubmit} className="space-y-5">
-                  <div className="flex items-center justify-between border-b border-border/30 pb-3">
-                    <span className="text-xs font-mono text-electric-blue flex items-center gap-2">
-                      <span className="w-1.5 h-1.5 rounded-full bg-electric-blue" />
-                      ENCRYPTED_SIGNAL_STREAM
-                    </span>
-                    <span className="text-[10px] font-mono text-muted-text">TLS_v1.3 // 256-BIT</span>
-                  </div>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <label className="block text-xs font-mono text-muted-text mb-1 uppercase">
+                  Name
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={formData.name}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  placeholder="Your Name"
+                  className="w-full px-4 py-2.5 rounded-lg bg-[#11161D] border border-white/10 focus:border-accent text-sm text-primary-text placeholder:text-muted-text/40 focus:outline-none transition-colors font-mono"
+                />
+              </div>
 
-                  <div>
-                    <label className="block text-xs font-mono text-muted-text mb-1.5 uppercase">
-                      YOUR IDENTIFIER / NAME
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      value={formData.name}
-                      onFocus={() => setIsFocused(true)}
-                      onBlur={() => setIsFocused(false)}
-                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      placeholder="e.g. Dr. Elena Vance / Google DeepMind"
-                      className="w-full px-4 py-3 rounded-xl bg-panel border border-border/60 focus:border-bright-blue text-sm text-primary-text placeholder:text-muted-text/40 focus:outline-none focus:ring-1 focus:ring-bright-blue/50 transition-all font-mono"
-                    />
-                  </div>
+              <div>
+                <label className="block text-xs font-mono text-muted-text mb-1 uppercase">
+                  Email
+                </label>
+                <input
+                  type="email"
+                  required
+                  value={formData.email}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  placeholder="name@company.com"
+                  className="w-full px-4 py-2.5 rounded-lg bg-[#11161D] border border-white/10 focus:border-accent text-sm text-primary-text placeholder:text-muted-text/40 focus:outline-none transition-colors font-mono"
+                />
+              </div>
 
-                  <div>
-                    <label className="block text-xs font-mono text-muted-text mb-1.5 uppercase">
-                      RETURN SIGNAL ADDRESS / EMAIL
-                    </label>
-                    <input
-                      type="email"
-                      required
-                      value={formData.email}
-                      onFocus={() => setIsFocused(true)}
-                      onBlur={() => setIsFocused(false)}
-                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      placeholder="your.email@organization.com"
-                      className="w-full px-4 py-3 rounded-xl bg-panel border border-border/60 focus:border-bright-blue text-sm text-primary-text placeholder:text-muted-text/40 focus:outline-none focus:ring-1 focus:ring-bright-blue/50 transition-all font-mono"
-                    />
-                  </div>
+              <div>
+                <label className="block text-xs font-mono text-muted-text mb-1 uppercase">
+                  Message
+                </label>
+                <textarea
+                  required
+                  rows={4}
+                  value={formData.message}
+                  onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                  placeholder="Tell me about your idea or project..."
+                  className="w-full px-4 py-2.5 rounded-lg bg-[#11161D] border border-white/10 focus:border-accent text-sm text-primary-text placeholder:text-muted-text/40 focus:outline-none transition-colors font-mono resize-none"
+                />
+              </div>
 
-                  <div>
-                    <label className="block text-xs font-mono text-muted-text mb-1.5 uppercase">
-                      PAYLOAD / TRANSMISSION MESSAGE
-                    </label>
-                    <textarea
-                      required
-                      rows={4}
-                      value={formData.message}
-                      onFocus={() => setIsFocused(true)}
-                      onBlur={() => setIsFocused(false)}
-                      onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                      placeholder="Describe your project, role, or collaboration scope..."
-                      className="w-full px-4 py-3 rounded-xl bg-panel border border-border/60 focus:border-bright-blue text-sm text-primary-text placeholder:text-muted-text/40 focus:outline-none focus:ring-1 focus:ring-bright-blue/50 transition-all font-mono resize-none"
-                    />
-                  </div>
+              {/* Submit Button with Sequential States (Requirement 26) */}
+              <button
+                type="submit"
+                disabled={status === 'sending'}
+                className="relative overflow-hidden w-full py-2.5 rounded-lg bg-[#2F9BFF] hover:bg-[#5CB5FF] text-white font-mono text-xs sm:text-sm font-medium transition-colors flex items-center justify-center gap-2 disabled:opacity-70"
+              >
+                {/* Small blue pulse line on sending */}
+                {status === 'sending' && (
+                  <div className="absolute inset-0 bg-white/10 animate-pulse" />
+                )}
 
-                  <button
-                    type="submit"
-                    disabled={isSubmitting}
-                    className="w-full py-3.5 rounded-xl bg-gradient-to-r from-electric-blue via-bright-blue to-soft-blue hover:opacity-90 text-white font-mono text-xs sm:text-sm font-bold tracking-wider shadow-[0_0_20px_rgba(22,135,255,0.4)] transition-all flex items-center justify-center gap-2 disabled:opacity-50"
-                  >
-                    {isSubmitting ? (
-                      <>
-                        <span className="w-2 h-2 rounded-full bg-white animate-ping" />
-                        <span>ENCRYPTING & DISPATCHING...</span>
-                      </>
-                    ) : (
-                      <>
-                        <span>TRANSMIT PACKET</span>
-                        <Send className="w-4 h-4" />
-                      </>
-                    )}
-                  </button>
-                </form>
-              )}
-            </CardTilt>
+                {status === 'idle' && <span>Send Message</span>}
+                {status === 'sending' && <span>Sending...</span>}
+                {status === 'sent' && (
+                  <span className="flex items-center gap-1.5 text-white font-semibold">
+                    <Check className="w-4 h-4" />
+                    Message Sent ✓
+                  </span>
+                )}
+              </button>
+            </form>
           </div>
         </div>
       </div>

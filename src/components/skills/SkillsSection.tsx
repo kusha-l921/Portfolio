@@ -1,229 +1,134 @@
 'use client';
 
 import React, { useState } from 'react';
-import dynamic from 'next/dynamic';
-import { SKILL_NODES } from '@/data/portfolioData';
-import { SkillNode } from '@/types';
-import SectionHeader from '@/components/ui/SectionHeader';
-import CardTilt from '@/components/ui/CardTilt';
-import { Sparkles, Orbit, Grid, ArrowUpRight, Cpu, Code2, Terminal, Layers } from 'lucide-react';
-import { sound } from '@/utils/sound';
-
-const SkillUniverseScene = dynamic(() => import('@/components/three/SkillUniverseScene'), {
-  ssr: false,
-  loading: () => (
-    <div className="w-full h-[480px] md:h-[580px] rounded-2xl border border-border/40 bg-panel/30 flex items-center justify-center">
-      <div className="flex items-center gap-2 text-xs font-mono text-muted-text">
-        <span className="w-2 h-2 rounded-full bg-electric-blue animate-ping" />
-        <span>CALCULATING_ORBITAL_EPHEMERIS...</span>
-      </div>
-    </div>
-  ),
-});
+import { SKILL_GROUPS, PROJECTS } from '@/data/portfolioData';
+import { SkillItem } from '@/types';
+import { ArrowUpRight } from 'lucide-react';
 
 export default function SkillsSection() {
-  const [selectedSkill, setSelectedSkill] = useState<SkillNode | null>(SKILL_NODES[0]); // default to PyTorch
-  const [viewMode, setViewMode] = useState<'3d' | 'matrix'>('3d');
-
-  const categories = ['ALL', 'AI / ML', 'PROGRAMMING', 'BACKEND', 'SYSTEMS', 'TOOLS'] as const;
-  const [filterCat, setFilterCat] = useState<string>('ALL');
-
-  const filteredMatrix = SKILL_NODES.filter((s) => {
-    if (filterCat === 'ALL') return true;
-    return s.category === filterCat;
-  });
+  const [hoveredSkill, setHoveredSkill] = useState<SkillItem | null>(null);
 
   return (
-    <section id="skills" className="relative py-24 sm:py-32 overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-4">
-          <SectionHeader
-            index="03 / SKILLS"
-            tag="KNOWLEDGE ARCHITECTURE"
-            title="Technical Universe"
-            subtitle="An interactive gravitational system representing proficiency, dependencies, and real-world system deployments."
-            className="mb-0"
-          />
-
-          {/* View Mode Toggle Switch */}
-          <div className="flex items-center gap-1.5 p-1 rounded-xl bg-panel border border-border/50 font-mono text-xs w-fit mb-6 sm:mb-0">
-            <button
-              onClick={() => {
-                sound.playClick();
-                setViewMode('3d');
-              }}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-all ${
-                viewMode === '3d'
-                  ? 'bg-electric-blue text-white shadow-sm'
-                  : 'text-secondary-text hover:text-primary-text'
-              }`}
-            >
-              <Orbit className="w-3.5 h-3.5" />
-              <span>3D UNIVERSE</span>
-            </button>
-            <button
-              onClick={() => {
-                sound.playClick();
-                setViewMode('matrix');
-              }}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-all ${
-                viewMode === 'matrix'
-                  ? 'bg-electric-blue text-white shadow-sm'
-                  : 'text-secondary-text hover:text-primary-text'
-              }`}
-            >
-              <Grid className="w-3.5 h-3.5" />
-              <span>MATRIX</span>
-            </button>
+    <section id="skills" className="py-20 sm:py-28 border-t border-white/5">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6">
+        {/* Header (Requirement 20) */}
+        <div className="mb-14">
+          <div className="flex items-center gap-2 font-mono text-xs text-muted-text mb-2">
+            <span className="text-accent">&gt;</span>
+            <span className="text-secondary-text">./skills</span>
           </div>
+          <div className="w-12 h-px bg-white/20 mb-4" />
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-primary-text">
+            Tools I work with.
+          </h2>
+          <p className="mt-3 text-secondary-text text-sm sm:text-base max-w-xl">
+            A comprehensive toolchain across deep learning research, systems architecture, and production deployment.
+          </p>
         </div>
 
-        {viewMode === '3d' ? (
-          /* 3D Orbital Universe + Connected Inspector Panel */
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start mt-10">
-            {/* 3D Universe Viewport */}
-            <div className="lg:col-span-8">
-              <SkillUniverseScene
-                selectedSkill={selectedSkill}
-                onSelectSkill={(skill) => {
-                  if (skill) {
-                    sound.playHover();
-                    setSelectedSkill(skill);
-                  }
-                }}
-              />
-            </div>
+        {/* Grouped Skills Matrix (Requirement 20 & 21) */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          {SKILL_GROUPS.map((group) => (
+            <div key={group.category} className="space-y-4">
+              <span className="font-mono text-xs text-muted-text uppercase tracking-widest block pb-2 border-b border-white/10 font-semibold">
+                {group.category}
+              </span>
 
-            {/* Live Knowledge Node Inspector Card */}
-            <div className="lg:col-span-4">
-              {selectedSkill ? (
-                <div className="p-6 rounded-2xl border border-electric-blue/40 bg-panel-elevated/85 backdrop-blur-xl shadow-glass space-y-6">
-                  {/* Top Node Header */}
-                  <div className="flex items-center justify-between pb-4 border-b border-border/40">
-                    <div>
-                      <span className="text-[10px] font-mono text-electric-blue uppercase tracking-widest block mb-0.5">
-                        {selectedSkill.category}
-                      </span>
-                      <h3 className="text-2xl font-black text-primary-text">
-                        {selectedSkill.name}
-                      </h3>
-                    </div>
-                    <div className="text-right font-mono">
-                      <span className="text-[10px] text-muted-text block">PROFICIENCY</span>
-                      <span className="text-xl font-bold text-success">
-                        {selectedSkill.proficiency}%
-                      </span>
-                    </div>
-                  </div>
+              <div className="space-y-2">
+                {group.skills.map((skill) => {
+                  const isHovered = hoveredSkill?.id === skill.id;
+                  const isRelated =
+                    hoveredSkill &&
+                    (hoveredSkill.relatedTech.includes(skill.name) ||
+                      skill.relatedTech.includes(hoveredSkill.name));
+                  const isDimmed = hoveredSkill && !isHovered && !isRelated;
 
-                  {/* Technical Overview */}
-                  <div>
-                    <h4 className="text-xs font-mono text-muted-text uppercase tracking-wider mb-2">
-                      SYSTEM CAPABILITY & USE:
-                    </h4>
-                    <p className="text-xs text-secondary-text leading-relaxed">
-                      {selectedSkill.description}
-                    </p>
-                  </div>
-
-                  {/* Connected Projects */}
-                  <div>
-                    <h4 className="text-xs font-mono text-bright-blue uppercase tracking-wider mb-2 flex items-center gap-1.5">
-                      <Cpu className="w-3.5 h-3.5" />
-                      DEPLOYED IN PROJECTS:
-                    </h4>
-                    <div className="space-y-1.5">
-                      {selectedSkill.relatedProjects.map((proj, i) => (
-                        <div
-                          key={i}
-                          className="px-3 py-2 rounded-lg bg-panel border border-border/40 text-xs font-mono text-primary-text flex items-center justify-between"
-                        >
-                          <span>{proj}</span>
-                          <span className="text-[10px] text-electric-blue">VERIFIED &gt;</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Interlinked Technologies */}
-                  <div>
-                    <h4 className="text-xs font-mono text-muted-text uppercase tracking-wider mb-2 flex items-center gap-1.5">
-                      <Layers className="w-3.5 h-3.5" />
-                      COUPLED TECHNOLOGIES:
-                    </h4>
-                    <div className="flex flex-wrap gap-1.5">
-                      {selectedSkill.relatedTech.map((tech) => (
+                  return (
+                    <div
+                      key={skill.id}
+                      onMouseEnter={() => setHoveredSkill(skill)}
+                      onMouseLeave={() => setHoveredSkill(null)}
+                      className={`group p-3 rounded-lg border transition-all duration-200 cursor-pointer ${
+                        isHovered
+                          ? 'border-accent bg-[#141B24]'
+                          : isRelated
+                          ? 'border-accent/40 bg-[#11161D]'
+                          : isDimmed
+                          ? 'border-white/5 bg-[#0D1117] opacity-40'
+                          : 'border-white/10 bg-[#11161D] hover:border-white/20'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between">
                         <span
-                          key={tech}
-                          className="px-2 py-0.5 rounded bg-panel border border-border/40 text-[11px] font-mono text-secondary-text"
+                          className={`text-sm font-medium transition-colors ${
+                            isHovered
+                              ? 'text-accent font-semibold'
+                              : isRelated
+                              ? 'text-[#5CB5FF]'
+                              : 'text-primary-text'
+                          }`}
                         >
-                          {tech}
+                          {skill.name}
                         </span>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              ) : (
-                <div className="p-8 rounded-2xl border border-dashed border-border/60 bg-panel/30 text-center font-mono text-xs text-muted-text">
-                  Hover or click any orbital node in the 3D universe to inspect system dependencies.
-                </div>
-              )}
-            </div>
-          </div>
-        ) : (
-          /* Matrix Grid View */
-          <div className="mt-8 space-y-6">
-            <div className="flex flex-wrap gap-2">
-              {categories.map((c) => (
-                <button
-                  key={c}
-                  onClick={() => setFilterCat(c)}
-                  className={`px-3 py-1 rounded-lg text-xs font-mono transition-colors ${
-                    filterCat === c
-                      ? 'bg-electric-blue text-white'
-                      : 'bg-panel border border-border/40 text-secondary-text hover:text-primary-text'
-                  }`}
-                >
-                  {c}
-                </button>
-              ))}
-            </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {filteredMatrix.map((skill) => (
-                <CardTilt
-                  key={skill.id}
-                  className="p-5 rounded-xl border border-border/40 bg-panel/70 hover:border-electric-blue/50 transition-all light-sweep-container"
-                >
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-[10px] font-mono text-electric-blue uppercase">
-                      {skill.category}
-                    </span>
-                    <span className="text-xs font-mono font-bold text-success">
-                      {skill.proficiency}%
-                    </span>
-                  </div>
-                  <h4 className="text-lg font-bold text-primary-text mb-1">
-                    {skill.name}
-                  </h4>
-                  <p className="text-xs text-secondary-text mb-4">
-                    {skill.description}
-                  </p>
-                  <div className="flex flex-wrap gap-1 pt-3 border-t border-border/30">
-                    {skill.relatedProjects.map((rp, i) => (
-                      <span
-                        key={i}
-                        className="px-2 py-0.5 rounded bg-panel-elevated text-[10px] font-mono text-muted-text"
-                      >
-                        {rp}
-                      </span>
-                    ))}
-                  </div>
-                </CardTilt>
-              ))}
+                        {/* Subtle Indicator (Requirement 21) */}
+                        <div
+                          className={`w-1.5 h-1.5 rounded-full transition-all ${
+                            isHovered
+                              ? 'bg-accent scale-125'
+                              : isRelated
+                              ? 'bg-[#5CB5FF]'
+                              : 'bg-transparent'
+                          }`}
+                        />
+                      </div>
+
+                      <p className="text-[11px] text-muted-text mt-1 line-clamp-2 leading-relaxed">
+                        {skill.description}
+                      </p>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
+          ))}
+        </div>
+
+        {/* Live Relationship Map: Highlights Related Projects (Requirement 21) */}
+        <div className="mt-12 p-5 rounded-xl border border-white/10 bg-[#0D1117] font-mono text-xs">
+          <div className="flex items-center justify-between mb-3 text-muted-text">
+            <span className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-accent" />
+              <span>RELATIONSHIP MAP // ACTIVE INSPECTION:</span>
+            </span>
+            <span className="text-accent font-semibold">
+              {hoveredSkill ? hoveredSkill.name : 'ALL TOOLS NOMINAL'}
+            </span>
           </div>
-        )}
+
+          {hoveredSkill ? (
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2 border-t border-white/5">
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="text-muted-text text-[11px]">COUPLED PROJECTS:</span>
+                {hoveredSkill.relatedProjects.map((pName) => (
+                  <span
+                    key={pName}
+                    className="px-2.5 py-1 rounded bg-[#161D26] border border-accent/40 text-accent font-semibold text-[11px]"
+                  >
+                    {pName}
+                  </span>
+                ))}
+              </div>
+              <div className="text-muted-text text-[11px] shrink-0">
+                LINKED TECH: {hoveredSkill.relatedTech.join(', ')}
+              </div>
+            </div>
+          ) : (
+            <p className="text-secondary-text text-[11px] pt-1">
+              Hover any skill above to inspect interconnected projects and related technologies.
+            </p>
+          )}
+        </div>
       </div>
     </section>
   );
