@@ -45,10 +45,9 @@ export default function Navbar() {
         position: 'sticky',
         top: '12px',
         zIndex: 50,
-        width: '100%',
-        maxWidth: '1140px',
+        width: 'min(92vw, 1440px)',
         margin: '0 auto',
-        padding: '0 1rem',
+        padding: '0 clamp(10px, 2vw, 24px)',
       }}
     >
       <nav
