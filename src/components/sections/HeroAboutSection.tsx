@@ -24,8 +24,8 @@ export default function HeroAboutSection() {
   };
 
   return (
-    <section id="me" className="pt-28 pb-16 sm:pt-36 sm:pb-20 scroll-mt-24">
-      <div className="space-y-12">
+    <section id="me" className="pt-20 pb-6 sm:pt-24 sm:pb-8 scroll-mt-20">
+      <div className="space-y-6">
         {/* Eyebrow / Terminal label & status (Stagger delay 100ms) */}
         <div className="flex flex-wrap items-center justify-between gap-3 text-xs font-mono text-[#666666] animate-fade-up delay-100">
           <div className="flex items-center gap-2">
@@ -42,26 +42,26 @@ export default function HeroAboutSection() {
         </div>
 
         {/* Hero Grid: Intro Left + Editorial Companion Right */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
           {/* Left Column: Editorial Introduction */}
-          <div className="lg:col-span-7 space-y-6">
+          <div className="lg:col-span-7 space-y-4">
             {/* Heading (Stagger delay 180ms) */}
             <div className="animate-fade-up delay-180">
-              <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-[#F1F1F1] leading-[1.1]">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-[#F1F1F1] leading-[1.1]">
                 Kushal Patel
               </h1>
-              <p className="mt-2 text-sm sm:text-base font-mono text-[#9A9A9A] tracking-wide">
+              <p className="mt-1.5 text-xs sm:text-sm font-mono text-[#9A9A9A] tracking-wide">
                 AI/ML Engineer <span className="text-[#444444]">•</span> Problem Solver <span className="text-[#444444]">•</span> Systems Builder
               </p>
             </div>
 
             {/* Subheading & Description (Stagger delay 280ms) */}
-            <div className="space-y-3 animate-fade-up delay-280">
-              <p className="text-xl sm:text-2xl font-medium text-[#DCDCDC] leading-snug">
+            <div className="space-y-2 animate-fade-up delay-280">
+              <p className="text-lg sm:text-xl font-medium text-[#DCDCDC] leading-snug">
                 Building <span className="text-white font-semibold underline decoration-[#2E2E2E] underline-offset-4">intelligent systems</span> for a better tomorrow.
               </p>
 
-              <p className="text-sm sm:text-base text-[#888888] leading-relaxed max-w-xl">
+              <p className="text-xs sm:text-sm text-[#888888] leading-relaxed max-w-xl">
                 I work at the intersection of machine learning, computer vision, and real-world problem solving — turning research ideas into scalable, production-grade systems. Currently engineering spatiotemporal vision models and low-power edge pipelines.
               </p>
             </div>
@@ -154,34 +154,34 @@ export default function HeroAboutSection() {
           </div>
 
           {/* Right Column: Monochrome Personal Card & Grayscale Companion Artwork (Stagger delay 350ms) */}
-          <div className="lg:col-span-5 flex flex-col gap-4 animate-fade-up delay-350">
-            <div className="p-5 sm:p-6 rounded-xl bg-[#0D0D0D] border border-[#1C1C1C] space-y-4 shadow-[0_4px_24px_rgba(0,0,0,0.6)] group">
+          <div className="lg:col-span-5 flex flex-col gap-3 animate-fade-up delay-350">
+            <div className="p-4 sm:p-5 rounded-xl bg-[#0D0D0D] border border-[#1C1C1C] space-y-3 shadow-[0_4px_20px_rgba(0,0,0,0.5)] group">
               {/* Card Header */}
-              <div className="flex items-center justify-between font-mono text-xs text-[#666666] border-b border-[#1A1A1A] pb-3">
+              <div className="flex items-center justify-between font-mono text-xs text-[#666666] border-b border-[#1A1A1A] pb-2.5">
                 <span className="text-[#A0A0A0] font-medium">&gt; personal.meta</span>
                 <span className="text-[#454545]">v2026.09</span>
               </div>
 
               {/* Requirement 11: Pure Monochrome Grayscale Character Illustration with Subtle Hover */}
-              <div className="relative w-full h-48 sm:h-52 rounded-lg bg-[#070707] border border-[#181818] overflow-hidden flex items-center justify-center p-2">
+              <div className="relative w-full h-40 sm:h-44 rounded-lg bg-[#070707] border border-[#181818] overflow-hidden flex items-center justify-center p-2">
                 <Image
                   src="/images/character_composite.png"
                   alt="Companion illustration"
-                  width={260}
-                  height={180}
+                  width={240}
+                  height={160}
                   className="w-auto h-full object-contain filter grayscale contrast-110 brightness-95 group-hover:contrast-125 group-hover:brightness-105 group-hover:-translate-y-0.5 transition-all duration-500 ease-out"
                   priority
                 />
                 <div className="absolute bottom-2 right-2 text-right">
-                  <span className="font-handwritten text-xs sm:text-sm text-[#A0A0A0] bg-[#0A0A0A]/90 px-2 py-0.5 rounded border border-[#1A1A1A]">
+                  <span className="font-handwritten text-xs text-[#A0A0A0] bg-[#0A0A0A]/90 px-2 py-0.5 rounded border border-[#1A1A1A]">
                     &ldquo;A better version of myself, everyday.&rdquo;
                   </span>
                 </div>
               </div>
 
               {/* Dev Philosophy & Quick Specs */}
-              <div className="space-y-2.5 font-mono text-xs">
-                <div className="flex items-center justify-between text-[#888888] py-1 border-b border-[#151515]">
+              <div className="space-y-2 font-mono text-xs">
+                <div className="flex items-center justify-between text-[#888888] py-0.5 border-b border-[#151515]">
                   <span className="text-[#555555]">&gt; currently_building</span>
                   <span className="text-[#E0E0E0] font-medium">Solar Flare Prediction</span>
                 </div>

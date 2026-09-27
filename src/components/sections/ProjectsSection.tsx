@@ -17,11 +17,11 @@ export default function ProjectsSection() {
   });
 
   return (
-    <section id="projects" className="py-16 scroll-mt-24">
+    <section id="projects" className="py-6 sm:py-8 scroll-mt-20">
       {/* Requirement 8: Animated Subtle Section Divider */}
-      <div className="section-divider mb-12 divider-active" />
+      <div className="section-divider mb-6 sm:mb-8 divider-active" />
 
-      <div className="space-y-8">
+      <div className="space-y-6">
         {/* Terminal label */}
         <div className="flex items-center gap-2 font-mono text-xs text-[#666666]">
           <span className="text-[#888888]">&gt;</span>
@@ -33,10 +33,10 @@ export default function ProjectsSection() {
         {/* Section Heading & Category Filter */}
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
           <div>
-            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-[#F1F1F1]">
+            <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-[#F1F1F1]">
               Featured Projects
             </h2>
-            <p className="mt-1 text-sm text-[#888888]">
+            <p className="mt-1 text-xs sm:text-sm text-[#888888]">
               Spatiotemporal forecasting, unsupervised edge vision, and digital forensic models.
             </p>
           </div>
@@ -61,7 +61,7 @@ export default function ProjectsSection() {
         </div>
 
         {/* Projects List */}
-        <div className="space-y-6 pt-2">
+        <div className="space-y-4 pt-1">
           {filteredProjects.map((project) => {
             const isExpanded = expandedProject === project.id;
             const isFeatured = project.featured;
@@ -72,7 +72,7 @@ export default function ProjectsSection() {
                 className="group rounded-xl bg-[#0D0D0D] hover:bg-[#111111] border border-[#1A1A1A] hover:border-[#2C2C2C] hover:-translate-y-0.5 transition-all duration-300 shadow-[0_4px_20px_rgba(0,0,0,0.5)] overflow-hidden"
               >
                 {/* Main Card Content */}
-                <div className="p-6 sm:p-8">
+                <div className="p-5 sm:p-6">
                   <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
                     {/* Project Image Preview in Grayscale */}
                     <div className="lg:col-span-4 order-last lg:order-first">

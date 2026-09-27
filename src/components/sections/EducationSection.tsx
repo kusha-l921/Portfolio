@@ -8,11 +8,11 @@ export default function EducationSection() {
   const { education } = RESUME_DATA;
 
   return (
-    <section className="py-16 scroll-mt-24">
+    <section className="py-6 sm:py-8 scroll-mt-20">
       {/* Requirement 8: Animated Subtle Section Divider */}
-      <div className="section-divider mb-12 divider-active" />
+      <div className="section-divider mb-6 sm:mb-8 divider-active" />
 
-      <div className="space-y-6">
+      <div className="space-y-4">
         {/* Terminal label */}
         <div className="flex items-center gap-2 font-mono text-xs text-[#666666]">
           <span className="text-[#888888]">&gt;</span>
@@ -21,12 +21,12 @@ export default function EducationSection() {
           <span className="text-[#555555]">academic-record</span>
         </div>
 
-        <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#F1F1F1]">
+        <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-[#F1F1F1]">
           Education
         </h2>
 
         {/* Education Card */}
-        <div className="p-6 sm:p-7 rounded-xl bg-[#0D0D0D] border border-[#1C1C1C] hover:border-[#2C2C2C] transition-all duration-300 shadow-[0_4px_20px_rgba(0,0,0,0.5)]">
+        <div className="p-5 sm:p-6 rounded-xl bg-[#0D0D0D] border border-[#1C1C1C] hover:border-[#2C2C2C] transition-all duration-300 shadow-[0_4px_20px_rgba(0,0,0,0.5)]">
           <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
             <div className="space-y-2">
               <div className="flex items-center gap-2 text-[#9A9A9A] font-mono text-xs">

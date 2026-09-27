@@ -56,11 +56,11 @@ export default function ExperienceSection() {
   const { achievements } = RESUME_DATA;
 
   return (
-    <section id="experience" className="py-16 scroll-mt-24">
+    <section id="experience" className="py-6 sm:py-8 scroll-mt-20">
       {/* Requirement 8: Animated Subtle Section Divider */}
-      <div className="section-divider mb-12 divider-active" />
+      <div className="section-divider mb-6 sm:mb-8 divider-active" />
 
-      <div className="space-y-8">
+      <div className="space-y-6">
         {/* Terminal label */}
         <div className="flex items-center gap-2 font-mono text-xs text-[#666666]">
           <span className="text-[#888888]">&gt;</span>
@@ -70,20 +70,20 @@ export default function ExperienceSection() {
         </div>
 
         <div>
-          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#F1F1F1]">
+          <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-[#F1F1F1]">
             Engineering &amp; Research Journey
           </h2>
-          <p className="mt-1 text-sm text-[#888888]">
+          <p className="mt-1 text-xs sm:text-sm text-[#888888]">
             Applied machine learning, deep learning architectures, and edge systems.
           </p>
         </div>
 
         {/* Experience Timeline */}
-        <div className="space-y-4 pt-2">
+        <div className="space-y-3.5 pt-1">
           {experiences.map((exp) => (
             <div
               key={exp.id}
-              className="p-6 rounded-xl bg-[#0D0D0D] border border-[#1C1C1C] hover:border-[#2C2C2C] transition-all duration-300 shadow-[0_4px_20px_rgba(0,0,0,0.5)] group"
+              className="p-5 sm:p-6 rounded-xl bg-[#0D0D0D] border border-[#1C1C1C] hover:border-[#2C2C2C] transition-all duration-300 shadow-[0_4px_20px_rgba(0,0,0,0.5)] group"
             >
               <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2 pb-3 border-b border-[#161616]">
                 <div>

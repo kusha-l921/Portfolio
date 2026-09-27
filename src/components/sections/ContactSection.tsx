@@ -40,11 +40,11 @@ export default function ContactSection() {
   };
 
   return (
-    <section id="contact" className="py-16 scroll-mt-24">
+    <section id="contact" className="py-6 sm:py-8 scroll-mt-20">
       {/* Requirement 8: Animated Subtle Section Divider */}
-      <div className="section-divider mb-12 divider-active" />
+      <div className="section-divider mb-6 sm:mb-8 divider-active" />
 
-      <div className="space-y-8">
+      <div className="space-y-6">
         {/* Terminal label */}
         <div className="flex items-center gap-2 font-mono text-xs text-[#666666]">
           <span className="text-[#888888]">&gt;</span>
@@ -54,10 +54,10 @@ export default function ContactSection() {
         </div>
 
         <div>
-          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-[#F1F1F1]">
+          <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-[#F1F1F1]">
             Get In Touch
           </h2>
-          <p className="mt-1 text-sm text-[#888888]">
+          <p className="mt-1 text-xs sm:text-sm text-[#888888]">
             Have a project in mind, an AI/ML research problem, or want to collaborate? Reach out anytime.
           </p>
         </div>

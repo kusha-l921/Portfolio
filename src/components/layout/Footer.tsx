@@ -12,7 +12,7 @@ export default function Footer() {
   };
 
   return (
-    <footer className="py-12 border-t border-[#171717] font-mono text-xs text-[#555555]">
+    <footer className="py-8 sm:py-10 border-t border-[#171717] font-mono text-xs text-[#555555]">
       <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
         <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 text-center sm:text-left">
           <span className="text-[#D4D4D4] font-semibold">
