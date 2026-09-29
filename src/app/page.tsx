@@ -7,6 +7,7 @@ import ProjectsSection from '../components/ProjectsSection';
 import SkillsSection from '../components/SkillsSection';
 import ContactSection from '../components/ContactSection';
 import Footer from '../components/Footer';
+import PortfolioTerminal from '../components/PortfolioTerminal';
 
 export default function HomePage() {
   return (
@@ -37,6 +38,9 @@ export default function HomePage() {
 
       {/* Minimal Footer */}
       <Footer />
+
+      {/* Global VS Code Integrated Bottom Terminal Panel */}
+      <PortfolioTerminal />
     </main>
   );
 }

@@ -13,26 +13,12 @@ export default function ContactSection() {
   };
 
   return (
-    <section id="contact" className="section" style={{ borderTop: '1px solid var(--border-subtle)' }}>
+    <section id="contact" className="section">
       <div className="container">
         {/* Section Header */}
         <div className="section-header">
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-            }}
-          >
-            <div className="terminal-label">
-              <span>&gt; contact.init()</span>
-            </div>
-            <span
-              className="font-mono"
-              style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}
-            >
-              05
-            </span>
+          <div className="terminal-label">
+            <span>&gt; contact.init()</span>
           </div>
 
           <h2 className="section-title">Let&apos;s build something.</h2>

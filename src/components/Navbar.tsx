@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { PERSONAL_DATA } from '../data/portfolioData';
 import { useTheme } from '../context/ThemeContext';
+import { useTerminal } from '../context/TerminalContext';
 
 const NAV_LINKS = [
   { label: '/me', href: '#me' },
@@ -19,6 +20,7 @@ export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { theme, toggleTheme } = useTheme();
+  const { isOpen: isTerminalOpen, toggleTerminal } = useTerminal();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -166,14 +168,39 @@ export default function Navbar() {
           })}
         </div>
 
-        {/* Right: Theme Toggle + Online Status + Resume Link */}
+        {/* Right: Terminal Trigger + Theme Toggle + Online Status + Resume Link */}
         <div
           style={{
             display: 'flex',
             alignItems: 'center',
-            gap: '0.65rem',
+            gap: '0.55rem',
           }}
         >
+          {/* Subtle Terminal Trigger Button */}
+          <button
+            onClick={toggleTerminal}
+            aria-label="Toggle VS Code terminal"
+            className="font-mono"
+            title="Toggle Terminal (Ctrl + ` or T)"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.35rem',
+              fontSize: '0.72rem',
+              padding: '0.28rem 0.65rem',
+              borderRadius: '9999px',
+              backgroundColor: isTerminalOpen ? 'var(--bg-pill-hover)' : 'var(--bg-card)',
+              color: isTerminalOpen ? 'var(--text-white)' : 'var(--text-dim)',
+              border: '1px solid',
+              borderColor: isTerminalOpen ? 'var(--border-strong)' : 'var(--border-subtle)',
+              cursor: 'pointer',
+              transition: 'all 0.18s ease',
+            }}
+          >
+            <span style={{ color: 'var(--text-muted)' }}>&gt;_</span>
+            <span>terminal</span>
+          </button>
+
           {/* Subtle Theme Toggle Button */}
           <button
             onClick={toggleTheme}

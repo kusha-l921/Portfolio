@@ -5,26 +5,12 @@ import { EDUCATION_DATA, ACHIEVEMENTS_DATA } from '../data/portfolioData';
 
 export default function EducationSection() {
   return (
-    <section id="education" className="section" style={{ borderTop: '1px solid var(--border-subtle)' }}>
+    <section id="education" className="section">
       <div className="container">
         {/* Section Header */}
         <div className="section-header">
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-            }}
-          >
-            <div className="terminal-label">
-              <span>&gt; education.info</span>
-            </div>
-            <span
-              className="font-mono"
-              style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}
-            >
-              02
-            </span>
+          <div className="terminal-label">
+            <span>&gt; education.info</span>
           </div>
           <h2 className="section-title">Education</h2>
           <p className="section-desc">

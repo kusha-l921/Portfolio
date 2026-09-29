@@ -57,26 +57,12 @@ function CategoryIcon({ id }: { id: string }) {
 
 export default function SkillsSection() {
   return (
-    <section id="skills" className="section" style={{ borderTop: '1px solid var(--border-subtle)' }}>
+    <section id="skills" className="section">
       <div className="container">
         {/* Section Header */}
         <div className="section-header">
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-            }}
-          >
-            <div className="terminal-label">
-              <span>&gt; skills.list</span>
-            </div>
-            <span
-              className="font-mono"
-              style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}
-            >
-              04
-            </span>
+          <div className="terminal-label">
+            <span>&gt; skills.list</span>
           </div>
 
           <h2 className="section-title">Skills &amp; Technologies</h2>

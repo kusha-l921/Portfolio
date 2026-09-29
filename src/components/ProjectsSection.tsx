@@ -18,26 +18,12 @@ export default function ProjectsSection() {
   });
 
   return (
-    <section id="projects" className="section" style={{ borderTop: '1px solid var(--border-subtle)' }}>
+    <section id="projects" className="section">
       <div className="container">
         {/* Section Header */}
         <div className="section-header">
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-            }}
-          >
-            <div className="terminal-label">
-              <span>&gt; projects/</span>
-            </div>
-            <span
-              className="font-mono"
-              style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}
-            >
-              03
-            </span>
+          <div className="terminal-label">
+            <span>&gt; projects/</span>
           </div>
 
           <h2 className="section-title">Selected Work</h2>
@@ -99,6 +85,7 @@ export default function ProjectsSection() {
           {filteredProjects.map((project) => (
             <div
               key={project.id}
+              id={`project-${project.id}`}
               className="card project-card-item"
               style={{
                 borderRadius: '8px',
@@ -106,6 +93,7 @@ export default function ProjectsSection() {
                 border: '1px solid var(--border-card)',
                 overflow: 'hidden',
                 transition: 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
+                scrollMarginTop: '100px',
               }}
             >
               <div

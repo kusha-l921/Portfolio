@@ -31,6 +31,7 @@ export const viewport: Viewport = {
 };
 
 import { ThemeProvider } from '../context/ThemeContext';
+import { TerminalProvider } from '../context/TerminalContext';
 
 export default function RootLayout({
   children,
@@ -49,8 +50,10 @@ export default function RootLayout({
       </head>
       <body>
         <ThemeProvider>
-          <CustomCursor />
-          {children}
+          <TerminalProvider>
+            <CustomCursor />
+            {children}
+          </TerminalProvider>
         </ThemeProvider>
       </body>
     </html>

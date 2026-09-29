@@ -5,26 +5,12 @@ import { ABOUT_DATA } from '../data/portfolioData';
 
 export default function AboutSection() {
   return (
-    <section id="about" className="section" style={{ borderTop: '1px solid var(--border-subtle)' }}>
+    <section id="about" className="section">
       <div className="container">
         {/* Section Header */}
         <div className="section-header">
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-            }}
-          >
-            <div className="terminal-label">
-              <span>&gt; about.txt</span>
-            </div>
-            <span
-              className="font-mono"
-              style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}
-            >
-              01
-            </span>
+          <div className="terminal-label">
+            <span>&gt; about.txt</span>
           </div>
           <h2 className="section-title">About</h2>
         </div>

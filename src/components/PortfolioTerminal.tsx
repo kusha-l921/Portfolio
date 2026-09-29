@@ -1,6 +1,8 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
+import { useTerminal } from '../context/TerminalContext';
+import { useTheme } from '../context/ThemeContext';
 
 interface TerminalLine {
   id: string;
@@ -8,45 +10,61 @@ interface TerminalLine {
   text: string;
 }
 
-const COMMAND_LIST = [
+const KNOWN_COMMANDS = [
   'help',
+  'clear',
+  'pwd',
+  'ls',
+  'whoami',
+  'home',
   'about',
   'education',
   'projects',
   'skills',
   'contact',
   'resume',
-  'home',
-  'whoami',
-  'ls',
-  'pwd',
-  'clear',
-  'cd /about',
-  'cd /education',
-  'cd /projects',
-  'cd /skills',
-  'cd /contact',
   'cd about',
   'cd education',
   'cd projects',
   'cd skills',
   'cd contact',
+  'cd ~',
+  'cd ..',
+  'cd ../..',
+  'cd projects/solarflare',
+  'cd projects/fieldsight',
+  'cd projects/firsefile',
+  'cd projects/rewear',
+  'cd solarflare',
+  'cd fieldsight',
+  'cd firsefile',
+  'cd rewear',
+  'sudo light-mode',
+  'sudo dark-mode',
+  'sudo about',
+  'sudo projects',
+  'sudo contact',
+  'theme light',
+  'theme dark',
 ];
 
 export default function PortfolioTerminal() {
-  const [currentPath, setCurrentPath] = useState('~/portfolio');
+  const { isOpen, closeTerminal } = useTerminal();
+  const { theme, toggleTheme } = useTheme();
+
+  const [currentPath, setCurrentPath] = useState('~');
+  const [activeTab, setActiveTab] = useState<'terminal' | 'output'>('terminal');
   const [inputVal, setInputVal] = useState('');
-  const [isFocused, setIsFocused] = useState(false);
   const [history, setHistory] = useState<TerminalLine[]>([
     {
       id: 'init-1',
-      type: 'command',
-      text: 'kushal@portfolio:~$ help',
+      type: 'info',
+      text: 'Kushal Patel — Interactive Portfolio Shell [v2.4 x86_64]',
     },
     {
       id: 'init-2',
       type: 'output',
-      text: 'available:\n  about     projects  skills\n  education contact   resume',
+      text: "Type 'help' for commands, 'cd projects' to browse work, or 'sudo light-mode' / 'sudo dark-mode' to switch theme.\nUse [Tab] to autocomplete and [↑/↓] for history. Press Ctrl+` or T to toggle panel.",
     },
   ]);
   const [commandHistory, setCommandHistory] = useState<string[]>([]);
@@ -55,49 +73,32 @@ export default function PortfolioTerminal() {
   const inputRef = useRef<HTMLInputElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  // Auto-scroll to bottom of terminal when history changes
+  // Auto-focus when opened
+  useEffect(() => {
+    if (isOpen) {
+      const timer = setTimeout(() => {
+        inputRef.current?.focus();
+      }, 60);
+      return () => clearTimeout(timer);
+    }
+  }, [isOpen]);
+
+  // Auto-scroll to bottom of terminal screen
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
-  }, [history, inputVal]);
+  }, [history, inputVal, isOpen]);
 
-  // Sync terminal title with scroll position
-  useEffect(() => {
-    const handleScroll = () => {
-      const sections = [
-        { id: 'me', path: '~/portfolio' },
-        { id: 'about', path: '~/portfolio/about' },
-        { id: 'education', path: '~/portfolio/education' },
-        { id: 'projects', path: '~/portfolio/projects' },
-        { id: 'skills', path: '~/portfolio/skills' },
-        { id: 'contact', path: '~/portfolio/contact' },
-      ];
-      const scrollPos = window.scrollY + 240;
-
-      for (let i = sections.length - 1; i >= 0; i--) {
-        const el = document.getElementById(sections[i].id);
-        if (el && el.offsetTop <= scrollPos) {
-          setCurrentPath(sections[i].path);
-          break;
-        }
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  const focusInput = () => {
-    inputRef.current?.focus();
-    setIsFocused(true);
+  const getPromptString = () => {
+    if (currentPath === '~') return 'kushal@portfolio:~$ ';
+    return `kushal@portfolio:${currentPath}$ `;
   };
 
-  const scrollToSection = (targetId: string, pathName: string) => {
-    setCurrentPath(pathName);
-    const element = document.getElementById(targetId);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+  const smoothScrollTo = (targetId: string) => {
+    const el = document.getElementById(targetId);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   };
 
@@ -108,152 +109,279 @@ export default function PortfolioTerminal() {
     setCommandHistory((prev) => [...prev, trimmed]);
     setHistoryIdx(-1);
 
-    // Strip aesthetic sudo prefix if present
-    let cmd = trimmed.toLowerCase();
-    if (cmd.startsWith('sudo ')) {
-      cmd = cmd.slice(5).trim();
-    }
-
-    const commandEntry: TerminalLine = {
+    const promptText = `${getPromptString()}${trimmed}`;
+    const userCmdEntry: TerminalLine = {
       id: `cmd-${Date.now()}`,
       type: 'command',
-      text: `kushal@portfolio:~$ ${trimmed}`,
+      text: promptText,
     };
 
-    let responseText = '';
-    let shouldClear = false;
+    const cmdLower = trimmed.toLowerCase();
 
-    // Safe Command Router
-    switch (cmd) {
-      case 'help':
-        responseText =
-          'available:\n  about     projects  skills\n  education contact   resume\nnavigation:\n  cd /about cd /projects home';
-        break;
-
-      case 'about':
-      case 'cd /about':
-      case 'cd about':
-        responseText = 'navigating to ~/about...';
-        scrollToSection('about', '~/portfolio/about');
-        break;
-
-      case 'education':
-      case 'cd /education':
-      case 'cd education':
-        responseText = 'navigating to ~/education...';
-        scrollToSection('education', '~/portfolio/education');
-        break;
-
-      case 'projects':
-      case 'cd /projects':
-      case 'cd projects':
-        responseText = 'navigating to ~/projects...';
-        scrollToSection('projects', '~/portfolio/projects');
-        break;
-
-      case 'skills':
-      case 'cd /skills':
-      case 'cd skills':
-        responseText = 'navigating to ~/skills...';
-        scrollToSection('skills', '~/portfolio/skills');
-        break;
-
-      case 'contact':
-      case 'cd /contact':
-      case 'cd contact':
-        responseText = 'navigating to ~/contact...';
-        scrollToSection('contact', '~/portfolio/contact');
-        break;
-
-      case 'home':
-      case 'cd ~':
-      case 'cd /':
-      case 'cd ..':
-        responseText = 'navigating to ~/home...';
-        scrollToSection('me', '~/portfolio');
-        break;
-
-      case 'resume':
-        responseText = 'opening resume.pdf...';
-        window.open('/docs/Kushal_Patel_Resume.pdf', '_blank');
-        break;
-
-      case 'whoami':
-        responseText =
-          'Kushal Patel — AI/ML Engineer · Systems Builder';
-        break;
-
-      case 'ls':
-        responseText =
-          'about/   education/   projects/   skills/   contact/   resume.pdf';
-        break;
-
-      case 'pwd':
-        responseText = `/home/kushal/${currentPath.replace('~/', '')}`;
-        break;
-
-      case 'clear':
-        shouldClear = true;
-        break;
-
-      default:
-        responseText = `command not found: ${trimmed} (try 'help')`;
-        break;
-    }
-
-    if (shouldClear) {
+    // 1. CLEAR
+    if (cmdLower === 'clear') {
       setHistory([]);
-    } else {
-      setHistory((prev) => [
-        ...prev,
-        commandEntry,
-        {
-          id: `res-${Date.now()}`,
-          type: 'output',
-          text: responseText,
-        },
-      ]);
+      setInputVal('');
+      return;
     }
+
+    let response = '';
+
+    // 2. HELP
+    if (cmdLower === 'help') {
+      response =
+        "Available commands:\n" +
+        "  navigation:  cd about | cd education | cd projects | cd skills | cd contact | cd ~\n" +
+        "  projects:    cd solarflare | cd fieldsight | cd firsefile | cd rewear\n" +
+        "  utilities:   ls, pwd, whoami, clear, resume, help\n" +
+        "  theme:       sudo light-mode | sudo dark-mode | theme light | theme dark\n" +
+        "  shortcuts:   [tab] autocomplete, [↑/↓] history, [ctrl+` / T] toggle terminal";
+    }
+
+    // 3. WHOAMI
+    else if (cmdLower === 'whoami') {
+      response = 'Kushal Patel — AI/ML Engineer · Systems Builder\nDwarkadas J. Sanghvi College of Engineering, Mumbai';
+    }
+
+    // 4. PWD
+    else if (cmdLower === 'pwd') {
+      const relative = currentPath.replace('~', '');
+      response = `/home/kushal${relative || ''}`;
+    }
+
+    // 5. RESUME
+    else if (cmdLower === 'resume') {
+      response = 'opening resume.pdf in new tab...';
+      window.open('/docs/Kushal_Patel_Resume.pdf', '_blank');
+    }
+
+    // 6. LS
+    else if (cmdLower === 'ls' || cmdLower.startsWith('ls ')) {
+      if (currentPath === '~') {
+        response = 'about/        education/    projects/     skills/       contact/      resume.pdf';
+      } else if (currentPath === '~/projects') {
+        response = '01 solarflare/   02 fieldsight/   03 firsefile/   04 rewear/';
+      } else if (currentPath.startsWith('~/projects/')) {
+        response = 'overview.md   architecture.onnx   empirical_metrics.csv   github_repo.url';
+      } else if (currentPath === '~/about') {
+        response = 'bio.txt   interests.json   domains.list   academic_background.md';
+      } else if (currentPath === '~/education') {
+        response = 'djsanghvi_coe.md   curriculum.txt   competitive_honors.log';
+      } else if (currentPath === '~/skills') {
+        response = 'machine_learning.py   computer_vision.onnx   development.cpp   web_tools.ts';
+      } else if (currentPath === '~/contact') {
+        response = 'direct_email.txt   github.url   linkedin.url';
+      } else {
+        response = 'README.md';
+      }
+    }
+
+    // 7. HOME
+    else if (cmdLower === 'home') {
+      response = 'navigating to ~/home...';
+      setCurrentPath('~');
+      setTimeout(() => smoothScrollTo('me'), 240);
+    }
+
+    // 8. DIRECT SECTION COMMANDS (about, education, projects, skills, contact)
+    else if (cmdLower === 'about') {
+      response = 'navigating to ~/about...';
+      setCurrentPath('~/about');
+      setTimeout(() => smoothScrollTo('about'), 240);
+    } else if (cmdLower === 'education') {
+      response = 'navigating to ~/education...';
+      setCurrentPath('~/education');
+      setTimeout(() => smoothScrollTo('education'), 240);
+    } else if (cmdLower === 'projects') {
+      response = 'navigating to ~/projects...';
+      setCurrentPath('~/projects');
+      setTimeout(() => smoothScrollTo('projects'), 240);
+    } else if (cmdLower === 'skills') {
+      response = 'navigating to ~/skills...';
+      setCurrentPath('~/skills');
+      setTimeout(() => smoothScrollTo('skills'), 240);
+    } else if (cmdLower === 'contact') {
+      response = 'navigating to ~/contact...';
+      setCurrentPath('~/contact');
+      setTimeout(() => smoothScrollTo('contact'), 240);
+    }
+
+    // 9. SUDO & THEME SWITCHING
+    else if (cmdLower === 'sudo light-mode' || cmdLower === 'theme light') {
+      response = '[sudo] switching interface theme to light mode...';
+      if (theme !== 'light') {
+        toggleTheme();
+      }
+    } else if (cmdLower === 'sudo dark-mode' || cmdLower === 'theme dark') {
+      response = '[sudo] switching interface theme to dark mode...';
+      if (theme !== 'dark') {
+        toggleTheme();
+      }
+    } else if (cmdLower === 'sudo about') {
+      response = '[sudo] authorized navigation: navigating to ~/about...';
+      setCurrentPath('~/about');
+      setTimeout(() => smoothScrollTo('about'), 240);
+    } else if (cmdLower === 'sudo projects') {
+      response = '[sudo] authorized navigation: navigating to ~/projects...';
+      setCurrentPath('~/projects');
+      setTimeout(() => smoothScrollTo('projects'), 240);
+    } else if (cmdLower === 'sudo contact') {
+      response = '[sudo] authorized navigation: navigating to ~/contact...';
+      setCurrentPath('~/contact');
+      setTimeout(() => smoothScrollTo('contact'), 240);
+    } else if (cmdLower.startsWith('sudo ')) {
+      response = '[sudo] command recognized. Sudo privileges granted for navigation and theme switches.';
+    }
+
+    // 10. CD COMMANDS & DIRECTORY TRAVERSAL
+    else if (cmdLower === 'cd' || cmdLower === 'cd ~' || cmdLower === 'cd /') {
+      response = 'navigating to ~/home...';
+      setCurrentPath('~');
+      setTimeout(() => smoothScrollTo('me'), 240);
+    } else if (cmdLower === 'cd ..') {
+      if (currentPath.startsWith('~/projects/')) {
+        response = 'navigating to ~/projects...';
+        setCurrentPath('~/projects');
+        setTimeout(() => smoothScrollTo('projects'), 240);
+      } else {
+        response = 'navigating to ~/home...';
+        setCurrentPath('~');
+        setTimeout(() => smoothScrollTo('me'), 240);
+      }
+    } else if (cmdLower === 'cd ../..' || cmdLower === 'cd ../../') {
+      response = 'navigating to ~/home...';
+      setCurrentPath('~');
+      setTimeout(() => smoothScrollTo('me'), 240);
+    }
+
+    // Section CDs
+    else if (cmdLower === 'cd about' || cmdLower === 'cd /about' || cmdLower === 'cd ~/about') {
+      response = 'navigating to ~/about...';
+      setCurrentPath('~/about');
+      setTimeout(() => smoothScrollTo('about'), 240);
+    } else if (cmdLower === 'cd education' || cmdLower === 'cd /education' || cmdLower === 'cd ~/education') {
+      response = 'navigating to ~/education...';
+      setCurrentPath('~/education');
+      setTimeout(() => smoothScrollTo('education'), 240);
+    } else if (cmdLower === 'cd projects' || cmdLower === 'cd /projects' || cmdLower === 'cd ~/projects') {
+      response = 'navigating to ~/projects...';
+      setCurrentPath('~/projects');
+      setTimeout(() => smoothScrollTo('projects'), 240);
+    } else if (cmdLower === 'cd skills' || cmdLower === 'cd /skills' || cmdLower === 'cd ~/skills') {
+      response = 'navigating to ~/skills...';
+      setCurrentPath('~/skills');
+      setTimeout(() => smoothScrollTo('skills'), 240);
+    } else if (cmdLower === 'cd contact' || cmdLower === 'cd /contact' || cmdLower === 'cd ~/contact') {
+      response = 'navigating to ~/contact...';
+      setCurrentPath('~/contact');
+      setTimeout(() => smoothScrollTo('contact'), 240);
+    }
+
+    // Project Nested CDs (solarflare, fieldsight, firsefile, rewear)
+    else if (
+      cmdLower === 'cd solarflare' ||
+      cmdLower === 'cd solar-flare' ||
+      cmdLower === 'cd projects/solarflare' ||
+      cmdLower === 'cd projects/solar-flare' ||
+      cmdLower === 'cd /projects/solarflare'
+    ) {
+      response = 'navigating to ~/projects/solarflare...\n[Solar Flare Prediction: Vision Transformer spatiotemporal forecasting]';
+      setCurrentPath('~/projects/solarflare');
+      setTimeout(() => smoothScrollTo('project-solar-flare'), 240);
+    } else if (
+      cmdLower === 'cd fieldsight' ||
+      cmdLower === 'cd fieldsight-lite' ||
+      cmdLower === 'cd projects/fieldsight' ||
+      cmdLower === 'cd projects/fieldsight-lite' ||
+      cmdLower === 'cd /projects/fieldsight'
+    ) {
+      response = 'navigating to ~/projects/fieldsight...\n[FieldSight Lite: Unsupervised training-free edge vision pipeline]';
+      setCurrentPath('~/projects/fieldsight');
+      setTimeout(() => smoothScrollTo('project-fieldsight-lite'), 240);
+    } else if (
+      cmdLower === 'cd firsefile' ||
+      cmdLower === 'cd projects/firsefile' ||
+      cmdLower === 'cd /projects/firsefile'
+    ) {
+      response = 'navigating to ~/projects/firsefile...\n[FirSeFile: ML digital forensics with Swin Transformer V2 & Rust]';
+      setCurrentPath('~/projects/firsefile');
+      setTimeout(() => smoothScrollTo('project-firsefile'), 240);
+    } else if (
+      cmdLower === 'cd rewear' ||
+      cmdLower === 'cd projects/rewear' ||
+      cmdLower === 'cd /projects/rewear'
+    ) {
+      response = 'navigating to ~/projects/rewear...\n[ReWear: Sustainable circular wardrobe exchange engine]';
+      setCurrentPath('~/projects/rewear');
+      setTimeout(() => smoothScrollTo('project-rewear'), 240);
+    }
+
+    // Invalid CD
+    else if (cmdLower.startsWith('cd ')) {
+      const targetDir = trimmed.slice(3).trim();
+      response = `bash: cd: ${targetDir}: no such portfolio directory\nType 'ls' to view available directories, or 'help' for guide.`;
+    }
+
+    // Default Unknown Command
+    else {
+      response = `bash: command not found: ${trimmed}\nTry 'help' or 'cd projects'`;
+    }
+
+    setHistory((prev) => [
+      ...prev,
+      userCmdEntry,
+      {
+        id: `res-${Date.now()}`,
+        type: 'output',
+        text: response,
+      },
+    ]);
 
     setInputVal('');
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    // Autocomplete with Tab
+    // 1. Tab Autocomplete
     if (e.key === 'Tab') {
       e.preventDefault();
       const current = inputVal.trim().toLowerCase();
       if (!current) return;
 
-      const match = COMMAND_LIST.find((c) => c.startsWith(current));
+      // Match commands
+      const match = KNOWN_COMMANDS.find((cmd) => cmd.startsWith(current));
       if (match) {
         setInputVal(match);
+      } else if (currentPath === '~/projects') {
+        const sub = ['solarflare', 'fieldsight', 'firsefile', 'rewear'].find((p) =>
+          `cd ${p}`.startsWith(current) || p.startsWith(current)
+        );
+        if (sub) {
+          setInputVal(current.startsWith('cd ') ? `cd ${sub}` : sub);
+        }
       }
       return;
     }
 
-    // Submit with Enter
+    // 2. Submit on Enter
     if (e.key === 'Enter') {
       e.preventDefault();
       handleCommand(inputVal);
       return;
     }
 
-    // Command History: Arrow Up
+    // 3. Arrow Up History
     if (e.key === 'ArrowUp') {
       e.preventDefault();
       if (commandHistory.length === 0) return;
 
       const nextIdx =
-        historyIdx === -1
-          ? commandHistory.length - 1
-          : Math.max(0, historyIdx - 1);
+        historyIdx === -1 ? commandHistory.length - 1 : Math.max(0, historyIdx - 1);
       setHistoryIdx(nextIdx);
       setInputVal(commandHistory[nextIdx]);
       return;
     }
 
-    // Command History: Arrow Down
+    // 4. Arrow Down History
     if (e.key === 'ArrowDown') {
       e.preventDefault();
       if (historyIdx === -1) return;
@@ -269,204 +397,319 @@ export default function PortfolioTerminal() {
       return;
     }
 
-    // Escape removes focus
+    // 5. Escape closes terminal
     if (e.key === 'Escape') {
-      inputRef.current?.blur();
-      setIsFocused(false);
+      e.preventDefault();
+      closeTerminal();
       return;
     }
   };
 
   return (
-    <div
-      className="portfolio-terminal-window"
-      onClick={focusInput}
+    <aside
+      className="vscode-integrated-terminal-panel"
+      aria-label="Integrated Terminal"
       style={{
-        width: '100%',
-        maxWidth: '330px',
-        height: '240px',
-        backgroundColor: 'var(--bg-card)',
-        border: `1px solid ${isFocused ? 'var(--border-strong)' : 'var(--border-card)'}`,
-        borderRadius: '8px',
-        overflow: 'hidden',
-        boxShadow: isFocused
-          ? '0 12px 32px rgba(0, 0, 0, 0.5), 0 0 0 1px var(--border-hover)'
-          : '0 6px 20px rgba(0, 0, 0, 0.35)',
-        transition: 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
+        position: 'fixed',
+        bottom: 0,
+        left: 0,
+        right: 0,
+        width: '100vw',
+        height: 'clamp(260px, 32vh, 380px)',
+        backgroundColor: '#080808',
+        borderTop: '1px solid #1C1C1C',
+        boxShadow: isOpen ? '0 -10px 40px rgba(0, 0, 0, 0.75)' : 'none',
+        zIndex: 1000,
         display: 'flex',
         flexDirection: 'column',
-        cursor: 'text',
-        userSelect: 'none',
+        transform: isOpen ? 'translateY(0)' : 'translateY(100%)',
+        transition: 'transform 260ms cubic-bezier(0.16, 1, 0.3, 1)',
+        pointerEvents: isOpen ? 'auto' : 'none',
+        userSelect: 'text',
       }}
     >
-      {/* Title Bar (Hyprland / Linux Minimalist Window Controls) */}
+      {/* VS Code Panel Tab Bar */}
       <div
         style={{
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          padding: '0.45rem 0.75rem',
-          backgroundColor: 'var(--bg-surface)',
-          borderBottom: '1px solid var(--border-subtle)',
+          height: '36px',
+          backgroundColor: '#0D0D0D',
+          borderBottom: '1px solid #1C1C1C',
+          padding: '0 clamp(16px, 2.5vw, 28px)',
+          userSelect: 'none',
         }}
       >
-        {/* Window controls */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
-          <span
+        {/* Left: Tabs */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem', height: '100%' }}>
+          <button
+            onClick={() => setActiveTab('terminal')}
+            className="font-mono"
             style={{
-              width: '7px',
-              height: '7px',
-              borderRadius: '50%',
-              backgroundColor: '#333333',
-              display: 'inline-block',
+              background: 'transparent',
+              border: 'none',
+              borderBottom: activeTab === 'terminal' ? '1px solid #E5E5E5' : '1px solid transparent',
+              color: activeTab === 'terminal' ? '#E5E5E5' : '#777777',
+              fontSize: '0.72rem',
+              fontWeight: 600,
+              letterSpacing: '0.04em',
+              padding: '0 0.2rem',
+              height: '100%',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.4rem',
+              transition: 'color 0.15s ease',
             }}
-          />
-          <span
-            style={{
-              width: '7px',
-              height: '7px',
-              borderRadius: '50%',
-              backgroundColor: '#333333',
-              display: 'inline-block',
-            }}
-          />
-          <span
-            style={{
-              width: '7px',
-              height: '7px',
-              borderRadius: '50%',
-              backgroundColor: '#333333',
-              display: 'inline-block',
-            }}
-          />
-        </div>
-
-        {/* Dynamic Window Title */}
-        <div
-          className="font-mono"
-          style={{
-            fontSize: '0.68rem',
-            color: 'var(--text-dim)',
-            letterSpacing: '0.02em',
-          }}
-        >
-          {currentPath}
-        </div>
-
-        {/* Status indicator */}
-        <div
-          className="font-mono"
-          style={{
-            fontSize: '0.6rem',
-            color: 'var(--text-muted)',
-          }}
-        >
-          zsh
-        </div>
-      </div>
-
-      {/* Terminal Screen & Logs */}
-      <div
-        ref={scrollRef}
-        style={{
-          padding: '0.65rem 0.85rem',
-          fontFamily: 'var(--font-mono)',
-          fontSize: '0.72rem',
-          color: 'var(--text-primary)',
-          lineHeight: 1.45,
-          overflowY: 'auto',
-          flex: 1,
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '0.35rem',
-        }}
-      >
-        {history.map((item) => (
-          <div key={item.id}>
-            {item.type === 'command' && (
-              <div style={{ color: 'var(--text-primary)', fontWeight: 500 }}>
-                {item.text}
-              </div>
-            )}
-            {item.type === 'info' && (
-              <div style={{ color: 'var(--text-secondary)' }}>{item.text}</div>
-            )}
-            {item.type === 'output' && (
-              <pre
-                style={{
-                  fontFamily: 'inherit',
-                  fontSize: 'inherit',
-                  color: 'var(--text-dim)',
-                  whiteSpace: 'pre-wrap',
-                  margin: 0,
-                  lineHeight: 1.4,
-                }}
-              >
-                {item.text}
-              </pre>
-            )}
-          </div>
-        ))}
-
-        {/* Active Input Line */}
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '0.35rem',
-            marginTop: '0.15rem',
-          }}
-        >
-          <span style={{ color: 'var(--text-dim)', flexShrink: 0, fontSize: '0.7rem' }}>
-            kushal@portfolio:~$
-          </span>
-          <div style={{ position: 'relative', flex: 1, display: 'flex', alignItems: 'center' }}>
-            <input
-              ref={inputRef}
-              type="text"
-              value={inputVal}
-              onChange={(e) => setInputVal(e.target.value)}
-              onKeyDown={handleKeyDown}
-              onFocus={() => setIsFocused(true)}
-              onBlur={() => setIsFocused(false)}
-              autoComplete="off"
-              autoCorrect="off"
-              autoCapitalize="off"
-              spellCheck="false"
-              aria-label="Portfolio interactive terminal command line"
+          >
+            <span>TERMINAL</span>
+            <span
               style={{
-                width: '100%',
-                background: 'transparent',
-                border: 'none',
-                outline: 'none',
-                color: 'var(--text-white)',
-                fontFamily: 'inherit',
-                fontSize: '0.72rem',
-                padding: 0,
-                margin: 0,
+                fontSize: '0.62rem',
+                color: '#555555',
+                backgroundColor: '#151515',
+                padding: '0.1rem 0.35rem',
+                borderRadius: '3px',
               }}
-            />
-          </div>
+            >
+              1
+            </span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab('output')}
+            className="font-mono"
+            style={{
+              background: 'transparent',
+              border: 'none',
+              borderBottom: activeTab === 'output' ? '1px solid #E5E5E5' : '1px solid transparent',
+              color: activeTab === 'output' ? '#E5E5E5' : '#777777',
+              fontSize: '0.72rem',
+              fontWeight: 600,
+              letterSpacing: '0.04em',
+              padding: '0 0.2rem',
+              height: '100%',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.4rem',
+              transition: 'color 0.15s ease',
+            }}
+          >
+            <span>OUTPUT</span>
+          </button>
+
+          <span
+            className="font-mono"
+            style={{
+              color: '#555555',
+              fontSize: '0.72rem',
+              letterSpacing: '0.04em',
+              cursor: 'default',
+            }}
+          >
+            PROBLEMS (0)
+          </span>
+        </div>
+
+        {/* Right: Path Status + Action Controls */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
+          <span
+            className="font-mono"
+            style={{
+              fontSize: '0.68rem',
+              color: '#666666',
+            }}
+          >
+            bash · {currentPath}
+          </span>
+
+          <span style={{ color: '#252525' }}>|</span>
+
+          {/* Clear Button */}
+          <button
+            onClick={() => setHistory([])}
+            aria-label="Clear terminal"
+            title="Clear terminal buffer"
+            className="font-mono"
+            style={{
+              background: 'transparent',
+              border: 'none',
+              color: '#777777',
+              fontSize: '0.72rem',
+              cursor: 'pointer',
+              padding: '0.2rem 0.35rem',
+              borderRadius: '3px',
+              transition: 'color 0.15s ease',
+            }}
+            onMouseEnter={(e) => (e.currentTarget.style.color = '#E5E5E5')}
+            onMouseLeave={(e) => (e.currentTarget.style.color = '#777777')}
+          >
+            clear
+          </button>
+
+          {/* Close Panel Button */}
+          <button
+            onClick={closeTerminal}
+            aria-label="Close terminal panel"
+            title="Close terminal (Esc or Ctrl+`)"
+            style={{
+              background: 'transparent',
+              border: 'none',
+              color: '#888888',
+              fontSize: '1rem',
+              lineHeight: 1,
+              cursor: 'pointer',
+              padding: '0.2rem 0.4rem',
+              borderRadius: '4px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              transition: 'all 0.15s ease',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.color = '#FFFFFF';
+              e.currentTarget.style.backgroundColor = '#1C1C1C';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.color = '#888888';
+              e.currentTarget.style.backgroundColor = 'transparent';
+            }}
+          >
+            ✕
+          </button>
         </div>
       </div>
 
-      {/* Terminal Footer Micro Hint */}
+      {/* Terminal Screen Body */}
+      {activeTab === 'terminal' ? (
+        <div
+          ref={scrollRef}
+          onClick={() => inputRef.current?.focus()}
+          style={{
+            flex: 1,
+            overflowY: 'auto',
+            padding: '0.75rem clamp(16px, 2.5vw, 28px)',
+            fontFamily: 'var(--font-mono)',
+            fontSize: '0.82rem',
+            lineHeight: 1.5,
+            color: '#E5E5E5',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '0.35rem',
+            cursor: 'text',
+          }}
+        >
+          {history.map((item) => (
+            <div key={item.id}>
+              {item.type === 'command' && (
+                <div style={{ color: '#FFFFFF', fontWeight: 500 }}>{item.text}</div>
+              )}
+              {item.type === 'info' && (
+                <div style={{ color: '#888888', fontSize: '0.78rem' }}>{item.text}</div>
+              )}
+              {item.type === 'output' && (
+                <pre
+                  style={{
+                    fontFamily: 'inherit',
+                    fontSize: 'inherit',
+                    color: '#B5B5B5',
+                    whiteSpace: 'pre-wrap',
+                    margin: 0,
+                    lineHeight: 1.45,
+                  }}
+                >
+                  {item.text}
+                </pre>
+              )}
+            </div>
+          ))}
+
+          {/* Active Command Input Line */}
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              marginTop: '0.2rem',
+            }}
+          >
+            <span style={{ color: '#888888', flexShrink: 0 }}>{getPromptString()}</span>
+            <div style={{ position: 'relative', flex: 1, display: 'flex', alignItems: 'center' }}>
+              <input
+                ref={inputRef}
+                type="text"
+                value={inputVal}
+                onChange={(e) => setInputVal(e.target.value)}
+                onKeyDown={handleKeyDown}
+                autoComplete="off"
+                autoCorrect="off"
+                autoCapitalize="off"
+                spellCheck="false"
+                aria-label="Portfolio shell input line"
+                style={{
+                  width: '100%',
+                  background: 'transparent',
+                  border: 'none',
+                  outline: 'none',
+                  color: '#FFFFFF',
+                  fontFamily: 'inherit',
+                  fontSize: '0.82rem',
+                  padding: 0,
+                  margin: 0,
+                }}
+              />
+            </div>
+          </div>
+        </div>
+      ) : (
+        /* OUTPUT Tab */
+        <div
+          style={{
+            flex: 1,
+            overflowY: 'auto',
+            padding: '0.75rem clamp(16px, 2.5vw, 28px)',
+            fontFamily: 'var(--font-mono)',
+            fontSize: '0.8rem',
+            color: '#888888',
+            lineHeight: 1.6,
+          }}
+        >
+          <div>[Portfolio Runtime]: Next.js 14 · Static Prerendering Active</div>
+          <div>[Environment]: Production Build (Client Navigation Engine)</div>
+          <div>[Active Theme]: {theme} mode</div>
+          <div>[Session Navigation]: Verified portfolio sections: Hero, About, Education, Projects, Skills, Contact</div>
+          <div style={{ marginTop: '0.5rem', color: '#555555' }}>
+            // All systems operating nominally. Type commands in TERMINAL tab.
+          </div>
+        </div>
+      )}
+
+      {/* Micro Status Bar / Shortcuts Hint */}
       <div
         style={{
-          padding: '0.25rem 0.75rem',
-          borderTop: '1px solid var(--border-subtle)',
-          backgroundColor: 'var(--bg-section)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
+          height: '24px',
+          backgroundColor: '#0A0A0A',
+          borderTop: '1px solid #161616',
+          padding: '0 clamp(16px, 2.5vw, 28px)',
           fontFamily: 'var(--font-mono)',
-          fontSize: '0.58rem',
-          color: 'var(--text-muted)',
+          fontSize: '0.62rem',
+          color: '#666666',
         }}
       >
-        <span>type &apos;help&apos;</span>
-        <span>[tab] complete</span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+          <span>Ctrl+` or T to toggle</span>
+          <span>Tab for autocomplete</span>
+          <span>↑/↓ for history</span>
+        </div>
+        <div>
+          <span>utf-8 · LF</span>
+        </div>
       </div>
-    </div>
+    </aside>
   );
 }

@@ -16,10 +16,10 @@ export default function AtmosphericPFP() {
       aria-hidden="true"
       style={{
         position: 'absolute',
-        top: 'clamp(1rem, 4vw, 4rem)',
-        right: 'clamp(-4vw, 2vw, 6vw)',
-        width: 'clamp(480px, 48vw, 800px)',
-        height: 'clamp(460px, 46vw, 760px)',
+        top: 'clamp(0.5rem, 3vw, 3.5rem)',
+        right: 'clamp(-2vw, 2vw, 6vw)',
+        width: 'clamp(460px, 42vw, 750px)',
+        height: 'clamp(440px, 40vw, 720px)',
         pointerEvents: 'none',
         userSelect: 'none',
         zIndex: 0,
@@ -32,9 +32,9 @@ export default function AtmosphericPFP() {
           width: '100%',
           height: '100%',
           maskImage:
-            'radial-gradient(ellipse at 54% 48%, rgba(0,0,0,1) 35%, rgba(0,0,0,0.7) 60%, rgba(0,0,0,0.2) 80%, transparent 92%)',
+            'radial-gradient(ellipse at 55% 48%, rgba(0,0,0,1) 45%, rgba(0,0,0,0.85) 68%, rgba(0,0,0,0.3) 85%, transparent 96%)',
           WebkitMaskImage:
-            'radial-gradient(ellipse at 54% 48%, rgba(0,0,0,1) 35%, rgba(0,0,0,0.7) 60%, rgba(0,0,0,0.2) 80%, transparent 92%)',
+            'radial-gradient(ellipse at 55% 48%, rgba(0,0,0,1) 45%, rgba(0,0,0,0.85) 68%, rgba(0,0,0,0.3) 85%, transparent 96%)',
         }}
       >
         <Image
@@ -42,13 +42,13 @@ export default function AtmosphericPFP() {
           alt=""
           fill
           priority
-          sizes="(max-width: 900px) 90vw, 50vw"
+          sizes="(max-width: 900px) 90vw, 45vw"
           style={{
             objectFit: 'contain',
             objectPosition: 'center right',
             mixBlendMode: isLight ? 'multiply' : 'screen',
-            opacity: isLight ? 0.09 : 0.13,
-            filter: isLight ? 'contrast(1.1)' : 'contrast(1.15) brightness(1.0)',
+            opacity: isLight ? 0.20 : 0.24,
+            filter: isLight ? 'contrast(1.15)' : 'contrast(1.2) brightness(1.05)',
             transition: 'opacity 0.3s ease, filter 0.3s ease',
           }}
         />
