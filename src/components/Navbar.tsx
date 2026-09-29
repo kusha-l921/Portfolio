@@ -23,19 +23,28 @@ export default function Navbar() {
   const { isOpen: isTerminalOpen, toggleTerminal } = useTerminal();
 
   useEffect(() => {
+    let ticking = false;
+
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const scrollY = window.scrollY;
+          setIsScrolled(scrollY > 25);
 
-      // Section spy
-      const sections = ['me', 'about', 'education', 'projects', 'skills', 'contact'];
-      const scrollPos = window.scrollY + 200;
+          // Section spy
+          const sections = ['me', 'about', 'education', 'projects', 'skills', 'contact'];
+          const scrollPos = scrollY + 200;
 
-      for (let i = sections.length - 1; i >= 0; i--) {
-        const el = document.getElementById(sections[i]);
-        if (el && el.offsetTop <= scrollPos) {
-          setActiveSection(sections[i]);
-          break;
-        }
+          for (let i = sections.length - 1; i >= 0; i--) {
+            const el = document.getElementById(sections[i]);
+            if (el && el.offsetTop <= scrollPos) {
+              setActiveSection(sections[i]);
+              break;
+            }
+          }
+          ticking = false;
+        });
+        ticking = true;
       }
     };
 
@@ -64,8 +73,8 @@ export default function Navbar() {
           padding: '0 1rem',
           borderRadius: '9999px',
           backgroundColor: isScrolled
-            ? (theme === 'light' ? 'rgba(255, 255, 255, 0.9)' : 'rgba(10, 10, 10, 0.92)')
-            : (theme === 'light' ? 'rgba(244, 244, 242, 0.8)' : 'rgba(13, 13, 13, 0.75)'),
+            ? (theme === 'light' ? 'rgba(255, 255, 255, 0.92)' : 'rgba(10, 10, 10, 0.92)')
+            : (theme === 'light' ? 'rgba(244, 244, 242, 0.85)' : 'rgba(13, 13, 13, 0.75)'),
           backdropFilter: 'blur(12px)',
           WebkitBackdropFilter: 'blur(12px)',
           border: '1px solid',
@@ -73,7 +82,7 @@ export default function Navbar() {
           boxShadow: isScrolled
             ? (theme === 'light' ? '0 8px 24px rgba(0, 0, 0, 0.06)' : '0 8px 30px rgba(0, 0, 0, 0.6)')
             : 'none',
-          transition: 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
+          transition: 'background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease',
         }}
         aria-label="Main Navigation"
       >

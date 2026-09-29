@@ -1,8 +1,10 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import { useTheme } from '../context/ThemeContext';
 
 export default function CustomCursor() {
+  const { theme } = useTheme();
   const [position, setPosition] = useState({ x: -100, y: -100 });
   const [trailing, setTrailing] = useState({ x: -100, y: -100 });
   const [isHovered, setIsHovered] = useState(false);
@@ -23,13 +25,17 @@ export default function CustomCursor() {
     };
 
     const handleMouseOver = (e: MouseEvent) => {
-      const target = e.target as HTMLElement;
+      const target = e.target as HTMLElement | null;
+      if (!target) return;
+      if (target.id === 'custom-cursor-dot' || target.id === 'custom-cursor-ring') return;
+
       if (
         target.closest('a') ||
         target.closest('button') ||
         target.closest('.card') ||
         target.closest('.pill') ||
-        target.closest('[role="button"]')
+        target.closest('[role="button"]') ||
+        target.closest('.project-action-btn')
       ) {
         setIsHovered(true);
       } else {
@@ -41,8 +47,8 @@ export default function CustomCursor() {
       setIsVisible(false);
     };
 
-    window.addEventListener('mousemove', handleMouseMove);
-    window.addEventListener('mouseover', handleMouseOver);
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
+    window.addEventListener('mouseover', handleMouseOver, { passive: true });
     document.addEventListener('mouseleave', handleMouseLeave);
 
     return () => {
@@ -69,35 +75,54 @@ export default function CustomCursor() {
 
   if (!isVisible) return null;
 
+  const isLight = theme === 'light';
+
   return (
     <>
       {/* Inner Dot */}
       <div
-        className="pointer-events-none fixed z-50 rounded-full transition-transform duration-75"
+        id="custom-cursor-dot"
+        aria-hidden="true"
         style={{
+          position: 'fixed',
           left: `${position.x}px`,
           top: `${position.y}px`,
           width: '5px',
           height: '5px',
-          backgroundColor: '#FFFFFF',
+          borderRadius: '50%',
+          backgroundColor: isLight ? '#111111' : '#FFFFFF',
           transform: 'translate(-50%, -50%)',
+          pointerEvents: 'none',
+          userSelect: 'none',
           zIndex: 9999,
+          transition: 'transform 0.05s ease',
         }}
       />
       {/* Outer Ring */}
       <div
-        className="pointer-events-none fixed z-50 rounded-full transition-all duration-200"
+        id="custom-cursor-ring"
+        aria-hidden="true"
         style={{
+          position: 'fixed',
           left: `${trailing.x}px`,
           top: `${trailing.y}px`,
           width: isHovered ? '36px' : '20px',
           height: isHovered ? '36px' : '20px',
-          border: '1px solid rgba(255, 255, 255, 0.35)',
-          backgroundColor: isHovered ? 'rgba(255, 255, 255, 0.05)' : 'transparent',
+          borderRadius: '50%',
+          border: isLight
+            ? '1px solid rgba(0, 0, 0, 0.35)'
+            : '1px solid rgba(255, 255, 255, 0.35)',
+          backgroundColor: isHovered
+            ? (isLight ? 'rgba(0, 0, 0, 0.04)' : 'rgba(255, 255, 255, 0.05)')
+            : 'transparent',
           transform: 'translate(-50%, -50%)',
+          pointerEvents: 'none',
+          userSelect: 'none',
           zIndex: 9998,
+          transition: 'width 0.18s ease, height 0.18s ease, background-color 0.18s ease, border-color 0.18s ease',
         }}
       />
     </>
   );
 }
+

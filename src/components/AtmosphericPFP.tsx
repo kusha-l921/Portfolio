@@ -8,7 +8,7 @@ export default function AtmosphericPFP() {
   const { theme } = useTheme();
 
   const isLight = theme === 'light';
-  const imageSrc = isLight ? '/images/pfp.jpeg' : '/images/inverted_pfp(1).jpeg';
+  const imageSrc = isLight ? '/images/light_pfp.jpg' : '/images/inverted_pfp(1).jpeg';
 
   return (
     <div

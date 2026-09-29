@@ -1,10 +1,10 @@
 'use client';
 
 import React, { useState } from 'react';
-import Image from 'next/image';
 import { PROJECTS_DATA } from '../data/portfolioData';
 import { Project } from '../types';
 import ProjectModal from './ProjectModal';
+import ProjectTerminalBox from './ProjectTerminalBox';
 
 const FILTERS = ['All', 'AI / ML', 'Computer Vision', 'Systems'] as const;
 
@@ -273,128 +273,21 @@ export default function ProjectsSection() {
                   </div>
                 </div>
 
-                {/* Right: Technical Preview / Schematic */}
+                {/* Right: Technical Terminal Preview Box */}
                 <div
                   className="project-preview-wrapper"
-                  onClick={() => setActiveModalProject(project)}
                   style={{
                     position: 'relative',
-                    height: 'clamp(200px, 20vw, 260px)',
-                    borderRadius: '6px',
-                    overflow: 'hidden',
-                    border: '1px solid var(--border-card)',
-                    backgroundColor: 'var(--bg-surface)',
-                    cursor: 'pointer',
+                    width: '100%',
+                    height: '100%',
                     display: 'flex',
                     alignItems: 'center',
-                    justifyContent: 'center',
                   }}
                 >
-                  {project.image ? (
-                    <Image
-                      src={project.image}
-                      alt={project.title}
-                      fill
-                      sizes="(max-width: 768px) 100vw, 540px"
-                      style={{
-                        objectFit: 'cover',
-                        filter: 'grayscale(100%) contrast(1.15) brightness(0.8)',
-                        transition: 'transform 0.3s ease, filter 0.3s ease',
-                      }}
-                      className="project-img-inner"
-                    />
-                  ) : (
-                    /* Minimal Blueprint Graphic for projects without raw satellite photos */
-                    <div
-                      style={{
-                        padding: '1.5rem',
-                        width: '100%',
-                        height: '100%',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        justifyContent: 'space-between',
-                        backgroundColor: 'var(--bg-card)',
-                        fontFamily: 'var(--font-mono)',
-                      }}
-                    >
-                      <div
-                        style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'space-between',
-                          borderBottom: '1px solid var(--border-subtle)',
-                          paddingBottom: '0.5rem',
-                        }}
-                      >
-                        <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>
-                          // schematic.sys
-                        </span>
-                        <span style={{ fontSize: '0.7rem', color: 'var(--text-dim)' }}>
-                          {project.id}.bin
-                        </span>
-                      </div>
-
-                      <div
-                        style={{
-                          display: 'flex',
-                          flexDirection: 'column',
-                          gap: '0.45rem',
-                          fontSize: '0.78rem',
-                          color: 'var(--text-secondary)',
-                        }}
-                      >
-                        {project.architecture.slice(0, 3).map((arch, i) => (
-                          <div
-                            key={i}
-                            style={{
-                              display: 'flex',
-                              alignItems: 'center',
-                              gap: '0.5rem',
-                            }}
-                          >
-                            <span style={{ color: 'var(--text-muted)' }}>0{i + 1}</span>
-                            <span style={{ color: 'var(--text-light)' }}>{arch}</span>
-                          </div>
-                        ))}
-                      </div>
-
-                      <div
-                        style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'space-between',
-                          fontSize: '0.7rem',
-                          color: 'var(--text-muted)',
-                          borderTop: '1px solid var(--border-subtle)',
-                          paddingTop: '0.5rem',
-                        }}
-                      >
-                        <span>[ONNX / C++]</span>
-                        <span>[READY]</span>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Hover prompt */}
-                  <div
-                    className="project-overlay-hint"
-                    style={{
-                      position: 'absolute',
-                      inset: 0,
-                      backgroundColor: 'rgba(5, 5, 5, 0.65)',
-                      backdropFilter: 'blur(2px)',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      opacity: 0,
-                      transition: 'opacity 0.2s ease',
-                      fontFamily: 'var(--font-mono)',
-                      fontSize: '0.78rem',
-                      color: '#FFFFFF',
-                    }}
-                  >
-                    <span>Click to inspect specs ↗</span>
-                  </div>
+                  <ProjectTerminalBox
+                    project={project}
+                    onClick={() => setActiveModalProject(project)}
+                  />
                 </div>
               </div>
             </div>

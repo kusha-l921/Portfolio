@@ -405,6 +405,8 @@ export default function PortfolioTerminal() {
     }
   };
 
+  const isLight = theme === 'light';
+
   return (
     <aside
       className="vscode-integrated-terminal-panel"
@@ -416,14 +418,16 @@ export default function PortfolioTerminal() {
         right: 0,
         width: '100vw',
         height: 'clamp(260px, 32vh, 380px)',
-        backgroundColor: '#080808',
-        borderTop: '1px solid #1C1C1C',
-        boxShadow: isOpen ? '0 -10px 40px rgba(0, 0, 0, 0.75)' : 'none',
+        backgroundColor: isLight ? '#FAFAF8' : '#080808',
+        borderTop: isLight ? '1px solid #D4D4CD' : '1px solid #1C1C1C',
+        boxShadow: isOpen
+          ? (isLight ? '0 -10px 40px rgba(0, 0, 0, 0.12)' : '0 -10px 40px rgba(0, 0, 0, 0.75)')
+          : 'none',
         zIndex: 1000,
         display: 'flex',
         flexDirection: 'column',
         transform: isOpen ? 'translateY(0)' : 'translateY(100%)',
-        transition: 'transform 260ms cubic-bezier(0.16, 1, 0.3, 1)',
+        transition: 'transform 260ms cubic-bezier(0.16, 1, 0.3, 1), background-color 0.25s ease, border-color 0.25s ease',
         pointerEvents: isOpen ? 'auto' : 'none',
         userSelect: 'text',
       }}
@@ -435,10 +439,11 @@ export default function PortfolioTerminal() {
           alignItems: 'center',
           justifyContent: 'space-between',
           height: '36px',
-          backgroundColor: '#0D0D0D',
-          borderBottom: '1px solid #1C1C1C',
+          backgroundColor: isLight ? '#EAEAE6' : '#0D0D0D',
+          borderBottom: isLight ? '1px solid #D4D4CD' : '1px solid #1C1C1C',
           padding: '0 clamp(16px, 2.5vw, 28px)',
           userSelect: 'none',
+          transition: 'background-color 0.25s ease, border-color 0.25s ease',
         }}
       >
         {/* Left: Tabs */}
@@ -449,8 +454,12 @@ export default function PortfolioTerminal() {
             style={{
               background: 'transparent',
               border: 'none',
-              borderBottom: activeTab === 'terminal' ? '1px solid #E5E5E5' : '1px solid transparent',
-              color: activeTab === 'terminal' ? '#E5E5E5' : '#777777',
+              borderBottom: activeTab === 'terminal'
+                ? (isLight ? '2px solid #161616' : '1px solid #E5E5E5')
+                : '1px solid transparent',
+              color: activeTab === 'terminal'
+                ? (isLight ? '#161616' : '#E5E5E5')
+                : (isLight ? '#777770' : '#777777'),
               fontSize: '0.72rem',
               fontWeight: 600,
               letterSpacing: '0.04em',
@@ -467,8 +476,8 @@ export default function PortfolioTerminal() {
             <span
               style={{
                 fontSize: '0.62rem',
-                color: '#555555',
-                backgroundColor: '#151515',
+                color: isLight ? '#444440' : '#888888',
+                backgroundColor: isLight ? '#DCDCD6' : '#151515',
                 padding: '0.1rem 0.35rem',
                 borderRadius: '3px',
               }}
@@ -483,8 +492,12 @@ export default function PortfolioTerminal() {
             style={{
               background: 'transparent',
               border: 'none',
-              borderBottom: activeTab === 'output' ? '1px solid #E5E5E5' : '1px solid transparent',
-              color: activeTab === 'output' ? '#E5E5E5' : '#777777',
+              borderBottom: activeTab === 'output'
+                ? (isLight ? '2px solid #161616' : '1px solid #E5E5E5')
+                : '1px solid transparent',
+              color: activeTab === 'output'
+                ? (isLight ? '#161616' : '#E5E5E5')
+                : (isLight ? '#777770' : '#777777'),
               fontSize: '0.72rem',
               fontWeight: 600,
               letterSpacing: '0.04em',
@@ -503,7 +516,7 @@ export default function PortfolioTerminal() {
           <span
             className="font-mono"
             style={{
-              color: '#555555',
+              color: isLight ? '#888880' : '#555555',
               fontSize: '0.72rem',
               letterSpacing: '0.04em',
               cursor: 'default',
@@ -519,13 +532,13 @@ export default function PortfolioTerminal() {
             className="font-mono"
             style={{
               fontSize: '0.68rem',
-              color: '#666666',
+              color: isLight ? '#666660' : '#666666',
             }}
           >
             bash · {currentPath}
           </span>
 
-          <span style={{ color: '#252525' }}>|</span>
+          <span style={{ color: isLight ? '#D0D0CA' : '#252525' }}>|</span>
 
           {/* Clear Button */}
           <button
@@ -536,15 +549,15 @@ export default function PortfolioTerminal() {
             style={{
               background: 'transparent',
               border: 'none',
-              color: '#777777',
+              color: isLight ? '#666660' : '#777777',
               fontSize: '0.72rem',
               cursor: 'pointer',
               padding: '0.2rem 0.35rem',
               borderRadius: '3px',
               transition: 'color 0.15s ease',
             }}
-            onMouseEnter={(e) => (e.currentTarget.style.color = '#E5E5E5')}
-            onMouseLeave={(e) => (e.currentTarget.style.color = '#777777')}
+            onMouseEnter={(e) => (e.currentTarget.style.color = isLight ? '#111111' : '#E5E5E5')}
+            onMouseLeave={(e) => (e.currentTarget.style.color = isLight ? '#666660' : '#777777')}
           >
             clear
           </button>
@@ -557,7 +570,7 @@ export default function PortfolioTerminal() {
             style={{
               background: 'transparent',
               border: 'none',
-              color: '#888888',
+              color: isLight ? '#666660' : '#888888',
               fontSize: '1rem',
               lineHeight: 1,
               cursor: 'pointer',
@@ -569,11 +582,11 @@ export default function PortfolioTerminal() {
               transition: 'all 0.15s ease',
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.color = '#FFFFFF';
-              e.currentTarget.style.backgroundColor = '#1C1C1C';
+              e.currentTarget.style.color = isLight ? '#111111' : '#FFFFFF';
+              e.currentTarget.style.backgroundColor = isLight ? '#DCDCD6' : '#1C1C1C';
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.color = '#888888';
+              e.currentTarget.style.color = isLight ? '#666660' : '#888888';
               e.currentTarget.style.backgroundColor = 'transparent';
             }}
           >
@@ -594,7 +607,8 @@ export default function PortfolioTerminal() {
             fontFamily: 'var(--font-mono)',
             fontSize: '0.82rem',
             lineHeight: 1.5,
-            color: '#E5E5E5',
+            color: isLight ? '#1A1A18' : '#E5E5E5',
+            backgroundColor: isLight ? '#FAFAF8' : '#080808',
             display: 'flex',
             flexDirection: 'column',
             gap: '0.35rem',
@@ -604,17 +618,21 @@ export default function PortfolioTerminal() {
           {history.map((item) => (
             <div key={item.id}>
               {item.type === 'command' && (
-                <div style={{ color: '#FFFFFF', fontWeight: 500 }}>{item.text}</div>
+                <div style={{ color: isLight ? '#0A0A0A' : '#FFFFFF', fontWeight: 500 }}>
+                  {item.text}
+                </div>
               )}
               {item.type === 'info' && (
-                <div style={{ color: '#888888', fontSize: '0.78rem' }}>{item.text}</div>
+                <div style={{ color: isLight ? '#666660' : '#888888', fontSize: '0.78rem' }}>
+                  {item.text}
+                </div>
               )}
               {item.type === 'output' && (
                 <pre
                   style={{
                     fontFamily: 'inherit',
                     fontSize: 'inherit',
-                    color: '#B5B5B5',
+                    color: isLight ? '#282824' : '#B5B5B5',
                     whiteSpace: 'pre-wrap',
                     margin: 0,
                     lineHeight: 1.45,
@@ -635,7 +653,9 @@ export default function PortfolioTerminal() {
               marginTop: '0.2rem',
             }}
           >
-            <span style={{ color: '#888888', flexShrink: 0 }}>{getPromptString()}</span>
+            <span style={{ color: isLight ? '#666660' : '#888888', flexShrink: 0 }}>
+              {getPromptString()}
+            </span>
             <div style={{ position: 'relative', flex: 1, display: 'flex', alignItems: 'center' }}>
               <input
                 ref={inputRef}
@@ -653,7 +673,7 @@ export default function PortfolioTerminal() {
                   background: 'transparent',
                   border: 'none',
                   outline: 'none',
-                  color: '#FFFFFF',
+                  color: isLight ? '#0A0A0A' : '#FFFFFF',
                   fontFamily: 'inherit',
                   fontSize: '0.82rem',
                   padding: 0,
@@ -672,7 +692,8 @@ export default function PortfolioTerminal() {
             padding: '0.75rem clamp(16px, 2.5vw, 28px)',
             fontFamily: 'var(--font-mono)',
             fontSize: '0.8rem',
-            color: '#888888',
+            color: isLight ? '#555550' : '#888888',
+            backgroundColor: isLight ? '#FAFAF8' : '#080808',
             lineHeight: 1.6,
           }}
         >
@@ -680,7 +701,7 @@ export default function PortfolioTerminal() {
           <div>[Environment]: Production Build (Client Navigation Engine)</div>
           <div>[Active Theme]: {theme} mode</div>
           <div>[Session Navigation]: Verified portfolio sections: Hero, About, Education, Projects, Skills, Contact</div>
-          <div style={{ marginTop: '0.5rem', color: '#555555' }}>
+          <div style={{ marginTop: '0.5rem', color: isLight ? '#888880' : '#555555' }}>
             // All systems operating nominally. Type commands in TERMINAL tab.
           </div>
         </div>
@@ -693,12 +714,12 @@ export default function PortfolioTerminal() {
           alignItems: 'center',
           justifyContent: 'space-between',
           height: '24px',
-          backgroundColor: '#0A0A0A',
-          borderTop: '1px solid #161616',
+          backgroundColor: isLight ? '#EAEAE6' : '#0A0A0A',
+          borderTop: isLight ? '1px solid #D4D4CD' : '1px solid #161616',
           padding: '0 clamp(16px, 2.5vw, 28px)',
           fontFamily: 'var(--font-mono)',
           fontSize: '0.62rem',
-          color: '#666666',
+          color: isLight ? '#666660' : '#666666',
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>

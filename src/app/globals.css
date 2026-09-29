@@ -138,6 +138,10 @@ body::before {
   font-family: var(--font-mono);
 }
 
+.pointer-events-none {
+  pointer-events: none !important;
+}
+
 .terminal-label {
   font-family: var(--font-mono);
   font-size: 0.82rem;

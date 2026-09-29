@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useEffect } from 'react';
-import Image from 'next/image';
 import { Project } from '../types';
+import ProjectTerminalBox from './ProjectTerminalBox';
 
 interface ProjectModalProps {
   project: Project | null;
@@ -133,31 +133,10 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
             </p>
           </div>
 
-          {/* Optional Project Thumbnail */}
-          {project.image && (
-            <div
-              style={{
-                position: 'relative',
-                width: '100%',
-                height: '220px',
-                borderRadius: '8px',
-                overflow: 'hidden',
-                border: '1px solid var(--border-card)',
-                backgroundColor: 'var(--bg-surface)',
-              }}
-            >
-              <Image
-                src={project.image}
-                alt={project.title}
-                fill
-                sizes="(max-width: 768px) 100vw, 700px"
-                style={{
-                  objectFit: 'cover',
-                  filter: 'grayscale(100%) contrast(1.1) brightness(0.85)',
-                }}
-              />
-            </div>
-          )}
+          {/* Project Terminal Execution Box */}
+          <div style={{ width: '100%' }}>
+            <ProjectTerminalBox project={project} />
+          </div>
 
           {/* Verified Technical Results */}
           <div>
