@@ -106,8 +106,8 @@ export default function ProjectTerminalBox({ project, className = '', onClick }:
               width: '5px',
               height: '5px',
               borderRadius: '50%',
-              backgroundColor: isLight ? '#3A3A35' : '#D0D0D0',
-              boxShadow: isLight ? 'none' : '0 0 4px rgba(255, 255, 255, 0.2)',
+              backgroundColor: 'var(--accent)',
+              boxShadow: '0 0 6px var(--accent-glow)',
               display: 'inline-block',
             }}
           />
@@ -214,14 +214,17 @@ export default function ProjectTerminalBox({ project, className = '', onClick }:
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-            <span>kushal@edge:~$</span>
+            <span>
+              <span style={{ color: isLight ? '#777770' : '#666666' }}>kushal@edge:</span>
+              <span style={{ color: 'var(--accent)' }}>~$</span>
+            </span>
             <span
               className="cursor-blink"
               style={{
                 display: 'inline-block',
                 width: '6px',
                 height: '1.05em',
-                backgroundColor: isLight ? '#111111' : '#FFFFFF',
+                backgroundColor: 'var(--accent)',
               }}
             />
           </div>

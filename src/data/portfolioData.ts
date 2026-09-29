@@ -430,40 +430,6 @@ export const PROJECTS_DATA: Project[] = [
       'Exported to ONNX Runtime to achieve <8ms inference per block and used probabilistic graph reassembly to reconstruct non-contiguous fragments.',
     ],
   },
-  {
-    id: 'rewear',
-    number: '06',
-    title: 'ReWear',
-    tagline: 'Automated fabric composition verification and circular textile redistribution powered by lightweight Vision Transformers.',
-    tags: ['MobileViT', 'Computer Vision', 'PyTorch', 'ONNX Runtime'],
-    category: 'Computer Vision',
-    period: '2025',
-    githubUrl: 'https://github.com/kusha-l921',
-    overview:
-      'A sustainability intelligence platform that analyzes textile microstructures via macro camera imagery to estimate fabric fiber blends and powers automated circular sorting.',
-    problem:
-      'Over 85% of textiles end up in landfills because garment tags are missing, faded, or counterfeit, preventing recyclers from sorting garments into pure streams.',
-    approach:
-      'Trained a lightweight Vision Transformer fine-tuned on microscopic textile weave patterns with contrastive self-supervised learning (SimCLR).',
-    dataset:
-      'Curated microscopic and macro fabric captures with certified lab chemical assay ground truth.',
-    architecture: [
-      'Mobile Camera Macro Lens Capture',
-      'Contrastive Weave Feature Extractor',
-      'Multi-Label Fiber Composition Regressor',
-      'ONNX Mobile Runtime',
-    ],
-    results: [
-      { metric: 'Accuracy', value: '91.6%', detail: 'Tested on multi-blend synthetic/organic samples' },
-      { metric: 'Inference', value: '24ms', detail: 'On-device inference via ONNX Runtime' },
-      { metric: 'Model Size', value: '8.2M', detail: 'Parameters optimized for edge mobile devices' },
-    ],
-    highlights: [
-      'Trained a lightweight Vision Transformer fine-tuned on microscopic textile weave patterns with contrastive self-supervised learning.',
-      'Achieved 91.6% fabric composition accuracy across multi-blend samples with on-device inference at 24ms via ONNX Runtime.',
-      'Built an automated verification pipeline to assess circular garment durability without destructive testing.',
-    ],
-  },
 ];
 
 export const SKILL_CATEGORIES: SkillCategory[] = [

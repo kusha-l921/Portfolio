@@ -38,13 +38,11 @@ const KNOWN_COMMANDS = [
   'cd projects/solarflare',
   'cd projects/fieldsight',
   'cd projects/firsefile',
-  'cd projects/rewear',
   'cd prometheus',
   'cd llm-council',
   'cd solarflare',
   'cd fieldsight',
   'cd firsefile',
-  'cd rewear',
   'sudo light-mode',
   'sudo dark-mode',
   'sudo about',
@@ -139,7 +137,7 @@ export default function PortfolioTerminal() {
       response =
         "Available commands:\n" +
         "  navigation:  cd about | cd education | cd projects | cd achievements | cd skills | cd contact | cd ~\n" +
-        "  projects:    cd prometheus | cd llm-council | cd solarflare | cd fieldsight | cd firsefile | cd rewear\n" +
+        "  projects:    cd prometheus | cd llm-council | cd solarflare | cd fieldsight | cd firsefile\n" +
         "  utilities:   ls, pwd, whoami, clear, resume, help\n" +
         "  theme:       sudo light-mode | sudo dark-mode | theme light | theme dark\n" +
         "  shortcuts:   [tab] autocomplete, [↑/↓] history, [ctrl+` / T] toggle terminal";
@@ -167,7 +165,7 @@ export default function PortfolioTerminal() {
       if (currentPath === '~') {
         response = 'about/        education/    projects/     achievements/ skills/       contact/      resume.pdf';
       } else if (currentPath === '~/projects') {
-        response = '01 prometheus/  02 llm-council/  03 solarflare/  04 fieldsight/  05 firsefile/  06 rewear/';
+        response = '01 prometheus/  02 llm-council/  03 solarflare/  04 fieldsight/  05 firsefile/';
       } else if (currentPath === '~/achievements') {
         response = '01 exportify-loc8.log   02 copycop-drishti.log';
       } else if (currentPath.startsWith('~/projects/')) {
@@ -345,16 +343,7 @@ export default function PortfolioTerminal() {
       response = 'navigating to ~/projects/firsefile...\n[FirSeFile: ML digital forensics with Swin Transformer V2 & Rust]';
       setCurrentPath('~/projects/firsefile');
       setTimeout(() => smoothScrollTo('project-firsefile'), 240);
-    } else if (
-      cmdLower === 'cd rewear' ||
-      cmdLower === 'cd projects/rewear' ||
-      cmdLower === 'cd /projects/rewear'
-    ) {
-      response = 'navigating to ~/projects/rewear...\n[ReWear: Sustainable circular wardrobe exchange engine]';
-      setCurrentPath('~/projects/rewear');
-      setTimeout(() => smoothScrollTo('project-rewear'), 240);
     }
-
 
     // Invalid CD
     else if (cmdLower.startsWith('cd ')) {
@@ -392,7 +381,7 @@ export default function PortfolioTerminal() {
       if (match) {
         setInputVal(match);
       } else if (currentPath === '~/projects') {
-        const sub = ['solarflare', 'fieldsight', 'firsefile', 'rewear'].find((p) =>
+        const sub = ['solarflare', 'fieldsight', 'firsefile'].find((p) =>
           `cd ${p}`.startsWith(current) || p.startsWith(current)
         );
         if (sub) {
@@ -495,8 +484,8 @@ export default function PortfolioTerminal() {
               background: 'transparent',
               border: 'none',
               borderBottom: activeTab === 'terminal'
-                ? (isLight ? '2px solid #161616' : '1px solid #E5E5E5')
-                : '1px solid transparent',
+                ? '2px solid var(--accent)'
+                : '2px solid transparent',
               color: activeTab === 'terminal'
                 ? (isLight ? '#161616' : '#E5E5E5')
                 : (isLight ? '#777770' : '#777777'),
@@ -533,8 +522,8 @@ export default function PortfolioTerminal() {
               background: 'transparent',
               border: 'none',
               borderBottom: activeTab === 'output'
-                ? (isLight ? '2px solid #161616' : '1px solid #E5E5E5')
-                : '1px solid transparent',
+                ? '2px solid var(--accent)'
+                : '2px solid transparent',
               color: activeTab === 'output'
                 ? (isLight ? '#161616' : '#E5E5E5')
                 : (isLight ? '#777770' : '#777777'),
@@ -693,8 +682,9 @@ export default function PortfolioTerminal() {
               marginTop: '0.2rem',
             }}
           >
-            <span style={{ color: isLight ? '#666660' : '#888888', flexShrink: 0 }}>
-              {getPromptString()}
+            <span style={{ flexShrink: 0, userSelect: 'none' }}>
+              <span style={{ color: isLight ? '#777770' : '#888888' }}>kushal@portfolio:</span>
+              <span style={{ color: 'var(--accent)' }}>{currentPath}$ </span>
             </span>
             <div style={{ position: 'relative', flex: 1, display: 'flex', alignItems: 'center' }}>
               <input

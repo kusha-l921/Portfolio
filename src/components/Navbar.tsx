@@ -168,11 +168,25 @@ export default function Navbar() {
                   color: isActive ? 'var(--text-white)' : 'var(--text-dim)',
                   backgroundColor: isActive ? 'var(--bg-pill-hover)' : 'transparent',
                   border: '1px solid',
-                  borderColor: isActive ? 'var(--border-strong)' : 'transparent',
+                  borderColor: isActive ? 'var(--accent-border)' : 'transparent',
                   transition: 'all 0.18s ease',
+                  position: 'relative',
                 }}
               >
-                {link.label}
+                {isActive && (
+                  <span
+                    style={{
+                      display: 'inline-block',
+                      width: '4px',
+                      height: '4px',
+                      borderRadius: '50%',
+                      backgroundColor: 'var(--accent)',
+                      marginRight: '5px',
+                      verticalAlign: 'middle',
+                    }}
+                  />
+                )}
+                <span>{link.label}</span>
               </a>
             );
           })}
@@ -202,12 +216,12 @@ export default function Navbar() {
               backgroundColor: isTerminalOpen ? 'var(--bg-pill-hover)' : 'var(--bg-card)',
               color: isTerminalOpen ? 'var(--text-white)' : 'var(--text-dim)',
               border: '1px solid',
-              borderColor: isTerminalOpen ? 'var(--border-strong)' : 'var(--border-subtle)',
+              borderColor: isTerminalOpen ? 'var(--accent-border)' : 'var(--border-subtle)',
               cursor: 'pointer',
               transition: 'all 0.18s ease',
             }}
           >
-            <span style={{ color: 'var(--text-muted)' }}>&gt;_</span>
+            <span style={{ color: 'var(--accent)' }}>&gt;_</span>
             <span>terminal</span>
           </button>
 
@@ -255,8 +269,8 @@ export default function Navbar() {
                 width: '6px',
                 height: '6px',
                 borderRadius: '50%',
-                backgroundColor: 'var(--text-primary)',
-                boxShadow: '0 0 6px rgba(255, 255, 255, 0.4)',
+                backgroundColor: 'var(--accent)',
+                boxShadow: '0 0 6px var(--accent-glow)',
                 display: 'inline-block',
               }}
             />
