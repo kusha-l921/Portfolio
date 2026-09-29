@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import CustomCursor from '../components/CustomCursor';
+import { ThemeProvider } from '../context/ThemeContext';
+import { TerminalProvider } from '../context/TerminalContext';
 
 export const metadata: Metadata = {
   title: 'Kushal Patel — AI/ML Engineer · Systems Builder',
@@ -30,16 +32,13 @@ export const viewport: Viewport = {
   maximumScale: 5,
 };
 
-import { ThemeProvider } from '../context/ThemeContext';
-import { TerminalProvider } from '../context/TerminalContext';
-
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" data-theme="dark" style={{ backgroundColor: '#050505', color: '#EEEEEE' }}>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
