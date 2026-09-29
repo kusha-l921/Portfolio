@@ -36,8 +36,8 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
             alignItems: 'center',
             justifyContent: 'space-between',
             padding: '1.25rem 1.5rem',
-            borderBottom: '1px solid #1C1C1C',
-            backgroundColor: '#0E0E0E',
+            borderBottom: '1px solid var(--border-subtle)',
+            backgroundColor: 'var(--bg-surface)',
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
@@ -45,16 +45,16 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
               className="font-mono"
               style={{
                 fontSize: '0.85rem',
-                color: '#8A8A8A',
-                backgroundColor: '#171717',
+                color: 'var(--text-secondary)',
+                backgroundColor: 'var(--bg-pill)',
                 padding: '0.2rem 0.5rem',
                 borderRadius: '4px',
-                border: '1px solid #252525',
+                border: '1px solid var(--border-subtle)',
               }}
             >
               {project.number}
             </span>
-            <span className="font-mono" style={{ fontSize: '0.78rem', color: '#666666' }}>
+            <span className="font-mono" style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
               &gt; project_specs / {project.id}
             </span>
           </div>
@@ -64,9 +64,9 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
             aria-label="Close modal"
             style={{
               background: 'transparent',
-              border: '1px solid #222222',
+              border: '1px solid var(--border-subtle)',
               borderRadius: '6px',
-              color: '#8A8A8A',
+              color: 'var(--text-secondary)',
               padding: '0.35rem 0.6rem',
               cursor: 'pointer',
               fontSize: '0.85rem',
@@ -74,12 +74,12 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
               transition: 'all 0.15s ease',
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.color = '#FFFFFF';
-              e.currentTarget.style.borderColor = '#444444';
+              e.currentTarget.style.color = 'var(--text-white)';
+              e.currentTarget.style.borderColor = 'var(--border-hover)';
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.color = '#8A8A8A';
-              e.currentTarget.style.borderColor = '#222222';
+              e.currentTarget.style.color = 'var(--text-secondary)';
+              e.currentTarget.style.borderColor = 'var(--border-subtle)';
             }}
           >
             [esc] ✕
@@ -105,14 +105,14 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
                   fontSize: '0.75rem',
                   padding: '0.2rem 0.6rem',
                   borderRadius: '9999px',
-                  backgroundColor: '#1C1C1C',
-                  color: '#EEEEEE',
-                  border: '1px solid #2D2D2D',
+                  backgroundColor: 'var(--bg-pill)',
+                  color: 'var(--text-primary)',
+                  border: '1px solid var(--border-subtle)',
                 }}
               >
                 {project.category}
               </span>
-              <span className="font-mono" style={{ fontSize: '0.75rem', color: '#666666' }}>
+              <span className="font-mono" style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
                 {project.period}
               </span>
             </div>
@@ -121,14 +121,14 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
               style={{
                 fontSize: '1.65rem',
                 fontWeight: 700,
-                color: '#FFFFFF',
+                color: 'var(--text-white)',
                 letterSpacing: '-0.02em',
               }}
             >
               {project.title}
             </h3>
 
-            <p style={{ fontSize: '1rem', color: '#969696', marginTop: '0.35rem', lineHeight: 1.5 }}>
+            <p style={{ fontSize: '1rem', color: 'var(--text-secondary)', marginTop: '0.35rem', lineHeight: 1.5 }}>
               {project.tagline}
             </p>
           </div>
@@ -142,8 +142,8 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
                 height: '220px',
                 borderRadius: '8px',
                 overflow: 'hidden',
-                border: '1px solid #202020',
-                backgroundColor: '#080808',
+                border: '1px solid var(--border-card)',
+                backgroundColor: 'var(--bg-surface)',
               }}
             >
               <Image
@@ -165,7 +165,7 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
               className="font-mono"
               style={{
                 fontSize: '0.72rem',
-                color: '#666666',
+                color: 'var(--text-muted)',
                 textTransform: 'uppercase',
                 letterSpacing: '0.04em',
                 display: 'block',
@@ -185,15 +185,15 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
                 <div
                   key={i}
                   style={{
-                    backgroundColor: '#121212',
-                    border: '1px solid #1F1F1F',
+                    backgroundColor: 'var(--bg-surface)',
+                    border: '1px solid var(--border-subtle)',
                     borderRadius: '6px',
                     padding: '0.85rem 1rem',
                   }}
                 >
                   <div
                     className="font-mono"
-                    style={{ fontSize: '0.68rem', color: '#8A8A8A', textTransform: 'uppercase' }}
+                    style={{ fontSize: '0.68rem', color: 'var(--text-muted)', textTransform: 'uppercase' }}
                   >
                     {res.metric}
                   </div>
@@ -201,13 +201,13 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
                     style={{
                       fontSize: '1.25rem',
                       fontWeight: 700,
-                      color: '#FFFFFF',
+                      color: 'var(--text-white)',
                       marginTop: '0.15rem',
                     }}
                   >
                     {res.value}
                   </div>
-                  <div style={{ fontSize: '0.75rem', color: '#666666', marginTop: '0.2rem' }}>
+                  <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginTop: '0.2rem' }}>
                     {res.detail}
                   </div>
                 </div>
@@ -221,7 +221,7 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
               className="font-mono"
               style={{
                 fontSize: '0.72rem',
-                color: '#666666',
+                color: 'var(--text-muted)',
                 textTransform: 'uppercase',
                 letterSpacing: '0.04em',
                 display: 'block',
@@ -237,8 +237,8 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
                 flexWrap: 'wrap',
                 gap: '0.5rem',
                 padding: '0.85rem 1rem',
-                backgroundColor: '#0F0F0F',
-                border: '1px solid #1C1C1C',
+                backgroundColor: 'var(--bg-surface)',
+                border: '1px solid var(--border-subtle)',
                 borderRadius: '6px',
               }}
             >
@@ -248,17 +248,17 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
                     className="font-mono"
                     style={{
                       fontSize: '0.78rem',
-                      color: '#D0D0D0',
+                      color: 'var(--text-primary)',
                       padding: '0.25rem 0.55rem',
-                      backgroundColor: '#171717',
+                      backgroundColor: 'var(--bg-pill)',
                       borderRadius: '4px',
-                      border: '1px solid #262626',
+                      border: '1px solid var(--border-subtle)',
                     }}
                   >
                     {layer}
                   </span>
                   {idx < project.architecture.length - 1 && (
-                    <span style={{ color: '#444444', fontSize: '0.75rem' }}>→</span>
+                    <span style={{ color: 'var(--text-muted)', fontSize: '0.75rem' }}>→</span>
                   )}
                 </React.Fragment>
               ))}
@@ -271,7 +271,7 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
               className="font-mono"
               style={{
                 fontSize: '0.72rem',
-                color: '#666666',
+                color: 'var(--text-muted)',
                 textTransform: 'uppercase',
                 letterSpacing: '0.04em',
                 display: 'block',
@@ -296,13 +296,13 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
                     alignItems: 'flex-start',
                     gap: '0.65rem',
                     fontSize: '0.88rem',
-                    color: '#B0B0B0',
+                    color: 'var(--text-secondary)',
                     lineHeight: 1.55,
                   }}
                 >
                   <span
                     className="font-mono"
-                    style={{ color: '#666666', marginTop: '0.1rem', flexShrink: 0 }}
+                    style={{ color: 'var(--text-muted)', marginTop: '0.1rem', flexShrink: 0 }}
                   >
                     [+]
                   </span>
@@ -322,9 +322,9 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
                   fontSize: '0.75rem',
                   padding: '0.25rem 0.65rem',
                   borderRadius: '4px',
-                  backgroundColor: '#141414',
-                  border: '1px solid #222222',
-                  color: '#8A8A8A',
+                  backgroundColor: 'var(--bg-surface)',
+                  border: '1px solid var(--border-subtle)',
+                  color: 'var(--text-secondary)',
                 }}
               >
                 {tag}
@@ -338,7 +338,7 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
-              borderTop: '1px solid #1C1C1C',
+              borderTop: '1px solid var(--border-subtle)',
               paddingTop: '1.25rem',
               marginTop: '0.5rem',
             }}

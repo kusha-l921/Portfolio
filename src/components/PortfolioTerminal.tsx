@@ -40,13 +40,13 @@ export default function PortfolioTerminal() {
   const [history, setHistory] = useState<TerminalLine[]>([
     {
       id: 'init-1',
-      type: 'info',
+      type: 'command',
       text: 'kushal@portfolio:~$ help',
     },
     {
       id: 'init-2',
       type: 'output',
-      text: 'available commands:\n  about        projects     contact\n  education    skills       resume\n  whoami       ls           clear\nnavigation:\n  cd /about    cd /projects cd /contact\n  cd /education cd /skills   home',
+      text: 'available:\n  about     projects  skills\n  education contact   resume',
     },
   ]);
   const [commandHistory, setCommandHistory] = useState<string[]>([]);
@@ -105,7 +105,6 @@ export default function PortfolioTerminal() {
     const trimmed = rawInput.trim();
     if (!trimmed) return;
 
-    // Record in command history
     setCommandHistory((prev) => [...prev, trimmed]);
     setHistoryIdx(-1);
 
@@ -128,7 +127,7 @@ export default function PortfolioTerminal() {
     switch (cmd) {
       case 'help':
         responseText =
-          'available commands:\n  about        projects     contact\n  education    skills       resume\n  whoami       ls           clear\nnavigation:\n  cd /about    cd /projects cd /contact\n  cd /education cd /skills   home';
+          'available:\n  about     projects  skills\n  education contact   resume\nnavigation:\n  cd /about cd /projects home';
         break;
 
       case 'about':
@@ -175,13 +174,13 @@ export default function PortfolioTerminal() {
         break;
 
       case 'resume':
-        responseText = 'opening resume.pdf in new tab...';
+        responseText = 'opening resume.pdf...';
         window.open('/docs/Kushal_Patel_Resume.pdf', '_blank');
         break;
 
       case 'whoami':
         responseText =
-          'Kushal Patel — AI/ML Engineer · Problem Solver · Systems Builder\nDwarkadas J. Sanghvi College of Engineering | Mumbai, India';
+          'Kushal Patel — AI/ML Engineer · Systems Builder';
         break;
 
       case 'ls':
@@ -198,7 +197,7 @@ export default function PortfolioTerminal() {
         break;
 
       default:
-        responseText = `command not found: ${trimmed}\ntype 'help' for available commands.`;
+        responseText = `command not found: ${trimmed} (try 'help')`;
         break;
     }
 
@@ -240,7 +239,7 @@ export default function PortfolioTerminal() {
       return;
     }
 
-    // Command History Navigation: Arrow Up
+    // Command History: Arrow Up
     if (e.key === 'ArrowUp') {
       e.preventDefault();
       if (commandHistory.length === 0) return;
@@ -254,7 +253,7 @@ export default function PortfolioTerminal() {
       return;
     }
 
-    // Command History Navigation: Arrow Down
+    // Command History: Arrow Down
     if (e.key === 'ArrowDown') {
       e.preventDefault();
       if (historyIdx === -1) return;
@@ -283,13 +282,16 @@ export default function PortfolioTerminal() {
       className="portfolio-terminal-window"
       onClick={focusInput}
       style={{
-        backgroundColor: '#070707',
-        border: `1px solid ${isFocused ? '#383838' : '#1C1C1C'}`,
+        width: '100%',
+        maxWidth: '330px',
+        height: '240px',
+        backgroundColor: 'var(--bg-card)',
+        border: `1px solid ${isFocused ? 'var(--border-strong)' : 'var(--border-card)'}`,
         borderRadius: '8px',
         overflow: 'hidden',
         boxShadow: isFocused
-          ? '0 12px 36px rgba(0, 0, 0, 0.75), 0 0 0 1px #2E2E2E'
-          : '0 8px 28px rgba(0, 0, 0, 0.55)',
+          ? '0 12px 32px rgba(0, 0, 0, 0.5), 0 0 0 1px var(--border-hover)'
+          : '0 6px 20px rgba(0, 0, 0, 0.35)',
         transition: 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
         display: 'flex',
         flexDirection: 'column',
@@ -303,37 +305,37 @@ export default function PortfolioTerminal() {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          padding: '0.55rem 0.85rem',
-          backgroundColor: '#0D0D0D',
-          borderBottom: '1px solid #181818',
+          padding: '0.45rem 0.75rem',
+          backgroundColor: 'var(--bg-surface)',
+          borderBottom: '1px solid var(--border-subtle)',
         }}
       >
         {/* Window controls */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.38rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
           <span
             style={{
-              width: '8px',
-              height: '8px',
+              width: '7px',
+              height: '7px',
               borderRadius: '50%',
-              backgroundColor: '#2A2A2A',
+              backgroundColor: '#333333',
               display: 'inline-block',
             }}
           />
           <span
             style={{
-              width: '8px',
-              height: '8px',
+              width: '7px',
+              height: '7px',
               borderRadius: '50%',
-              backgroundColor: '#2A2A2A',
+              backgroundColor: '#333333',
               display: 'inline-block',
             }}
           />
           <span
             style={{
-              width: '8px',
-              height: '8px',
+              width: '7px',
+              height: '7px',
               borderRadius: '50%',
-              backgroundColor: '#2A2A2A',
+              backgroundColor: '#333333',
               display: 'inline-block',
             }}
           />
@@ -343,20 +345,20 @@ export default function PortfolioTerminal() {
         <div
           className="font-mono"
           style={{
-            fontSize: '0.72rem',
-            color: '#8A8A8A',
+            fontSize: '0.68rem',
+            color: 'var(--text-dim)',
             letterSpacing: '0.02em',
           }}
         >
           {currentPath}
         </div>
 
-        {/* Status / micro badge */}
+        {/* Status indicator */}
         <div
           className="font-mono"
           style={{
-            fontSize: '0.62rem',
-            color: '#555555',
+            fontSize: '0.6rem',
+            color: 'var(--text-muted)',
           }}
         >
           zsh
@@ -367,37 +369,37 @@ export default function PortfolioTerminal() {
       <div
         ref={scrollRef}
         style={{
-          padding: '0.85rem 1rem',
+          padding: '0.65rem 0.85rem',
           fontFamily: 'var(--font-mono)',
-          fontSize: '0.76rem',
-          color: '#EAEAEA',
-          lineHeight: 1.5,
+          fontSize: '0.72rem',
+          color: 'var(--text-primary)',
+          lineHeight: 1.45,
           overflowY: 'auto',
           flex: 1,
           display: 'flex',
           flexDirection: 'column',
-          gap: '0.45rem',
+          gap: '0.35rem',
         }}
       >
         {history.map((item) => (
           <div key={item.id}>
             {item.type === 'command' && (
-              <div style={{ color: '#EAEAEA', fontWeight: 500 }}>
+              <div style={{ color: 'var(--text-primary)', fontWeight: 500 }}>
                 {item.text}
               </div>
             )}
             {item.type === 'info' && (
-              <div style={{ color: '#969696' }}>{item.text}</div>
+              <div style={{ color: 'var(--text-secondary)' }}>{item.text}</div>
             )}
             {item.type === 'output' && (
               <pre
                 style={{
                   fontFamily: 'inherit',
                   fontSize: 'inherit',
-                  color: '#8A8A8A',
+                  color: 'var(--text-dim)',
                   whiteSpace: 'pre-wrap',
                   margin: 0,
-                  lineHeight: 1.45,
+                  lineHeight: 1.4,
                 }}
               >
                 {item.text}
@@ -411,11 +413,11 @@ export default function PortfolioTerminal() {
           style={{
             display: 'flex',
             alignItems: 'center',
-            gap: '0.4rem',
-            marginTop: '0.2rem',
+            gap: '0.35rem',
+            marginTop: '0.15rem',
           }}
         >
-          <span style={{ color: '#8A8A8A', flexShrink: 0 }}>
+          <span style={{ color: 'var(--text-dim)', flexShrink: 0, fontSize: '0.7rem' }}>
             kushal@portfolio:~$
           </span>
           <div style={{ position: 'relative', flex: 1, display: 'flex', alignItems: 'center' }}>
@@ -437,9 +439,9 @@ export default function PortfolioTerminal() {
                 background: 'transparent',
                 border: 'none',
                 outline: 'none',
-                color: '#FFFFFF',
+                color: 'var(--text-white)',
                 fontFamily: 'inherit',
-                fontSize: 'inherit',
+                fontSize: '0.72rem',
                 padding: 0,
                 margin: 0,
               }}
@@ -448,21 +450,21 @@ export default function PortfolioTerminal() {
         </div>
       </div>
 
-      {/* Terminal Footer Micro Hints */}
+      {/* Terminal Footer Micro Hint */}
       <div
         style={{
-          padding: '0.35rem 0.85rem',
-          borderTop: '1px solid #141414',
-          backgroundColor: '#090909',
+          padding: '0.25rem 0.75rem',
+          borderTop: '1px solid var(--border-subtle)',
+          backgroundColor: 'var(--bg-section)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
           fontFamily: 'var(--font-mono)',
-          fontSize: '0.62rem',
-          color: '#555555',
+          fontSize: '0.58rem',
+          color: 'var(--text-muted)',
         }}
       >
-        <span>type &apos;help&apos; or &apos;cd /projects&apos;</span>
+        <span>type &apos;help&apos;</span>
         <span>[tab] complete</span>
       </div>
     </div>

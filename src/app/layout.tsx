@@ -30,6 +30,8 @@ export const viewport: Viewport = {
   maximumScale: 5,
 };
 
+import { ThemeProvider } from '../context/ThemeContext';
+
 export default function RootLayout({
   children,
 }: {
@@ -46,8 +48,10 @@ export default function RootLayout({
         />
       </head>
       <body>
-        <CustomCursor />
-        {children}
+        <ThemeProvider>
+          <CustomCursor />
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );

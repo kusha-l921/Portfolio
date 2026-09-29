@@ -5,7 +5,7 @@ import { EDUCATION_DATA, ACHIEVEMENTS_DATA } from '../data/portfolioData';
 
 export default function EducationSection() {
   return (
-    <section id="education" className="section" style={{ borderTop: '1px solid #141414' }}>
+    <section id="education" className="section" style={{ borderTop: '1px solid var(--border-subtle)' }}>
       <div className="container">
         {/* Section Header */}
         <div className="section-header">
@@ -21,7 +21,7 @@ export default function EducationSection() {
             </div>
             <span
               className="font-mono"
-              style={{ fontSize: '0.75rem', color: '#555555' }}
+              style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}
             >
               02
             </span>
@@ -32,12 +32,12 @@ export default function EducationSection() {
           </p>
         </div>
 
-        {/* Education Main Card */}
+        {/* Education Main Grid */}
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'minmax(0, 1.35fr) minmax(0, 1fr)',
-            gap: '1.5rem',
+            gridTemplateColumns: 'minmax(0, 1.4fr) minmax(0, 1fr)',
+            gap: 'clamp(1.5rem, 3vw, 2.5rem)',
           }}
           className="education-grid"
         >
@@ -45,9 +45,9 @@ export default function EducationSection() {
           <div
             className="card"
             style={{
-              padding: '1.75rem',
-              backgroundColor: '#0B0B0B',
-              border: '1px solid #1C1C1C',
+              padding: 'clamp(1.5rem, 2.5vw, 2.25rem)',
+              backgroundColor: 'var(--bg-card)',
+              border: '1px solid var(--border-card)',
               borderRadius: '8px',
               display: 'flex',
               flexDirection: 'column',
@@ -61,25 +61,25 @@ export default function EducationSection() {
                   alignItems: 'flex-start',
                   justifyContent: 'space-between',
                   gap: '1rem',
-                  marginBottom: '0.75rem',
+                  marginBottom: '1rem',
                 }}
               >
                 <div>
                   <h3
                     style={{
-                      fontSize: '1.2rem',
-                      fontWeight: 600,
-                      color: '#FFFFFF',
-                      letterSpacing: '-0.01em',
+                      fontSize: 'clamp(1.2rem, 1.6vw, 1.45rem)',
+                      fontWeight: 700,
+                      color: 'var(--text-white)',
+                      letterSpacing: '-0.015em',
                     }}
                   >
                     {EDUCATION_DATA.institution}
                   </h3>
                   <p
                     style={{
-                      fontSize: '0.85rem',
-                      color: '#8A8A8A',
-                      marginTop: '0.2rem',
+                      fontSize: '0.9rem',
+                      color: 'var(--text-secondary)',
+                      marginTop: '0.3rem',
                     }}
                   >
                     {EDUCATION_DATA.university} · {EDUCATION_DATA.location}
@@ -89,11 +89,11 @@ export default function EducationSection() {
                 <div
                   className="font-mono"
                   style={{
-                    fontSize: '0.75rem',
-                    color: '#EEEEEE',
-                    backgroundColor: '#161616',
-                    border: '1px solid #282828',
-                    padding: '0.3rem 0.65rem',
+                    fontSize: '0.78rem',
+                    color: 'var(--text-primary)',
+                    backgroundColor: 'var(--bg-surface)',
+                    border: '1px solid var(--border-subtle)',
+                    padding: '0.35rem 0.75rem',
                     borderRadius: '4px',
                     whiteSpace: 'nowrap',
                   }}
@@ -102,12 +102,12 @@ export default function EducationSection() {
                 </div>
               </div>
 
-              <div style={{ marginTop: '1rem', marginBottom: '1.25rem' }}>
+              <div style={{ marginTop: '1.25rem', marginBottom: '1.5rem' }}>
                 <div
                   style={{
-                    fontSize: '1rem',
-                    fontWeight: 500,
-                    color: '#EEEEEE',
+                    fontSize: '1.1rem',
+                    fontWeight: 600,
+                    color: 'var(--text-primary)',
                   }}
                 >
                   {EDUCATION_DATA.degree}
@@ -115,9 +115,9 @@ export default function EducationSection() {
                 <div
                   className="font-mono"
                   style={{
-                    fontSize: '0.8rem',
-                    color: '#A5A5A5',
-                    marginTop: '0.25rem',
+                    fontSize: '0.85rem',
+                    color: 'var(--text-secondary)',
+                    marginTop: '0.35rem',
                   }}
                 >
                   {EDUCATION_DATA.honours}
@@ -130,7 +130,7 @@ export default function EducationSection() {
                   listStyle: 'none',
                   display: 'flex',
                   flexDirection: 'column',
-                  gap: '0.55rem',
+                  gap: '0.65rem',
                 }}
               >
                 {EDUCATION_DATA.highlights.map((point, idx) => (
@@ -139,15 +139,15 @@ export default function EducationSection() {
                     style={{
                       display: 'flex',
                       alignItems: 'flex-start',
-                      gap: '0.6rem',
-                      fontSize: '0.85rem',
-                      color: '#969696',
-                      lineHeight: 1.5,
+                      gap: '0.65rem',
+                      fontSize: '0.9rem',
+                      color: 'var(--text-secondary)',
+                      lineHeight: 1.6,
                     }}
                   >
                     <span
                       className="font-mono"
-                      style={{ color: '#555555', marginTop: '0.1rem' }}
+                      style={{ color: 'var(--text-muted)', marginTop: '0.1rem' }}
                     >
                       &gt;
                     </span>
@@ -163,22 +163,22 @@ export default function EducationSection() {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
-                borderTop: '1px solid #161616',
-                paddingTop: '1rem',
-                marginTop: '1.5rem',
+                borderTop: '1px solid var(--border-subtle)',
+                paddingTop: '1.25rem',
+                marginTop: '1.75rem',
               }}
             >
               <span
                 className="font-mono"
-                style={{ fontSize: '0.75rem', color: '#666666' }}
+                style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}
               >
                 academic_standing
               </span>
               <div
                 className="font-mono"
                 style={{
-                  fontSize: '0.82rem',
-                  color: '#FFFFFF',
+                  fontSize: '0.88rem',
+                  color: 'var(--text-white)',
                   fontWeight: 600,
                 }}
               >
@@ -199,9 +199,9 @@ export default function EducationSection() {
               className="font-mono"
               style={{
                 fontSize: '0.72rem',
-                color: '#666666',
+                color: 'var(--text-muted)',
                 textTransform: 'uppercase',
-                letterSpacing: '0.04em',
+                letterSpacing: '0.05em',
               }}
             >
               // competitive_honors
@@ -212,13 +212,13 @@ export default function EducationSection() {
                 key={ach.id}
                 className="card"
                 style={{
-                  padding: '1.25rem',
-                  backgroundColor: '#0B0B0B',
-                  border: '1px solid #1C1C1C',
+                  padding: '1.35rem',
+                  backgroundColor: 'var(--bg-card)',
+                  border: '1px solid var(--border-card)',
                   borderRadius: '8px',
                   display: 'flex',
                   flexDirection: 'column',
-                  gap: '0.5rem',
+                  gap: '0.6rem',
                 }}
               >
                 <div
@@ -231,11 +231,11 @@ export default function EducationSection() {
                   <span
                     className="font-mono"
                     style={{
-                      fontSize: '0.68rem',
-                      color: '#EEEEEE',
-                      backgroundColor: '#181818',
-                      border: '1px solid #292929',
-                      padding: '0.2rem 0.5rem',
+                      fontSize: '0.72rem',
+                      color: 'var(--text-primary)',
+                      backgroundColor: 'var(--bg-surface)',
+                      border: '1px solid var(--border-subtle)',
+                      padding: '0.2rem 0.55rem',
                       borderRadius: '4px',
                     }}
                   >
@@ -243,7 +243,7 @@ export default function EducationSection() {
                   </span>
                   <span
                     className="font-mono"
-                    style={{ fontSize: '0.72rem', color: '#666666' }}
+                    style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}
                   >
                     {ach.date}
                   </span>
@@ -251,10 +251,10 @@ export default function EducationSection() {
 
                 <h4
                   style={{
-                    fontSize: '0.92rem',
+                    fontSize: '1rem',
                     fontWeight: 600,
-                    color: '#EEEEEE',
-                    lineHeight: 1.35,
+                    color: 'var(--text-primary)',
+                    lineHeight: 1.4,
                   }}
                 >
                   {ach.title}
@@ -262,9 +262,9 @@ export default function EducationSection() {
 
                 <p
                   style={{
-                    fontSize: '0.8rem',
-                    color: '#8A8A8A',
-                    lineHeight: 1.5,
+                    fontSize: '0.85rem',
+                    color: 'var(--text-secondary)',
+                    lineHeight: 1.55,
                   }}
                 >
                   {ach.description}
@@ -278,7 +278,7 @@ export default function EducationSection() {
       <style jsx global>{`
         @media (max-width: 860px) {
           .education-grid {
-            gridTemplateColumns: 1fr !important;
+            grid-template-columns: 1fr !important;
           }
         }
       `}</style>

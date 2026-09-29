@@ -11,32 +11,32 @@ export default function Hero() {
       className="hero-section"
       style={{
         position: 'relative',
-        minHeight: '580px',
+        minHeight: '620px',
         display: 'flex',
         alignItems: 'center',
-        paddingTop: '3.5rem',
-        paddingBottom: '3.5rem',
+        paddingTop: 'clamp(3rem, 6vw, 5rem)',
+        paddingBottom: 'clamp(3rem, 6vw, 5rem)',
         overflow: 'hidden',
       }}
     >
-      <div className="hero-container">
-        <div className="hero-row">
-          {/* LEFT: Personal introduction (~55-60%) */}
-          <div className="hero-content">
+      <div className="container" style={{ position: 'relative', zIndex: 10 }}>
+        <div className="hero-flex-wrapper">
+          {/* Main Hero Identity Content: ~65-70% width */}
+          <div className="hero-main-content">
             {/* Terminal prompt label */}
-            <div className="terminal-label" style={{ marginBottom: '1rem' }}>
+            <div className="terminal-label" style={{ marginBottom: '1.25rem' }}>
               <span>{PERSONAL_DATA.terminalPrompt}</span>
             </div>
 
-            {/* Main Name Heading with terminal cursor */}
+            {/* Kushal Patel (Primary visual focus, 64-80px desktop) */}
             <div>
               <h1
                 style={{
-                  fontSize: 'clamp(2.5rem, 4.8vw, 3.8rem)',
-                  fontWeight: 700,
-                  letterSpacing: '-0.03em',
-                  color: '#FFFFFF',
-                  lineHeight: 1.08,
+                  fontSize: 'clamp(2.8rem, 5.5vw, 4.8rem)',
+                  fontWeight: 800,
+                  letterSpacing: '-0.035em',
+                  color: 'var(--text-white)',
+                  lineHeight: 1.05,
                 }}
               >
                 {PERSONAL_DATA.fullName}
@@ -44,9 +44,9 @@ export default function Hero() {
               </h1>
               <p
                 style={{
-                  fontSize: '1.05rem',
-                  color: '#8A8A8A',
-                  marginTop: '0.45rem',
+                  fontSize: 'clamp(1rem, 1.4vw, 1.25rem)',
+                  color: 'var(--text-dim)',
+                  marginTop: '0.5rem',
                   fontWeight: 400,
                   letterSpacing: '-0.01em',
                 }}
@@ -58,22 +58,22 @@ export default function Hero() {
             {/* Strong statement */}
             <h2
               style={{
-                fontSize: 'clamp(1.3rem, 2.4vw, 1.85rem)',
+                fontSize: 'clamp(1.4rem, 2.6vw, 2.15rem)',
                 fontWeight: 600,
-                color: '#EEEEEE',
+                color: 'var(--text-primary)',
                 letterSpacing: '-0.02em',
-                lineHeight: 1.32,
-                marginTop: '1.25rem',
-                maxWidth: '600px',
+                lineHeight: 1.3,
+                marginTop: '1.5rem',
+                maxWidth: '680px',
               }}
             >
               Building{' '}
               <span
                 style={{
-                  color: '#FFFFFF',
+                  color: 'var(--text-white)',
                   textDecoration: 'underline',
-                  textDecorationColor: '#3A3A3A',
-                  textUnderlineOffset: '5px',
+                  textDecorationColor: 'var(--border-strong)',
+                  textUnderlineOffset: '6px',
                 }}
               >
                 intelligent systems
@@ -84,11 +84,11 @@ export default function Hero() {
             {/* Supporting paragraph */}
             <p
               style={{
-                fontSize: '0.98rem',
-                color: '#969696',
-                lineHeight: 1.68,
-                marginTop: '1rem',
-                maxWidth: '560px',
+                fontSize: 'clamp(1rem, 1.2vw, 1.12rem)',
+                color: 'var(--text-secondary)',
+                lineHeight: 1.7,
+                marginTop: '1.15rem',
+                maxWidth: '640px',
               }}
             >
               {PERSONAL_DATA.supportingParagraph}
@@ -100,19 +100,19 @@ export default function Hero() {
                 display: 'flex',
                 flexWrap: 'wrap',
                 gap: '0.5rem',
-                marginTop: '1.25rem',
+                marginTop: '1.5rem',
               }}
             >
               <div className="pill">
-                <span style={{ color: '#666666' }}>loc:</span>
+                <span style={{ color: 'var(--text-muted)' }}>loc:</span>
                 <span>{PERSONAL_DATA.location}</span>
               </div>
               <div className="pill">
-                <span style={{ color: '#666666' }}>edu:</span>
+                <span style={{ color: 'var(--text-muted)' }}>edu:</span>
                 <span>{PERSONAL_DATA.college}</span>
               </div>
               <div className="pill">
-                <span style={{ color: '#666666' }}>deg:</span>
+                <span style={{ color: 'var(--text-muted)' }}>deg:</span>
                 <span>{PERSONAL_DATA.degree}</span>
               </div>
             </div>
@@ -124,7 +124,7 @@ export default function Hero() {
                 alignItems: 'center',
                 flexWrap: 'wrap',
                 gap: '0.85rem',
-                marginTop: '1.65rem',
+                marginTop: '1.75rem',
               }}
             >
               <a href="#projects" className="btn btn-primary">
@@ -148,111 +148,89 @@ export default function Hero() {
               style={{
                 display: 'flex',
                 alignItems: 'center',
-                gap: '1.25rem',
-                fontSize: '0.82rem',
-                color: '#666666',
-                marginTop: '1.35rem',
+                gap: '1.35rem',
+                fontSize: '0.85rem',
+                color: 'var(--text-muted)',
+                marginTop: '1.5rem',
               }}
             >
               <a
                 href={PERSONAL_DATA.githubUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                style={{ color: '#8A8A8A', textDecoration: 'none', transition: 'color 0.2s' }}
-                onMouseEnter={(e) => (e.currentTarget.style.color = '#FFFFFF')}
-                onMouseLeave={(e) => (e.currentTarget.style.color = '#8A8A8A')}
+                style={{ color: 'var(--text-dim)', textDecoration: 'none', transition: 'color 0.2s' }}
+                onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--text-white)')}
+                onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--text-dim)')}
               >
                 github ↗
               </a>
-              <span style={{ color: '#252525' }}>·</span>
+              <span style={{ color: 'var(--border-strong)' }}>·</span>
               <a
                 href={PERSONAL_DATA.linkedinUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                style={{ color: '#8A8A8A', textDecoration: 'none', transition: 'color 0.2s' }}
-                onMouseEnter={(e) => (e.currentTarget.style.color = '#FFFFFF')}
-                onMouseLeave={(e) => (e.currentTarget.style.color = '#8A8A8A')}
+                style={{ color: 'var(--text-dim)', textDecoration: 'none', transition: 'color 0.2s' }}
+                onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--text-white)')}
+                onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--text-dim)')}
               >
                 linkedin ↗
               </a>
-              <span style={{ color: '#252525' }}>·</span>
+              <span style={{ color: 'var(--border-strong)' }}>·</span>
               <a
                 href={`mailto:${PERSONAL_DATA.email}`}
-                style={{ color: '#8A8A8A', textDecoration: 'none', transition: 'color 0.2s' }}
-                onMouseEnter={(e) => (e.currentTarget.style.color = '#FFFFFF')}
-                onMouseLeave={(e) => (e.currentTarget.style.color = '#8A8A8A')}
+                style={{ color: 'var(--text-dim)', textDecoration: 'none', transition: 'color 0.2s' }}
+                onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--text-white)')}
+                onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--text-dim)')}
               >
                 email ↗
               </a>
             </div>
           </div>
 
-          {/* RIGHT: Compact Interactive Terminal (~30-35%) */}
-          <div className="hero-terminal-col">
+          {/* Secondary Detail: Small Floating Terminal on the far right */}
+          <div className="hero-side-terminal" style={{ zIndex: 20 }}>
             <PortfolioTerminal />
           </div>
         </div>
       </div>
 
       <style jsx global>{`
-        /* Hero Container: Begins 40-60px from viewport edge on desktop */
-        .hero-container {
-          width: 94vw;
-          max-width: 1560px;
-          margin-left: auto;
-          margin-right: auto;
-          padding-left: clamp(16px, 3vw, 48px);
-          padding-right: clamp(16px, 3vw, 48px);
-          position: relative;
-          z-index: 2;
-        }
-
-        .hero-row {
+        .hero-flex-wrapper {
           display: flex;
           align-items: center;
           justifyContent: space-between;
-          gap: clamp(2rem, 4.5vw, 4.5rem);
+          gap: clamp(2rem, 5vw, 6rem);
           width: 100%;
         }
 
-        .hero-content {
-          flex: 1 1 58%;
-          max-width: 640px;
+        .hero-main-content {
+          flex: 1 1 65%;
+          max-width: 720px;
           min-width: 0;
         }
 
-        .hero-terminal-col {
+        .hero-side-terminal {
           flex: 0 0 auto;
-          width: clamp(380px, 34vw, 460px);
-          height: 310px;
+          width: clamp(280px, 24vw, 340px);
           display: flex;
-          flex-direction: column;
+          justifyContent: flex-end;
         }
 
-        .hero-terminal-col .portfolio-terminal-window {
-          height: 100%;
-        }
-
-        /* Responsive Tablet & Mobile Stacking */
+        /* Tablet & Mobile Layout */
         @media (max-width: 960px) {
-          .hero-section {
-            min-height: auto !important;
-            padding-top: 2.5rem !important;
-            padding-bottom: 2.5rem !important;
-          }
-          .hero-row {
+          .hero-flex-wrapper {
             flex-direction: column !important;
             align-items: flex-start !important;
             gap: 2.5rem !important;
           }
-          .hero-content {
+          .hero-main-content {
             max-width: 100% !important;
           }
-          .hero-terminal-col {
+          .hero-side-terminal {
             width: 100% !important;
-            max-width: 420px !important;
-            height: 290px !important;
-            margin: 0 auto;
+            max-width: 340px !important;
+            justifyContent: flex-start !important;
+            margin-top: 1rem;
           }
         }
       `}</style>

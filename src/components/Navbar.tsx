@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { PERSONAL_DATA } from '../data/portfolioData';
+import { useTheme } from '../context/ThemeContext';
 
 const NAV_LINKS = [
   { label: '/me', href: '#me' },
@@ -17,6 +18,7 @@ export default function Navbar() {
   const [activeSection, setActiveSection] = useState('me');
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { theme, toggleTheme } = useTheme();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -45,7 +47,8 @@ export default function Navbar() {
         position: 'sticky',
         top: '12px',
         zIndex: 50,
-        width: 'min(92vw, 1440px)',
+        width: '94vw',
+        maxWidth: '1560px',
         margin: '0 auto',
         padding: '0 clamp(10px, 2vw, 24px)',
       }}
@@ -58,12 +61,16 @@ export default function Navbar() {
           height: '52px',
           padding: '0 1rem',
           borderRadius: '9999px',
-          backgroundColor: isScrolled ? 'rgba(10, 10, 10, 0.92)' : 'rgba(13, 13, 13, 0.75)',
+          backgroundColor: isScrolled
+            ? (theme === 'light' ? 'rgba(255, 255, 255, 0.9)' : 'rgba(10, 10, 10, 0.92)')
+            : (theme === 'light' ? 'rgba(244, 244, 242, 0.8)' : 'rgba(13, 13, 13, 0.75)'),
           backdropFilter: 'blur(12px)',
           WebkitBackdropFilter: 'blur(12px)',
           border: '1px solid',
-          borderColor: isScrolled ? '#262626' : '#1A1A1A',
-          boxShadow: isScrolled ? '0 8px 30px rgba(0, 0, 0, 0.6)' : 'none',
+          borderColor: isScrolled ? 'var(--border-strong)' : 'var(--border-card)',
+          boxShadow: isScrolled
+            ? (theme === 'light' ? '0 8px 24px rgba(0, 0, 0, 0.06)' : '0 8px 30px rgba(0, 0, 0, 0.6)')
+            : 'none',
           transition: 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
         }}
         aria-label="Main Navigation"
@@ -86,8 +93,8 @@ export default function Navbar() {
               height: '28px',
               borderRadius: '50%',
               overflow: 'hidden',
-              border: '1px solid #333333',
-              backgroundColor: '#171717',
+              border: '1px solid var(--border-strong)',
+              backgroundColor: 'var(--bg-surface)',
               flexShrink: 0,
             }}
           >
@@ -107,7 +114,7 @@ export default function Navbar() {
               style={{
                 fontSize: '0.85rem',
                 fontWeight: 600,
-                color: '#FFFFFF',
+                color: 'var(--text-white)',
                 letterSpacing: '-0.01em',
               }}
             >
@@ -117,7 +124,7 @@ export default function Navbar() {
               className="font-mono"
               style={{
                 fontSize: '0.68rem',
-                color: '#8A8A8A',
+                color: 'var(--text-dim)',
               }}
             >
               AI/ML Engineer
@@ -146,23 +153,11 @@ export default function Navbar() {
                   padding: '0.35rem 0.65rem',
                   borderRadius: '9999px',
                   textDecoration: 'none',
-                  color: isActive ? '#FFFFFF' : '#8A8A8A',
-                  backgroundColor: isActive ? '#1F1F1F' : 'transparent',
+                  color: isActive ? 'var(--text-white)' : 'var(--text-dim)',
+                  backgroundColor: isActive ? 'var(--bg-pill-hover)' : 'transparent',
                   border: '1px solid',
-                  borderColor: isActive ? '#333333' : 'transparent',
+                  borderColor: isActive ? 'var(--border-strong)' : 'transparent',
                   transition: 'all 0.18s ease',
-                }}
-                onMouseEnter={(e) => {
-                  if (!isActive) {
-                    e.currentTarget.style.color = '#EEEEEE';
-                    e.currentTarget.style.backgroundColor = '#161616';
-                  }
-                }}
-                onMouseLeave={(e) => {
-                  if (!isActive) {
-                    e.currentTarget.style.color = '#8A8A8A';
-                    e.currentTarget.style.backgroundColor = 'transparent';
-                  }
                 }}
               >
                 {link.label}
@@ -171,14 +166,38 @@ export default function Navbar() {
           })}
         </div>
 
-        {/* Right: Online Status + Resume Link */}
+        {/* Right: Theme Toggle + Online Status + Resume Link */}
         <div
           style={{
             display: 'flex',
             alignItems: 'center',
-            gap: '0.75rem',
+            gap: '0.65rem',
           }}
         >
+          {/* Subtle Theme Toggle Button */}
+          <button
+            onClick={toggleTheme}
+            aria-label="Toggle dark/light theme"
+            className="font-mono"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: '28px',
+              height: '28px',
+              borderRadius: '50%',
+              backgroundColor: 'var(--bg-card)',
+              border: '1px solid var(--border-card)',
+              color: 'var(--text-primary)',
+              cursor: 'pointer',
+              fontSize: '0.75rem',
+              transition: 'all 0.2s ease',
+            }}
+            title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+          >
+            {theme === 'dark' ? '☀' : '☾'}
+          </button>
+
           {/* Online status indicator */}
           <div
             className="font-mono"
@@ -187,11 +206,11 @@ export default function Navbar() {
               alignItems: 'center',
               gap: '0.4rem',
               fontSize: '0.72rem',
-              color: '#8A8A8A',
+              color: 'var(--text-dim)',
               padding: '0.25rem 0.5rem',
               borderRadius: '9999px',
-              backgroundColor: '#121212',
-              border: '1px solid #1C1C1C',
+              backgroundColor: 'var(--bg-card)',
+              border: '1px solid var(--border-subtle)',
             }}
           >
             <span
@@ -199,7 +218,7 @@ export default function Navbar() {
                 width: '6px',
                 height: '6px',
                 borderRadius: '50%',
-                backgroundColor: '#EEEEEE',
+                backgroundColor: 'var(--text-primary)',
                 boxShadow: '0 0 6px rgba(255, 255, 255, 0.4)',
                 display: 'inline-block',
               }}
@@ -220,19 +239,11 @@ export default function Navbar() {
               fontSize: '0.75rem',
               padding: '0.32rem 0.75rem',
               borderRadius: '9999px',
-              color: '#FFFFFF',
-              backgroundColor: '#1A1A1A',
-              border: '1px solid #2D2D2D',
+              color: 'var(--text-white)',
+              backgroundColor: 'var(--bg-pill)',
+              border: '1px solid var(--border-card)',
               textDecoration: 'none',
               transition: 'all 0.18s ease',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = '#262626';
-              e.currentTarget.style.borderColor = '#444444';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = '#1A1A1A';
-              e.currentTarget.style.borderColor = '#2D2D2D';
             }}
           >
             <span>resume.pdf</span>
@@ -247,10 +258,10 @@ export default function Navbar() {
             style={{
               display: 'none',
               background: 'transparent',
-              border: '1px solid #222222',
+              border: '1px solid var(--border-card)',
               borderRadius: '6px',
               padding: '0.35rem',
-              color: '#EEEEEE',
+              color: 'var(--text-primary)',
               cursor: 'pointer',
             }}
           >
@@ -270,8 +281,8 @@ export default function Navbar() {
         <div
           style={{
             marginTop: '0.5rem',
-            backgroundColor: '#0D0D0D',
-            border: '1px solid #222222',
+            backgroundColor: 'var(--bg-card)',
+            border: '1px solid var(--border-card)',
             borderRadius: '12px',
             padding: '0.75rem',
             display: 'flex',
@@ -289,8 +300,8 @@ export default function Navbar() {
               style={{
                 padding: '0.5rem 0.75rem',
                 borderRadius: '6px',
-                color: activeSection === link.href.replace('#', '') ? '#FFFFFF' : '#8A8A8A',
-                backgroundColor: activeSection === link.href.replace('#', '') ? '#1A1A1A' : 'transparent',
+                color: activeSection === link.href.replace('#', '') ? 'var(--text-white)' : 'var(--text-dim)',
+                backgroundColor: activeSection === link.href.replace('#', '') ? 'var(--bg-pill)' : 'transparent',
                 textDecoration: 'none',
                 fontSize: '0.85rem',
               }}

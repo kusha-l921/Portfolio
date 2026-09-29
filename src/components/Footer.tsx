@@ -7,10 +7,10 @@ export default function Footer() {
   return (
     <footer
       style={{
-        borderTop: '1px solid #141414',
+        borderTop: '1px solid var(--border-subtle)',
         paddingTop: '2.5rem',
         paddingBottom: '3.5rem',
-        backgroundColor: '#050505',
+        backgroundColor: 'var(--bg-body)',
         position: 'relative',
         zIndex: 1,
       }}
@@ -27,12 +27,12 @@ export default function Footer() {
         >
           {/* Identity */}
           <div>
-            <div style={{ fontSize: '0.92rem', fontWeight: 600, color: '#FFFFFF' }}>
+            <div style={{ fontSize: '0.92rem', fontWeight: 600, color: 'var(--text-white)' }}>
               {PERSONAL_DATA.fullName}
             </div>
             <div
               className="font-mono"
-              style={{ fontSize: '0.72rem', color: '#666666', marginTop: '0.15rem' }}
+              style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginTop: '0.15rem' }}
             >
               AI/ML Engineer · Systems Builder
             </div>
@@ -52,9 +52,9 @@ export default function Footer() {
               href={PERSONAL_DATA.githubUrl}
               target="_blank"
               rel="noopener noreferrer"
-              style={{ color: '#8A8A8A', textDecoration: 'none', transition: 'color 0.15s ease' }}
-              onMouseEnter={(e) => (e.currentTarget.style.color = '#FFFFFF')}
-              onMouseLeave={(e) => (e.currentTarget.style.color = '#8A8A8A')}
+              style={{ color: 'var(--text-secondary)', textDecoration: 'none', transition: 'color 0.15s ease' }}
+              onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--text-white)')}
+              onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--text-secondary)')}
             >
               GitHub ↗
             </a>
@@ -62,17 +62,17 @@ export default function Footer() {
               href={PERSONAL_DATA.linkedinUrl}
               target="_blank"
               rel="noopener noreferrer"
-              style={{ color: '#8A8A8A', textDecoration: 'none', transition: 'color 0.15s ease' }}
-              onMouseEnter={(e) => (e.currentTarget.style.color = '#FFFFFF')}
-              onMouseLeave={(e) => (e.currentTarget.style.color = '#8A8A8A')}
+              style={{ color: 'var(--text-secondary)', textDecoration: 'none', transition: 'color 0.15s ease' }}
+              onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--text-white)')}
+              onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--text-secondary)')}
             >
               LinkedIn ↗
             </a>
             <a
               href={`mailto:${PERSONAL_DATA.email}`}
-              style={{ color: '#8A8A8A', textDecoration: 'none', transition: 'color 0.15s ease' }}
-              onMouseEnter={(e) => (e.currentTarget.style.color = '#FFFFFF')}
-              onMouseLeave={(e) => (e.currentTarget.style.color = '#8A8A8A')}
+              style={{ color: 'var(--text-secondary)', textDecoration: 'none', transition: 'color 0.15s ease' }}
+              onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--text-white)')}
+              onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--text-secondary)')}
             >
               Email ↗
             </a>
@@ -89,13 +89,13 @@ export default function Footer() {
           >
             <span
               className="font-mono"
-              style={{ fontSize: '0.72rem', color: '#444444' }}
+              style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}
             >
               &gt; end_of_session
             </span>
             <span
               className="font-mono"
-              style={{ fontSize: '0.72rem', color: '#666666' }}
+              style={{ fontSize: '0.72rem', color: 'var(--text-secondary)' }}
             >
               © 2026 {PERSONAL_DATA.fullName}. All rights reserved.
             </span>

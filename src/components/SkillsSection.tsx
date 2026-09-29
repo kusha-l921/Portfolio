@@ -57,7 +57,7 @@ function CategoryIcon({ id }: { id: string }) {
 
 export default function SkillsSection() {
   return (
-    <section id="skills" className="section" style={{ borderTop: '1px solid #141414' }}>
+    <section id="skills" className="section" style={{ borderTop: '1px solid var(--border-subtle)' }}>
       <div className="container">
         {/* Section Header */}
         <div className="section-header">
@@ -73,7 +73,7 @@ export default function SkillsSection() {
             </div>
             <span
               className="font-mono"
-              style={{ fontSize: '0.75rem', color: '#555555' }}
+              style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}
             >
               04
             </span>
@@ -85,36 +85,36 @@ export default function SkillsSection() {
           </p>
         </div>
 
-        {/* Categorized Rows / Cards */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
+        {/* Wide Categorized Rows Layout */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
           {SKILL_CATEGORIES.map((cat) => (
             <div
               key={cat.id}
-              className="card"
+              className="card skill-category-row"
               style={{
                 display: 'grid',
-                gridTemplateColumns: '220px 1fr',
+                gridTemplateColumns: 'clamp(180px, 20vw, 260px) 1fr',
                 alignItems: 'center',
-                gap: '1.5rem',
-                padding: '1.15rem 1.5rem',
+                gap: 'clamp(1rem, 3vw, 2.5rem)',
+                padding: 'clamp(1rem, 2vw, 1.4rem) clamp(1.25rem, 2.5vw, 2rem)',
                 borderRadius: '8px',
-                backgroundColor: '#0A0A0A',
-                border: '1px solid #1A1A1A',
+                backgroundColor: 'var(--bg-card)',
+                border: '1px solid var(--border-card)',
                 transition: 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
               }}
             >
               {/* Category Identity */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
                 <span
                   style={{
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    width: '32px',
-                    height: '32px',
+                    width: '36px',
+                    height: '36px',
                     borderRadius: '6px',
-                    backgroundColor: '#121212',
-                    border: '1px solid #202020',
+                    backgroundColor: 'var(--bg-surface)',
+                    border: '1px solid var(--border-subtle)',
                     flexShrink: 0,
                   }}
                 >
@@ -122,10 +122,11 @@ export default function SkillsSection() {
                 </span>
                 <h3
                   style={{
-                    fontSize: '0.9rem',
-                    fontWeight: 600,
-                    color: '#EEEEEE',
-                    letterSpacing: '-0.01em',
+                    fontSize: 'clamp(0.85rem, 1.1vw, 1rem)',
+                    fontWeight: 700,
+                    color: 'var(--text-primary)',
+                    letterSpacing: '0.04em',
+                    textTransform: 'uppercase',
                   }}
                 >
                   {cat.title}
@@ -138,7 +139,7 @@ export default function SkillsSection() {
                   display: 'flex',
                   alignItems: 'center',
                   flexWrap: 'wrap',
-                  gap: '0.45rem',
+                  gap: '0.55rem',
                 }}
               >
                 {cat.skills.map((skill) => (
@@ -146,24 +147,24 @@ export default function SkillsSection() {
                     key={skill}
                     className="font-mono"
                     style={{
-                      fontSize: '0.78rem',
-                      padding: '0.28rem 0.65rem',
+                      fontSize: '0.82rem',
+                      padding: '0.35rem 0.75rem',
                       borderRadius: '4px',
-                      backgroundColor: '#111111',
-                      border: '1px solid #1D1D1D',
-                      color: '#B0B0B0',
+                      backgroundColor: 'var(--bg-surface)',
+                      border: '1px solid var(--border-subtle)',
+                      color: 'var(--text-light)',
                       transition: 'all 0.15s ease',
                       cursor: 'default',
                     }}
                     onMouseEnter={(e) => {
-                      e.currentTarget.style.backgroundColor = '#181818';
-                      e.currentTarget.style.borderColor = '#333333';
-                      e.currentTarget.style.color = '#FFFFFF';
+                      e.currentTarget.style.backgroundColor = 'var(--bg-pill-hover)';
+                      e.currentTarget.style.borderColor = 'var(--border-hover)';
+                      e.currentTarget.style.color = 'var(--text-white)';
                     }}
                     onMouseLeave={(e) => {
-                      e.currentTarget.style.backgroundColor = '#111111';
-                      e.currentTarget.style.borderColor = '#1D1D1D';
-                      e.currentTarget.style.color = '#B0B0B0';
+                      e.currentTarget.style.backgroundColor = 'var(--bg-surface)';
+                      e.currentTarget.style.borderColor = 'var(--border-subtle)';
+                      e.currentTarget.style.color = 'var(--text-light)';
                     }}
                   >
                     {skill}
@@ -176,11 +177,15 @@ export default function SkillsSection() {
       </div>
 
       <style jsx global>{`
-        @media (max-width: 720px) {
-          #skills .card {
+        @media (max-width: 768px) {
+          .skill-category-row {
             grid-template-columns: 1fr !important;
-            gap: 0.85rem !important;
+            gap: 1rem !important;
           }
+        }
+        .skill-category-row:hover {
+          border-color: var(--border-hover) !important;
+          background-color: var(--bg-card-hover) !important;
         }
       `}</style>
     </section>

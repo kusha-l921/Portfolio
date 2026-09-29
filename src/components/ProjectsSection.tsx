@@ -18,7 +18,7 @@ export default function ProjectsSection() {
   });
 
   return (
-    <section id="projects" className="section" style={{ borderTop: '1px solid #141414' }}>
+    <section id="projects" className="section" style={{ borderTop: '1px solid var(--border-subtle)' }}>
       <div className="container">
         {/* Section Header */}
         <div className="section-header">
@@ -34,7 +34,7 @@ export default function ProjectsSection() {
             </div>
             <span
               className="font-mono"
-              style={{ fontSize: '0.75rem', color: '#555555' }}
+              style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}
             >
               03
             </span>
@@ -42,7 +42,7 @@ export default function ProjectsSection() {
 
           <h2 className="section-title">Selected Work</h2>
           <p className="section-desc">
-            A collection of projects, experiments and systems I&apos;ve built.
+            A collection of production experiments, neural architectures, and edge systems.
           </p>
 
           {/* Monochrome Filter Tabs */}
@@ -52,7 +52,7 @@ export default function ProjectsSection() {
               alignItems: 'center',
               flexWrap: 'wrap',
               gap: '0.5rem',
-              marginTop: '1.5rem',
+              marginTop: '1.75rem',
             }}
           >
             {FILTERS.map((f) => {
@@ -63,27 +63,27 @@ export default function ProjectsSection() {
                   onClick={() => setSelectedFilter(f)}
                   className="font-mono"
                   style={{
-                    fontSize: '0.78rem',
-                    padding: '0.35rem 0.85rem',
+                    fontSize: '0.8rem',
+                    padding: '0.4rem 0.95rem',
                     borderRadius: '6px',
-                    backgroundColor: isActive ? '#EEEEEE' : '#0E0E0E',
-                    color: isActive ? '#050505' : '#8A8A8A',
+                    backgroundColor: isActive ? 'var(--text-white)' : 'var(--bg-card)',
+                    color: isActive ? 'var(--bg-body)' : 'var(--text-secondary)',
                     border: '1px solid',
-                    borderColor: isActive ? '#FFFFFF' : '#1F1F1F',
+                    borderColor: isActive ? 'var(--text-white)' : 'var(--border-card)',
                     cursor: 'pointer',
                     transition: 'all 0.18s ease',
                     fontWeight: isActive ? 600 : 400,
                   }}
                   onMouseEnter={(e) => {
                     if (!isActive) {
-                      e.currentTarget.style.color = '#EEEEEE';
-                      e.currentTarget.style.borderColor = '#333333';
+                      e.currentTarget.style.color = 'var(--text-white)';
+                      e.currentTarget.style.borderColor = 'var(--border-hover)';
                     }
                   }}
                   onMouseLeave={(e) => {
                     if (!isActive) {
-                      e.currentTarget.style.color = '#8A8A8A';
-                      e.currentTarget.style.borderColor = '#1F1F1F';
+                      e.currentTarget.style.color = 'var(--text-secondary)';
+                      e.currentTarget.style.borderColor = 'var(--border-card)';
                     }
                   }}
                 >
@@ -94,16 +94,16 @@ export default function ProjectsSection() {
           </div>
         </div>
 
-        {/* Project Archive List */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+        {/* Project Full-Width Panels List */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.75rem' }}>
           {filteredProjects.map((project) => (
             <div
               key={project.id}
               className="card project-card-item"
               style={{
                 borderRadius: '8px',
-                backgroundColor: '#0A0A0A',
-                border: '1px solid #1A1A1A',
+                backgroundColor: 'var(--bg-card)',
+                border: '1px solid var(--border-card)',
                 overflow: 'hidden',
                 transition: 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
               }}
@@ -111,58 +111,59 @@ export default function ProjectsSection() {
               <div
                 style={{
                   display: 'grid',
-                  gridTemplateColumns: 'minmax(0, 1.4fr) minmax(0, 1fr)',
-                  gap: '1.5rem',
-                  padding: '1.5rem',
+                  gridTemplateColumns: 'minmax(0, 1.55fr) minmax(0, 1fr)',
+                  gap: 'clamp(1.5rem, 3.5vw, 3rem)',
+                  padding: 'clamp(1.5rem, 3vw, 2.5rem)',
                   alignItems: 'center',
                 }}
                 className="project-grid"
               >
                 {/* Left: Project Information */}
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                   {/* Micro header: Number + Category */}
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
                     <span
                       className="font-mono"
                       style={{
-                        fontSize: '0.78rem',
-                        color: '#666666',
+                        fontSize: '0.82rem',
+                        color: 'var(--text-muted)',
                       }}
                     >
                       {project.number}
                     </span>
-                    <span style={{ color: '#252525' }}>·</span>
+                    <span style={{ color: 'var(--border-card)' }}>·</span>
                     <span
                       className="font-mono"
                       style={{
-                        fontSize: '0.72rem',
-                        color: '#8A8A8A',
+                        fontSize: '0.75rem',
+                        color: 'var(--text-secondary)',
                         textTransform: 'uppercase',
-                        letterSpacing: '0.04em',
+                        letterSpacing: '0.05em',
                       }}
                     >
                       {project.category}
                     </span>
-                    <span style={{ color: '#252525' }}>·</span>
+                    <span style={{ color: 'var(--border-card)' }}>·</span>
                     <span
                       className="font-mono"
                       style={{
-                        fontSize: '0.72rem',
-                        color: '#555555',
+                        fontSize: '0.75rem',
+                        color: 'var(--text-muted)',
                       }}
                     >
                       {project.period}
                     </span>
                   </div>
 
-                  {/* Title */}
+                  {/* Title (Large Desktop Scale 28-36px) */}
                   <h3
                     className="project-title"
                     style={{
-                      fontSize: '1.45rem',
-                      fontWeight: 600,
-                      color: '#FFFFFF',
-                      letterSpacing: '-0.02em',
+                      fontSize: 'clamp(1.5rem, 2.3vw, 2.15rem)',
+                      fontWeight: 700,
+                      color: 'var(--text-white)',
+                      letterSpacing: '-0.025em',
+                      lineHeight: 1.18,
                       transition: 'transform 0.2s ease',
                       cursor: 'pointer',
                     }}
@@ -174,27 +175,27 @@ export default function ProjectsSection() {
                   {/* Tagline / Description */}
                   <p
                     style={{
-                      fontSize: '0.92rem',
-                      color: '#8A8A8A',
-                      lineHeight: 1.55,
+                      fontSize: 'clamp(0.95rem, 1.15vw, 1.05rem)',
+                      color: 'var(--text-secondary)',
+                      lineHeight: 1.65,
                     }}
                   >
                     {project.tagline}
                   </p>
 
                   {/* Technology Tags */}
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem' }}>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.45rem' }}>
                     {project.tags.map((tag) => (
                       <span
                         key={tag}
                         className="font-mono"
                         style={{
-                          fontSize: '0.72rem',
-                          padding: '0.2rem 0.55rem',
+                          fontSize: '0.76rem',
+                          padding: '0.25rem 0.6rem',
                           borderRadius: '4px',
-                          backgroundColor: '#121212',
-                          border: '1px solid #1E1E1E',
-                          color: '#A5A5A5',
+                          backgroundColor: 'var(--bg-surface)',
+                          border: '1px solid var(--border-subtle)',
+                          color: 'var(--text-light)',
                         }}
                       >
                         {tag}
@@ -208,24 +209,24 @@ export default function ProjectsSection() {
                       style={{
                         display: 'flex',
                         alignItems: 'center',
-                        gap: '0.5rem',
-                        padding: '0.4rem 0.75rem',
+                        gap: '0.6rem',
+                        padding: '0.45rem 0.85rem',
                         borderRadius: '6px',
-                        backgroundColor: '#0F0F0F',
-                        border: '1px solid #1C1C1C',
+                        backgroundColor: 'var(--bg-surface)',
+                        border: '1px solid var(--border-subtle)',
                         width: 'fit-content',
                       }}
                     >
-                      <span className="font-mono" style={{ fontSize: '0.7rem', color: '#666666' }}>
+                      <span className="font-mono" style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>
                         {project.results[0].metric}:
                       </span>
                       <span
                         className="font-mono"
-                        style={{ fontSize: '0.78rem', color: '#EEEEEE', fontWeight: 600 }}
+                        style={{ fontSize: '0.82rem', color: 'var(--text-white)', fontWeight: 600 }}
                       >
                         {project.results[0].value}
                       </span>
-                      <span style={{ fontSize: '0.72rem', color: '#555555' }}>
+                      <span style={{ fontSize: '0.74rem', color: 'var(--text-muted)' }}>
                         ({project.results[0].detail})
                       </span>
                     </div>
@@ -236,8 +237,8 @@ export default function ProjectsSection() {
                     style={{
                       display: 'flex',
                       alignItems: 'center',
-                      gap: '1rem',
-                      marginTop: '0.35rem',
+                      gap: '1.25rem',
+                      marginTop: '0.5rem',
                     }}
                   >
                     <button
@@ -246,9 +247,9 @@ export default function ProjectsSection() {
                       style={{
                         display: 'inline-flex',
                         alignItems: 'center',
-                        gap: '0.45rem',
-                        fontSize: '0.8rem',
-                        color: '#EEEEEE',
+                        gap: '0.5rem',
+                        fontSize: '0.84rem',
+                        color: 'var(--text-white)',
                         background: 'transparent',
                         border: 'none',
                         cursor: 'pointer',
@@ -269,17 +270,17 @@ export default function ProjectsSection() {
                       style={{
                         display: 'inline-flex',
                         alignItems: 'center',
-                        gap: '0.35rem',
-                        fontSize: '0.8rem',
-                        color: '#8A8A8A',
+                        gap: '0.4rem',
+                        fontSize: '0.84rem',
+                        color: 'var(--text-secondary)',
                         textDecoration: 'none',
                         transition: 'color 0.18s ease',
                       }}
-                      onMouseEnter={(e) => (e.currentTarget.style.color = '#FFFFFF')}
-                      onMouseLeave={(e) => (e.currentTarget.style.color = '#8A8A8A')}
+                      onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--text-white)')}
+                      onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--text-secondary)')}
                     >
                       <span>GitHub</span>
-                      <span style={{ fontSize: '0.85rem' }}>↗</span>
+                      <span style={{ fontSize: '0.9rem' }}>↗</span>
                     </a>
                   </div>
                 </div>
@@ -290,11 +291,11 @@ export default function ProjectsSection() {
                   onClick={() => setActiveModalProject(project)}
                   style={{
                     position: 'relative',
-                    height: '200px',
+                    height: 'clamp(200px, 20vw, 260px)',
                     borderRadius: '6px',
                     overflow: 'hidden',
-                    border: '1px solid #1C1C1C',
-                    backgroundColor: '#080808',
+                    border: '1px solid var(--border-card)',
+                    backgroundColor: 'var(--bg-surface)',
                     cursor: 'pointer',
                     display: 'flex',
                     alignItems: 'center',
@@ -306,10 +307,10 @@ export default function ProjectsSection() {
                       src={project.image}
                       alt={project.title}
                       fill
-                      sizes="(max-width: 768px) 100vw, 420px"
+                      sizes="(max-width: 768px) 100vw, 540px"
                       style={{
                         objectFit: 'cover',
-                        filter: 'grayscale(100%) contrast(1.15) brightness(0.75)',
+                        filter: 'grayscale(100%) contrast(1.15) brightness(0.8)',
                         transition: 'transform 0.3s ease, filter 0.3s ease',
                       }}
                       className="project-img-inner"
@@ -318,13 +319,13 @@ export default function ProjectsSection() {
                     /* Minimal Blueprint Graphic for projects without raw satellite photos */
                     <div
                       style={{
-                        padding: '1.25rem',
+                        padding: '1.5rem',
                         width: '100%',
                         height: '100%',
                         display: 'flex',
                         flexDirection: 'column',
                         justifyContent: 'space-between',
-                        backgroundColor: '#0B0B0B',
+                        backgroundColor: 'var(--bg-card)',
                         fontFamily: 'var(--font-mono)',
                       }}
                     >
@@ -333,14 +334,14 @@ export default function ProjectsSection() {
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'space-between',
-                          borderBottom: '1px solid #181818',
-                          paddingBottom: '0.4rem',
+                          borderBottom: '1px solid var(--border-subtle)',
+                          paddingBottom: '0.5rem',
                         }}
                       >
-                        <span style={{ fontSize: '0.68rem', color: '#666666' }}>
+                        <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>
                           // schematic.sys
                         </span>
-                        <span style={{ fontSize: '0.65rem', color: '#444444' }}>
+                        <span style={{ fontSize: '0.7rem', color: 'var(--text-dim)' }}>
                           {project.id}.bin
                         </span>
                       </div>
@@ -349,9 +350,9 @@ export default function ProjectsSection() {
                         style={{
                           display: 'flex',
                           flexDirection: 'column',
-                          gap: '0.35rem',
-                          fontSize: '0.72rem',
-                          color: '#8A8A8A',
+                          gap: '0.45rem',
+                          fontSize: '0.78rem',
+                          color: 'var(--text-secondary)',
                         }}
                       >
                         {project.architecture.slice(0, 3).map((arch, i) => (
@@ -360,11 +361,11 @@ export default function ProjectsSection() {
                             style={{
                               display: 'flex',
                               alignItems: 'center',
-                              gap: '0.4rem',
+                              gap: '0.5rem',
                             }}
                           >
-                            <span style={{ color: '#444444' }}>0{i + 1}</span>
-                            <span style={{ color: '#A5A5A5' }}>{arch}</span>
+                            <span style={{ color: 'var(--text-muted)' }}>0{i + 1}</span>
+                            <span style={{ color: 'var(--text-light)' }}>{arch}</span>
                           </div>
                         ))}
                       </div>
@@ -374,10 +375,10 @@ export default function ProjectsSection() {
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'space-between',
-                          fontSize: '0.65rem',
-                          color: '#555555',
-                          borderTop: '1px solid #161616',
-                          paddingTop: '0.4rem',
+                          fontSize: '0.7rem',
+                          color: 'var(--text-muted)',
+                          borderTop: '1px solid var(--border-subtle)',
+                          paddingTop: '0.5rem',
                         }}
                       >
                         <span>[ONNX / C++]</span>
@@ -400,7 +401,7 @@ export default function ProjectsSection() {
                       opacity: 0,
                       transition: 'opacity 0.2s ease',
                       fontFamily: 'var(--font-mono)',
-                      fontSize: '0.75rem',
+                      fontSize: '0.78rem',
                       color: '#FFFFFF',
                     }}
                   >
@@ -420,26 +421,25 @@ export default function ProjectsSection() {
       />
 
       <style jsx global>{`
-        @media (max-width: 820px) {
+        @media (max-width: 860px) {
           .project-grid {
-            gridTemplateColumns: 1fr !important;
-            gap: 1.25rem !important;
+            grid-template-columns: 1fr !important;
+            gap: 1.5rem !important;
           }
           .project-preview-wrapper {
-            height: 180px !important;
+            height: 200px !important;
           }
         }
         .project-card-item:hover {
-          border-color: #2B2B2B !important;
+          border-color: var(--border-hover) !important;
           transform: translateY(-2px);
-          background-color: #0E0E0E !important;
+          background-color: var(--bg-card-hover) !important;
         }
         .project-card-item:hover .project-title {
-          transform: translateX(3px);
-          color: #FFFFFF !important;
+          transform: translateX(4px);
         }
         .project-card-item:hover .project-arrow {
-          transform: translateX(3px);
+          transform: translateX(4px);
         }
         .project-card-item:hover .project-img-inner {
           transform: scale(1.03);

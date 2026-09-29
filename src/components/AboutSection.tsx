@@ -5,7 +5,7 @@ import { ABOUT_DATA } from '../data/portfolioData';
 
 export default function AboutSection() {
   return (
-    <section id="about" className="section" style={{ borderTop: '1px solid #141414' }}>
+    <section id="about" className="section" style={{ borderTop: '1px solid var(--border-subtle)' }}>
       <div className="container">
         {/* Section Header */}
         <div className="section-header">
@@ -21,7 +21,7 @@ export default function AboutSection() {
             </div>
             <span
               className="font-mono"
-              style={{ fontSize: '0.75rem', color: '#555555' }}
+              style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}
             >
               01
             </span>
@@ -29,23 +29,24 @@ export default function AboutSection() {
           <h2 className="section-title">About</h2>
         </div>
 
-        {/* Two-Column Clean Architecture */}
+        {/* Two-Column Clean Editorial Architecture */}
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'minmax(0, 1.25fr) minmax(0, 1fr)',
-            gap: '2.5rem',
+            gridTemplateColumns: 'minmax(0, 1.4fr) minmax(0, 1fr)',
+            gap: 'clamp(2rem, 5vw, 5rem)',
             alignItems: 'start',
           }}
           className="about-grid"
         >
           {/* Left Column: Personal Narrative */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
             <p
               style={{
-                fontSize: '1.05rem',
-                color: '#D0D0D0',
-                lineHeight: 1.7,
+                fontSize: 'clamp(1.05rem, 1.4vw, 1.22rem)',
+                color: 'var(--text-primary)',
+                lineHeight: 1.75,
+                fontWeight: 400,
               }}
             >
               {ABOUT_DATA.bioParagraph1}
@@ -53,39 +54,39 @@ export default function AboutSection() {
 
             <p
               style={{
-                fontSize: '0.95rem',
-                color: '#8A8A8A',
-                lineHeight: 1.68,
+                fontSize: 'clamp(0.95rem, 1.2vw, 1.05rem)',
+                color: 'var(--text-secondary)',
+                lineHeight: 1.72,
               }}
             >
               {ABOUT_DATA.bioParagraph2}
             </p>
 
             {/* Core Interest Badges */}
-            <div style={{ marginTop: '0.5rem' }}>
+            <div style={{ marginTop: '0.75rem' }}>
               <span
                 className="font-mono"
                 style={{
                   fontSize: '0.72rem',
-                  color: '#666666',
+                  color: 'var(--text-muted)',
                   display: 'block',
-                  marginBottom: '0.5rem',
+                  marginBottom: '0.65rem',
                 }}
               >
                 // primary_domains
               </span>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.45rem' }}>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
                 {ABOUT_DATA.interests.map((interest) => (
                   <span
                     key={interest}
                     className="font-mono"
                     style={{
-                      fontSize: '0.75rem',
-                      padding: '0.25rem 0.65rem',
+                      fontSize: '0.78rem',
+                      padding: '0.35rem 0.75rem',
                       borderRadius: '4px',
-                      backgroundColor: '#0F0F0F',
-                      border: '1px solid #1C1C1C',
-                      color: '#A5A5A5',
+                      backgroundColor: 'var(--bg-card)',
+                      border: '1px solid var(--border-card)',
+                      color: 'var(--text-light)',
                     }}
                   >
                     {interest}
@@ -95,16 +96,16 @@ export default function AboutSection() {
             </div>
           </div>
 
-          {/* Right Column: Compact Information Panel */}
+          {/* Right Column: Focus & Profile Details */}
           <div
             style={{
-              backgroundColor: '#0B0B0B',
-              border: '1px solid #1C1C1C',
+              backgroundColor: 'var(--bg-card)',
+              border: '1px solid var(--border-card)',
               borderRadius: '8px',
-              padding: '1.5rem',
+              padding: 'clamp(1.5rem, 2.5vw, 2.25rem)',
               display: 'flex',
               flexDirection: 'column',
-              gap: '1.25rem',
+              gap: '1.5rem',
             }}
           >
             {/* Focus */}
@@ -112,24 +113,24 @@ export default function AboutSection() {
               <span
                 className="font-mono"
                 style={{
-                  fontSize: '0.7rem',
-                  color: '#666666',
+                  fontSize: '0.72rem',
+                  color: 'var(--text-muted)',
                   textTransform: 'uppercase',
-                  letterSpacing: '0.05em',
+                  letterSpacing: '0.06em',
                   display: 'block',
-                  marginBottom: '0.35rem',
+                  marginBottom: '0.5rem',
                 }}
               >
                 focus
               </span>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.2rem' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
                 {ABOUT_DATA.focus.map((item) => (
                   <span
                     key={item}
                     style={{
-                      fontSize: '0.88rem',
-                      color: '#EEEEEE',
-                      fontWeight: 500,
+                      fontSize: '1rem',
+                      color: 'var(--text-primary)',
+                      fontWeight: 600,
                     }}
                   >
                     {item}
@@ -139,31 +140,31 @@ export default function AboutSection() {
             </div>
 
             {/* Currently Learning */}
-            <div style={{ borderTop: '1px solid #161616', paddingTop: '1rem' }}>
+            <div style={{ borderTop: '1px solid var(--border-subtle)', paddingTop: '1.25rem' }}>
               <span
                 className="font-mono"
                 style={{
-                  fontSize: '0.7rem',
-                  color: '#666666',
+                  fontSize: '0.72rem',
+                  color: 'var(--text-muted)',
                   textTransform: 'uppercase',
-                  letterSpacing: '0.05em',
+                  letterSpacing: '0.06em',
                   display: 'block',
-                  marginBottom: '0.35rem',
+                  marginBottom: '0.5rem',
                 }}
               >
                 currently_learning
               </span>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem' }}>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.45rem' }}>
                 {ABOUT_DATA.currentlyLearning.map((item) => (
                   <span
                     key={item}
                     className="font-mono"
                     style={{
-                      fontSize: '0.78rem',
-                      color: '#A5A5A5',
-                      padding: '0.2rem 0.5rem',
-                      backgroundColor: '#121212',
-                      border: '1px solid #1E1E1E',
+                      fontSize: '0.8rem',
+                      color: 'var(--text-secondary)',
+                      padding: '0.25rem 0.6rem',
+                      backgroundColor: 'var(--bg-surface)',
+                      border: '1px solid var(--border-subtle)',
                       borderRadius: '4px',
                     }}
                   >
@@ -178,26 +179,26 @@ export default function AboutSection() {
               style={{
                 display: 'grid',
                 gridTemplateColumns: '1fr 1fr',
-                gap: '1rem',
-                borderTop: '1px solid #161616',
-                paddingTop: '1rem',
+                gap: '1.25rem',
+                borderTop: '1px solid var(--border-subtle)',
+                paddingTop: '1.25rem',
               }}
             >
               <div>
                 <span
                   className="font-mono"
                   style={{
-                    fontSize: '0.7rem',
-                    color: '#666666',
+                    fontSize: '0.72rem',
+                    color: 'var(--text-muted)',
                     textTransform: 'uppercase',
-                    letterSpacing: '0.05em',
+                    letterSpacing: '0.06em',
                     display: 'block',
-                    marginBottom: '0.25rem',
+                    marginBottom: '0.35rem',
                   }}
                 >
                   location
                 </span>
-                <span style={{ fontSize: '0.85rem', color: '#D0D0D0' }}>
+                <span style={{ fontSize: '0.9rem', color: 'var(--text-light)' }}>
                   {ABOUT_DATA.location}
                 </span>
               </div>
@@ -206,17 +207,17 @@ export default function AboutSection() {
                 <span
                   className="font-mono"
                   style={{
-                    fontSize: '0.7rem',
-                    color: '#666666',
+                    fontSize: '0.72rem',
+                    color: 'var(--text-muted)',
                     textTransform: 'uppercase',
-                    letterSpacing: '0.05em',
+                    letterSpacing: '0.06em',
                     display: 'block',
-                    marginBottom: '0.25rem',
+                    marginBottom: '0.35rem',
                   }}
                 >
                   education
                 </span>
-                <span style={{ fontSize: '0.85rem', color: '#D0D0D0' }}>
+                <span style={{ fontSize: '0.9rem', color: 'var(--text-light)' }}>
                   {ABOUT_DATA.education}
                 </span>
               </div>
@@ -228,7 +229,7 @@ export default function AboutSection() {
       <style jsx global>{`
         @media (max-width: 840px) {
           .about-grid {
-            gridTemplateColumns: 1fr !important;
+            grid-template-columns: 1fr !important;
             gap: 2rem !important;
           }
         }
