@@ -11,6 +11,7 @@ const NAV_LINKS = [
   { label: '/about', href: '#about' },
   { label: '/education', href: '#education' },
   { label: '/projects', href: '#projects' },
+  { label: '/achievements', href: '#achievements' },
   { label: '/skills', href: '#skills' },
   { label: '/contact', href: '#contact' },
 ];
@@ -32,7 +33,7 @@ export default function Navbar() {
           setIsScrolled(scrollY > 25);
 
           // Section spy
-          const sections = ['me', 'about', 'education', 'projects', 'skills', 'contact'];
+          const sections = ['me', 'about', 'education', 'projects', 'achievements', 'skills', 'contact'];
           const scrollPos = scrollY + 200;
 
           for (let i = sections.length - 1; i >= 0; i--) {

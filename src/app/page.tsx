@@ -4,6 +4,7 @@ import AtmosphericPFP from '../components/AtmosphericPFP';
 import AboutSection from '../components/AboutSection';
 import EducationSection from '../components/EducationSection';
 import ProjectsSection from '../components/ProjectsSection';
+import AchievementsSection from '../components/AchievementsSection';
 import SkillsSection from '../components/SkillsSection';
 import ContactSection from '../components/ContactSection';
 import Footer from '../components/Footer';
@@ -29,6 +30,9 @@ export default function HomePage() {
 
       {/* Selected Work (#projects) */}
       <ProjectsSection />
+
+      {/* Engineering Achievements (#achievements) */}
+      <AchievementsSection />
 
       {/* Skills & Technologies (#skills) */}
       <SkillsSection />

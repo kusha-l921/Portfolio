@@ -20,21 +20,27 @@ const KNOWN_COMMANDS = [
   'about',
   'education',
   'projects',
+  'achievements',
   'skills',
   'contact',
   'resume',
   'cd about',
   'cd education',
   'cd projects',
+  'cd achievements',
   'cd skills',
   'cd contact',
   'cd ~',
   'cd ..',
   'cd ../..',
+  'cd projects/prometheus',
+  'cd projects/llm-council',
   'cd projects/solarflare',
   'cd projects/fieldsight',
   'cd projects/firsefile',
   'cd projects/rewear',
+  'cd prometheus',
+  'cd llm-council',
   'cd solarflare',
   'cd fieldsight',
   'cd firsefile',
@@ -43,6 +49,7 @@ const KNOWN_COMMANDS = [
   'sudo dark-mode',
   'sudo about',
   'sudo projects',
+  'sudo achievements',
   'sudo contact',
   'theme light',
   'theme dark',
@@ -131,8 +138,8 @@ export default function PortfolioTerminal() {
     if (cmdLower === 'help') {
       response =
         "Available commands:\n" +
-        "  navigation:  cd about | cd education | cd projects | cd skills | cd contact | cd ~\n" +
-        "  projects:    cd solarflare | cd fieldsight | cd firsefile | cd rewear\n" +
+        "  navigation:  cd about | cd education | cd projects | cd achievements | cd skills | cd contact | cd ~\n" +
+        "  projects:    cd prometheus | cd llm-council | cd solarflare | cd fieldsight | cd firsefile | cd rewear\n" +
         "  utilities:   ls, pwd, whoami, clear, resume, help\n" +
         "  theme:       sudo light-mode | sudo dark-mode | theme light | theme dark\n" +
         "  shortcuts:   [tab] autocomplete, [↑/↓] history, [ctrl+` / T] toggle terminal";
@@ -158,9 +165,11 @@ export default function PortfolioTerminal() {
     // 6. LS
     else if (cmdLower === 'ls' || cmdLower.startsWith('ls ')) {
       if (currentPath === '~') {
-        response = 'about/        education/    projects/     skills/       contact/      resume.pdf';
+        response = 'about/        education/    projects/     achievements/ skills/       contact/      resume.pdf';
       } else if (currentPath === '~/projects') {
-        response = '01 solarflare/   02 fieldsight/   03 firsefile/   04 rewear/';
+        response = '01 prometheus/  02 llm-council/  03 solarflare/  04 fieldsight/  05 firsefile/  06 rewear/';
+      } else if (currentPath === '~/achievements') {
+        response = '01 exportify-loc8.log   02 copycop-drishti.log';
       } else if (currentPath.startsWith('~/projects/')) {
         response = 'overview.md   architecture.onnx   empirical_metrics.csv   github_repo.url';
       } else if (currentPath === '~/about') {
@@ -183,7 +192,7 @@ export default function PortfolioTerminal() {
       setTimeout(() => smoothScrollTo('me'), 240);
     }
 
-    // 8. DIRECT SECTION COMMANDS (about, education, projects, skills, contact)
+    // 8. DIRECT SECTION COMMANDS
     else if (cmdLower === 'about') {
       response = 'navigating to ~/about...';
       setCurrentPath('~/about');
@@ -196,6 +205,10 @@ export default function PortfolioTerminal() {
       response = 'navigating to ~/projects...';
       setCurrentPath('~/projects');
       setTimeout(() => smoothScrollTo('projects'), 240);
+    } else if (cmdLower === 'achievements') {
+      response = 'navigating to ~/achievements...';
+      setCurrentPath('~/achievements');
+      setTimeout(() => smoothScrollTo('achievements'), 240);
     } else if (cmdLower === 'skills') {
       response = 'navigating to ~/skills...';
       setCurrentPath('~/skills');
@@ -225,6 +238,10 @@ export default function PortfolioTerminal() {
       response = '[sudo] authorized navigation: navigating to ~/projects...';
       setCurrentPath('~/projects');
       setTimeout(() => smoothScrollTo('projects'), 240);
+    } else if (cmdLower === 'sudo achievements') {
+      response = '[sudo] authorized navigation: navigating to ~/achievements...';
+      setCurrentPath('~/achievements');
+      setTimeout(() => smoothScrollTo('achievements'), 240);
     } else if (cmdLower === 'sudo contact') {
       response = '[sudo] authorized navigation: navigating to ~/contact...';
       setCurrentPath('~/contact');
@@ -267,6 +284,10 @@ export default function PortfolioTerminal() {
       response = 'navigating to ~/projects...';
       setCurrentPath('~/projects');
       setTimeout(() => smoothScrollTo('projects'), 240);
+    } else if (cmdLower === 'cd achievements' || cmdLower === 'cd /achievements' || cmdLower === 'cd ~/achievements') {
+      response = 'navigating to ~/achievements...';
+      setCurrentPath('~/achievements');
+      setTimeout(() => smoothScrollTo('achievements'), 240);
     } else if (cmdLower === 'cd skills' || cmdLower === 'cd /skills' || cmdLower === 'cd ~/skills') {
       response = 'navigating to ~/skills...';
       setCurrentPath('~/skills');
@@ -277,8 +298,26 @@ export default function PortfolioTerminal() {
       setTimeout(() => smoothScrollTo('contact'), 240);
     }
 
-    // Project Nested CDs (solarflare, fieldsight, firsefile, rewear)
+    // Project Nested CDs (prometheus, llm-council, solarflare, fieldsight, firsefile, rewear)
     else if (
+      cmdLower === 'cd prometheus' ||
+      cmdLower === 'cd projects/prometheus' ||
+      cmdLower === 'cd /projects/prometheus'
+    ) {
+      response = 'navigating to ~/projects/prometheus...\n[PROMETHEUS: Browser-based prompt intelligence engine]';
+      setCurrentPath('~/projects/prometheus');
+      setTimeout(() => smoothScrollTo('project-prometheus'), 240);
+    } else if (
+      cmdLower === 'cd llm-council' ||
+      cmdLower === 'cd llm_council' ||
+      cmdLower === 'cd projects/llm-council' ||
+      cmdLower === 'cd projects/llm_council' ||
+      cmdLower === 'cd /projects/llm-council'
+    ) {
+      response = 'navigating to ~/projects/llm-council...\n[LLM Council: Multi-agent reasoning and orchestration system]';
+      setCurrentPath('~/projects/llm-council');
+      setTimeout(() => smoothScrollTo('project-llm-council'), 240);
+    } else if (
       cmdLower === 'cd solarflare' ||
       cmdLower === 'cd solar-flare' ||
       cmdLower === 'cd projects/solarflare' ||
@@ -315,6 +354,7 @@ export default function PortfolioTerminal() {
       setCurrentPath('~/projects/rewear');
       setTimeout(() => smoothScrollTo('project-rewear'), 240);
     }
+
 
     // Invalid CD
     else if (cmdLower.startsWith('cd ')) {

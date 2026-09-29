@@ -30,12 +30,36 @@ export interface SkillCategory {
   skills: string[];
 }
 
+export interface AchievementSubsection {
+  title: string;
+  content?: string;
+  bullets?: string[];
+}
+
+export interface AchievementTechnicalSection {
+  heading: string;
+  description?: string;
+  pipeline?: string[];
+  subsections?: AchievementSubsection[];
+  bullets?: string[];
+}
+
 export interface Achievement {
   id: string;
+  number: string;
+  projectName: string;
   title: string;
+  competition: string;
   award: string;
   organizer: string;
   date: string;
   badge: string;
+  collapsedSummary: string;
   description: string;
+  whatWeBuilt: string;
+  whatWeBuiltBullets?: string[];
+  pipeline?: string[];
+  technicalSections: AchievementTechnicalSection[];
+  resultSummary: string;
+  resultBullets?: string[];
 }

@@ -106,15 +106,15 @@ export default function ProjectTerminalBox({ project, className = '', onClick }:
               width: '5px',
               height: '5px',
               borderRadius: '50%',
-              backgroundColor: isLight ? '#228B22' : '#4ADE80',
-              boxShadow: isLight ? 'none' : '0 0 4px rgba(74, 222, 128, 0.4)',
+              backgroundColor: isLight ? '#3A3A35' : '#D0D0D0',
+              boxShadow: isLight ? 'none' : '0 0 4px rgba(255, 255, 255, 0.2)',
               display: 'inline-block',
             }}
           />
           <span
             style={{
               fontSize: '0.65rem',
-              color: isLight ? 'var(--text-muted)' : 'var(--text-muted)',
+              color: isLight ? 'var(--text-muted)' : 'var(--gray-medium)',
               textTransform: 'uppercase',
               letterSpacing: '0.05em',
             }}

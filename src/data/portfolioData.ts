@@ -74,35 +74,264 @@ export const EDUCATION_DATA = {
     'Honours specialization in Immersive Technology and High-Performance Spatial Computing.',
     'Undergraduate research focusing on spatiotemporal Vision Transformers and Edge AI algorithms.',
   ],
+  coursework: [
+    'Data Structures & Algorithms',
+    'Machine Learning & Neural Networks',
+    'Computer Vision & Image Processing',
+    'Operating Systems & Systems Programming',
+    'Linear Algebra & Calculus',
+    'Probability & Statistics',
+    'Database Management Systems',
+    'Distributed Systems',
+  ],
+  researchFocus: [
+    'Spatiotemporal Vision Transformers for solar event forecasting',
+    'Lightweight training-free vision pipelines on low-power CPUs',
+    'Deep learning block classification for forensic data recovery',
+  ],
 };
 
 export const ACHIEVEMENTS_DATA: Achievement[] = [
   {
-    id: 'loc-8',
-    title: 'Winner – Lines of Code (LOC 8.0) 2026 National-Level Hackathon',
+    id: 'loc-8-exportify',
+    number: '01',
+    projectName: 'Exportify',
+    title: 'Lines of Code (LOC 8.0) — National-Level Hackathon',
+    competition: 'Lines of Code (LOC 8.0) National-Level Hackathon',
     award: '1st Place Winner',
     organizer: 'National-Level Hackathon (1000+ Participants)',
     date: '2026',
     badge: '1ST PLACE / 1000+ PARTICIPANTS',
-    description:
-      'Collaborated on Exportify, designing the multi-factor scoring algorithm and trade-matching engine that ranked exporter-buyer compatibility across multi-dimensional features to automate international supplier discovery and trade risk assessment.',
+    collapsedSummary: 'AI-driven B2B trade platform for intelligent buyer–exporter matching.',
+    description: 'AI-driven B2B trade platform for intelligent buyer–exporter matching.',
+    whatWeBuilt:
+      'Exportify is an AI-driven B2B trade platform designed to automate international commerce by pairing global buyers/demanders with verified exporters/suppliers.',
+    whatWeBuiltBullets: [
+      'Compatibility assessment across multi-dimensional criteria',
+      'Logistics feasibility & fulfillment timeline validation',
+      'Comprehensive risk profiling to support intelligent international trade matching',
+    ],
+    technicalSections: [
+      {
+        heading: 'Technical Architecture',
+        subsections: [
+          {
+            title: 'Backend & Business Logic',
+            content:
+              'Python-based full-stack architecture handling request routing, data processing, and trade intelligence.',
+          },
+          {
+            title: 'Database (PostgreSQL)',
+            content:
+              'Used for structured information storage and high-integrity transactional records:',
+            bullets: [
+              'Supplier catalogs and verification credentials',
+              'Buyer requests and order specifications',
+              'Trade compliance records and customs requirements',
+            ],
+          },
+        ],
+      },
+      {
+        heading: 'Matching & Optimization Engine',
+        subsections: [
+          {
+            title: 'Operations Research / Mathematical Optimization',
+            content:
+              'Supplier-demander allocation engine that mathematically evaluates allocation solutions against strict real-world limits:',
+            bullets: [
+              'Supplier capacity constraints and quota allocations',
+              'Minimum order quantities (MOQs)',
+              'Delivery deadlines and production lead times',
+            ],
+          },
+          {
+            title: 'Multi-Factor Scoring Engine',
+            content:
+              'Evaluates compatibility across multiple weighted dimensions:',
+            bullets: [
+              'Product specifications and technical standards',
+              'International trade certifications and compliance',
+              'Pricing tolerances and currency stability',
+              'Historical fulfillment reliability and score tracking',
+            ],
+          },
+        ],
+      },
+      {
+        heading: 'Trade & Logistics Risk Engine',
+        description:
+          'Evaluates end-to-end supply chain risk before trade recommendations are finalized:',
+        bullets: [
+          'Transit lead times and multi-modal freight reliability',
+          'Geopolitical and shipping-lane disruption risk indexing',
+          'Cross-border regulatory compliance and tariff variance',
+        ],
+      },
+    ],
+    resultSummary: '1st Place / 1000+ Participants',
+    resultBullets: [
+      '1st Place Winner at Lines of Code (LOC 8.0) National-Level Hackathon',
+      'Selected as top solution among 1000+ registered engineering participants',
+    ],
   },
   {
-    id: 'drishti-ai',
-    title: '1st Runner-Up – Drishti AI Hackathon 2026',
+    id: 'drishti-ai-copycop',
+    number: '02',
+    projectName: 'CopyCop / Dexit AI',
+    title: 'Drishti AI Hackathon 2026',
+    competition: 'Drishti AI Hackathon 2026',
     award: '1st Runner-Up (2nd Place)',
     organizer: 'Organized by Dexit Global (250+ Teams)',
     date: '2026',
-    badge: '2ND PLACE / 250+ TEAMS',
-    description:
-      'Collaborated on CopyCop, designing the behavioral risk-scoring engine and multi-person tracking pipeline to detect examination misconduct anomalies and stream real-time, privacy-preserving alerts to invigilators on edge hardware.',
+    badge: '1ST RUNNER-UP / 250+ TEAMS',
+    collapsedSummary: 'Real-time computer-vision monitoring system for behavioral risk and anomaly detection.',
+    description: 'Real-time computer-vision monitoring system for behavioral risk and anomaly detection.',
+    whatWeBuilt:
+      'CopyCop / Dexit AI is a computer-vision surveillance system designed to continuously understand activity in CCTV footage and generate real-time behavioral risk signals rather than simply detecting individual objects.',
+    pipeline: [
+      'CCTV Camera',
+      'Video Stream',
+      'Frame Processing',
+      'Person Detection',
+      'Multi-Person Tracking',
+      'Behavioral Features',
+      'Risk Assessment',
+      'Real-Time Alert',
+    ],
+    technicalSections: [
+      {
+        heading: 'Person Detection & Multi-Person Tracking',
+        subsections: [
+          {
+            title: 'Person Detection',
+            content:
+              'The system identifies people in the camera feed across variable lighting, angles, and occlusions.',
+          },
+          {
+            title: 'Multi-Person Tracking',
+            content:
+              'Maintains consistent identities across video frames so activity can be analyzed over time rather than treating every frame independently in isolation:',
+            bullets: [
+              'Temporal identity continuity: Person #17 → Frame 100 → Frame 101 → Frame 102 → Frame 103',
+              'Preserves trajectories and positional sequences essential for downstream behavioral analysis',
+            ],
+          },
+        ],
+      },
+      {
+        heading: 'Behavioral Risk Scoring & Anomaly Detection',
+        subsections: [
+          {
+            title: 'Continuous Behavioral Risk Scoring',
+            content:
+              'Instead of a brittle binary flag (SUSPICIOUS = TRUE), the system computes a continuous behavioral risk gradient:',
+            bullets: [
+              'Continuous scale: Risk Score 0 (Normal) ─────────────────────── 100 (High Risk)',
+              'Monitored signals: movement patterns, interaction patterns, temporal behavior, and tracked activity',
+            ],
+          },
+          {
+            title: 'Anomaly / Misconduct Detection',
+            content:
+              'Identifies activities that statistically deviate from expected behavioral baselines:',
+            bullets: [
+              'Evaluation flow: Normal activity → Expected behavior → Observed behavior → Deviation → Risk assessment',
+              'Flags sudden trajectory anomalies, irregular proximity clustering, and non-compliant activity',
+            ],
+          },
+        ],
+      },
+      {
+        heading: 'Real-Time Alerts & Privacy-Preserving Edge Architecture',
+        subsections: [
+          {
+            title: 'Real-Time Event Surfacing',
+            content:
+              'Detection → Tracking → Behavior analysis → Risk threshold → Alert. Surfaces critical events requiring immediate attention instead of requiring an operator to continuously monitor every camera feed.',
+          },
+          {
+            title: 'Privacy / Edge Angle',
+            content:
+              'Engineered around privacy-preserving edge execution: Camera → Local / Edge processing → Detection + tracking → Behavioral analysis → Alert / metadata. Raw video frames remain localized on-device while only anonymized metadata and alerts are transmitted.',
+          },
+        ],
+      },
+    ],
+    resultSummary: '1st Runner-Up / 250+ Teams',
+    resultBullets: [
+      '1st Runner-Up (2nd Place) at Drishti AI Hackathon 2026',
+      'Recognized among 250+ competing teams for real-time edge computer vision architecture',
+    ],
   },
 ];
 
 export const PROJECTS_DATA: Project[] = [
   {
-    id: 'solar-flare',
+    id: 'prometheus',
     number: '01',
+    title: 'PROMETHEUS',
+    tagline: 'Browser-based prompt intelligence system that analyzes messy user prompts, extracts requirements, and reconstructs structured prompts.',
+    tags: ['TypeScript', 'Vite', 'Chrome Extension APIs', 'Shadow DOM', 'NLP'],
+    category: 'AI / ML',
+    period: '2026',
+    githubUrl: 'https://github.com/kusha-l921/prometheus',
+    overview:
+      'A browser-based prompt intelligence system designed to analyze messy user prompts, extract intent and requirements, remove noise and redundancy, preserve constraints, and reconstruct a stronger structured prompt.',
+    problem:
+      'Raw human prompts sent to foundation models are frequently unstructured, conversational, and redundant, leading to hallucinations, degraded generation quality, and wasted context tokens.',
+    approach:
+      'Engineered local client-side processing using TypeScript, Vite, Chrome Extension APIs, Content Scripts, and Shadow DOM injection with dual-mode prompt reconstruction.',
+    architecture: [
+      'Prompt Detection & Requirement Extraction',
+      'Constraint Scoring & Deduplication Engine',
+      'Shadow DOM Browser Extension Architecture',
+    ],
+    results: [
+      { metric: 'Processing', value: 'Local/Client', detail: 'Zero-latency browser-side processing' },
+      { metric: 'Reconstruction', value: 'Dual Mode', detail: 'Optimized analytical & Caveman execution' },
+      { metric: 'Architecture', value: 'Shadow DOM', detail: 'Platform-specific adapters & content scripts' },
+    ],
+    highlights: [
+      'Engineered a browser-based prompt intelligence system to analyze messy prompts, extract intent and constraints, and remove redundancy.',
+      'Implemented requirement extraction, constraint detection, importance scoring, and deduplication locally without server latency.',
+      'Built a resilient Chrome Extension architecture with Content Scripts, Shadow DOM styling isolation, and platform-specific adapters.',
+    ],
+  },
+  {
+    id: 'llm-council',
+    number: '02',
+    title: 'LLM Council',
+    tagline: 'Multi-agent reasoning system orchestrating specialized agents to generate, challenge, refine, and evaluate solutions before final response.',
+    tags: ['Python', 'LangGraph', 'Groq', 'Pydantic', 'Streamlit'],
+    category: 'AI / ML',
+    period: '2026',
+    githubUrl: 'https://github.com/kusha-l921/llm-council',
+    overview:
+      'A multi-agent reasoning system that uses specialized agents to generate, challenge, refine, and evaluate solutions before producing a final verified response.',
+    problem:
+      'Single-pass LLM completions suffer from unverified assumptions, cognitive bias, and inability to self-correct complex analytical tasks without structured adversarial evaluation.',
+    approach:
+      'Architected a stateful multi-agent DAG in LangGraph orchestrating Proponent → Adversary → Refiner → Robustness Evaluator → Judge with shared state and conditional routing.',
+    architecture: [
+      'Proponent → Adversary → Refiner Pipeline',
+      'Robustness Evaluator & Judge Layer',
+      'LangGraph Stateful Multi-Agent DAG',
+    ],
+    results: [
+      { metric: 'Orchestration', value: 'LangGraph DAG', detail: 'Multi-agent stateful conditional routing' },
+      { metric: 'Pipeline', value: '5 Agents', detail: 'Proponent, Adversary, Refiner, Evaluator, Judge' },
+      { metric: 'Inference', value: 'Groq LPU', detail: 'High-throughput LLM reasoning inference' },
+    ],
+    highlights: [
+      'Architected a multi-agent reasoning system where specialized agents collaboratively generate, challenge, refine, and evaluate solutions before final response generation.',
+      'Orchestrated a 5-stage pipeline: Proponent generation, Adversarial critique, Refiner reconciliation, Robustness evaluation, and Judge arbitration.',
+      'Configured conditional routing, shared state propagation, and early termination on high-confidence solutions with Pydantic validation.',
+    ],
+  },
+  {
+    id: 'solar-flare',
+    number: '03',
     title: 'Solar Flare Prediction',
     tagline: 'Deep learning based system to predict solar flares using multi-channel solar imagery from NOAA and NASA satellites.',
     tags: ['Vision Transformer', 'Sunpy', 'XAI', 'PyTorch', 'Time Series'],
@@ -136,7 +365,7 @@ export const PROJECTS_DATA: Project[] = [
   },
   {
     id: 'fieldsight-lite',
-    number: '02',
+    number: '04',
     title: 'FieldSight Lite',
     tagline: 'Unsupervised, training-free vision pipeline on low-power CPUs achieving 35.8ms latency at 27.9 FPS with 68MB RAM.',
     tags: ['Computer Vision', 'Edge Computing', 'CIELAB', 'Statistical Modeling'],
@@ -169,7 +398,7 @@ export const PROJECTS_DATA: Project[] = [
   },
   {
     id: 'firsefile',
-    number: '03',
+    number: '05',
     title: 'FirSeFile',
     tagline: 'ML forensic recovery platform integrating Swin Transformer V2 into a Rust backend to classify orphaned 4KB disk blocks.',
     tags: ['Python', 'Swin Transformer', 'PyTorch', 'ONNX Runtime', 'Rust'],
@@ -203,7 +432,7 @@ export const PROJECTS_DATA: Project[] = [
   },
   {
     id: 'rewear',
-    number: '04',
+    number: '06',
     title: 'ReWear',
     tagline: 'Automated fabric composition verification and circular textile redistribution powered by lightweight Vision Transformers.',
     tags: ['MobileViT', 'Computer Vision', 'PyTorch', 'ONNX Runtime'],

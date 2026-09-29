@@ -1,7 +1,6 @@
 'use client';
 
-import React from 'react';
-import { EDUCATION_DATA, ACHIEVEMENTS_DATA } from '../data/portfolioData';
+import { EDUCATION_DATA } from '../data/portfolioData';
 
 export default function EducationSection() {
   return (
@@ -173,90 +172,122 @@ export default function EducationSection() {
             </div>
           </div>
 
-          {/* Hackathon & Engineering Honors Panel (Verified from Resume) */}
+          {/* Academic Coursework & Research Focus Panel */}
           <div
             style={{
               display: 'flex',
               flexDirection: 'column',
-              gap: '1rem',
+              gap: '1.25rem',
             }}
           >
+            {/* Relevant Coursework */}
             <div
-              className="font-mono"
+              className="card"
               style={{
-                fontSize: '0.72rem',
-                color: 'var(--text-muted)',
-                textTransform: 'uppercase',
-                letterSpacing: '0.05em',
+                padding: 'clamp(1.25rem, 2vw, 1.65rem)',
+                backgroundColor: 'var(--bg-card)',
+                border: '1px solid var(--border-card)',
+                borderRadius: '8px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '0.85rem',
               }}
             >
-              // competitive_honors
-            </div>
-
-            {ACHIEVEMENTS_DATA.map((ach) => (
               <div
-                key={ach.id}
-                className="card"
+                className="font-mono"
                 style={{
-                  padding: '1.35rem',
-                  backgroundColor: 'var(--bg-card)',
-                  border: '1px solid var(--border-card)',
-                  borderRadius: '8px',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: '0.6rem',
+                  fontSize: '0.72rem',
+                  color: 'var(--text-muted)',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.05em',
                 }}
               >
-                <div
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                  }}
-                >
+                // relevant_coursework
+              </div>
+
+              <div
+                style={{
+                  display: 'flex',
+                  flexWrap: 'wrap',
+                  gap: '0.45rem',
+                }}
+              >
+                {EDUCATION_DATA.coursework.map((course, idx) => (
                   <span
+                    key={idx}
                     className="font-mono"
                     style={{
-                      fontSize: '0.72rem',
-                      color: 'var(--text-primary)',
+                      fontSize: '0.76rem',
+                      padding: '0.28rem 0.65rem',
+                      borderRadius: '4px',
                       backgroundColor: 'var(--bg-surface)',
                       border: '1px solid var(--border-subtle)',
-                      padding: '0.2rem 0.55rem',
-                      borderRadius: '4px',
+                      color: 'var(--text-primary)',
+                      lineHeight: 1.4,
                     }}
                   >
-                    {ach.badge}
+                    {course}
                   </span>
-                  <span
-                    className="font-mono"
-                    style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}
-                  >
-                    {ach.date}
-                  </span>
-                </div>
-
-                <h4
-                  style={{
-                    fontSize: '1rem',
-                    fontWeight: 600,
-                    color: 'var(--text-primary)',
-                    lineHeight: 1.4,
-                  }}
-                >
-                  {ach.title}
-                </h4>
-
-                <p
-                  style={{
-                    fontSize: '0.85rem',
-                    color: 'var(--text-secondary)',
-                    lineHeight: 1.55,
-                  }}
-                >
-                  {ach.description}
-                </p>
+                ))}
               </div>
-            ))}
+            </div>
+
+            {/* Academic Research Focus */}
+            <div
+              className="card"
+              style={{
+                padding: 'clamp(1.25rem, 2vw, 1.65rem)',
+                backgroundColor: 'var(--bg-card)',
+                border: '1px solid var(--border-card)',
+                borderRadius: '8px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '0.85rem',
+              }}
+            >
+              <div
+                className="font-mono"
+                style={{
+                  fontSize: '0.72rem',
+                  color: 'var(--text-muted)',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.05em',
+                }}
+              >
+                // academic_research_focus
+              </div>
+
+              <ul
+                style={{
+                  listStyle: 'none',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '0.65rem',
+                }}
+              >
+                {EDUCATION_DATA.researchFocus.map((focus, idx) => (
+                  <li
+                    key={idx}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'flex-start',
+                      gap: '0.55rem',
+                      fontSize: '0.88rem',
+                      color: 'var(--text-secondary)',
+                      lineHeight: 1.55,
+                    }}
+                  >
+                    <span
+                      className="font-mono"
+                      style={{ color: 'var(--text-muted)', marginTop: '0.1rem', fontSize: '0.8rem' }}
+                    >
+                      &gt;
+                    </span>
+                    <span>{focus}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
         </div>
       </div>

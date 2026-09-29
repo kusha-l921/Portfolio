@@ -149,7 +149,7 @@ export default function ProjectsSection() {
                     style={{
                       fontSize: 'clamp(1.5rem, 2.3vw, 2.15rem)',
                       fontWeight: 700,
-                      color: 'var(--text-white)',
+                      color: 'var(--text-primary)',
                       letterSpacing: '-0.025em',
                       lineHeight: 1.18,
                       transition: 'transform 0.2s ease',
