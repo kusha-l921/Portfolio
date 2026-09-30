@@ -39,7 +39,7 @@ export default function Footer() {
 
           {/* Social Links */}
           <div
-            className="font-mono"
+            className="font-mono footer-social-links"
             style={{
               display: 'flex',
               alignItems: 'center',
@@ -51,29 +51,26 @@ export default function Footer() {
               href={PERSONAL_DATA.githubUrl}
               target="_blank"
               rel="noopener noreferrer"
-              style={{ color: 'var(--text-secondary)', textDecoration: 'none', transition: 'color 0.15s ease' }}
-              onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--text-white)')}
-              onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--text-secondary)')}
+              className="footer-social-link"
             >
-              GitHub ↗
+              <span>GitHub</span>
+              <span className="footer-arrow">↗</span>
             </a>
             <a
               href={PERSONAL_DATA.linkedinUrl}
               target="_blank"
               rel="noopener noreferrer"
-              style={{ color: 'var(--text-secondary)', textDecoration: 'none', transition: 'color 0.15s ease' }}
-              onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--text-white)')}
-              onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--text-secondary)')}
+              className="footer-social-link"
             >
-              LinkedIn ↗
+              <span>LinkedIn</span>
+              <span className="footer-arrow">↗</span>
             </a>
             <a
               href={`mailto:${PERSONAL_DATA.email}`}
-              style={{ color: 'var(--text-secondary)', textDecoration: 'none', transition: 'color 0.15s ease' }}
-              onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--text-white)')}
-              onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--text-secondary)')}
+              className="footer-social-link"
             >
-              Email ↗
+              <span>Email</span>
+              <span className="footer-arrow">↗</span>
             </a>
           </div>
 
@@ -101,6 +98,29 @@ export default function Footer() {
           </div>
         </div>
       </div>
+
+      <style jsx global>{`
+        .footer-social-link {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.35rem;
+          color: var(--text-secondary);
+          text-decoration: none;
+          transition: color 0.18s var(--ease-smooth);
+        }
+        .footer-social-link .footer-arrow {
+          display: inline-block;
+          transition: transform 0.22s var(--ease-smooth), color 0.2s ease;
+          color: var(--text-muted);
+        }
+        .footer-social-link:hover {
+          color: var(--text-white);
+        }
+        .footer-social-link:hover .footer-arrow {
+          transform: translate(2px, -2px);
+          color: var(--accent-blue);
+        }
+      `}</style>
     </footer>
   );
 }

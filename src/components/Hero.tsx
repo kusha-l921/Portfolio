@@ -142,7 +142,7 @@ export default function Hero() {
 
           {/* Social Links */}
           <div
-            className="font-mono"
+            className="font-mono hero-social-links"
             style={{
               display: 'flex',
               alignItems: 'center',
@@ -156,31 +156,28 @@ export default function Hero() {
               href={PERSONAL_DATA.githubUrl}
               target="_blank"
               rel="noopener noreferrer"
-              style={{ color: 'var(--text-dim)', textDecoration: 'none', transition: 'color 0.2s' }}
-              onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--text-white)')}
-              onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--text-dim)')}
+              className="hero-social-link"
             >
-              github ↗
+              <span>github</span>
+              <span className="social-arrow">↗</span>
             </a>
             <span style={{ color: 'var(--border-strong)' }}>·</span>
             <a
               href={PERSONAL_DATA.linkedinUrl}
               target="_blank"
               rel="noopener noreferrer"
-              style={{ color: 'var(--text-dim)', textDecoration: 'none', transition: 'color 0.2s' }}
-              onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--text-white)')}
-              onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--text-dim)')}
+              className="hero-social-link"
             >
-              linkedin ↗
+              <span>linkedin</span>
+              <span className="social-arrow">↗</span>
             </a>
             <span style={{ color: 'var(--border-strong)' }}>·</span>
             <a
               href={`mailto:${PERSONAL_DATA.email}`}
-              style={{ color: 'var(--text-dim)', textDecoration: 'none', transition: 'color 0.2s' }}
-              onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--text-white)')}
-              onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--text-dim)')}
+              className="hero-social-link"
             >
-              email ↗
+              <span>email</span>
+              <span className="social-arrow">↗</span>
             </a>
           </div>
         </div>
@@ -190,6 +187,26 @@ export default function Hero() {
         .hero-main-content {
           max-width: 820px;
           min-width: 0;
+        }
+        .hero-social-link {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.35rem;
+          color: var(--text-dim);
+          text-decoration: none;
+          transition: color 0.2s var(--ease-smooth);
+        }
+        .hero-social-link .social-arrow {
+          display: inline-block;
+          transition: transform 0.22s var(--ease-smooth), color 0.2s ease;
+          color: var(--text-muted);
+        }
+        .hero-social-link:hover {
+          color: var(--text-white);
+        }
+        .hero-social-link:hover .social-arrow {
+          transform: translate(2px, -2px);
+          color: var(--accent-blue);
         }
       `}</style>
     </section>

@@ -96,7 +96,7 @@ export default function AchievementsSection() {
                       </span>
                       <span style={{ color: 'var(--border-card)' }}>·</span>
 
-                      {/* Grayscale Badge with subtle accent indicator */}
+                      {/* Grayscale Badge with subtle amber accent on expand/highlight */}
                       <span
                         className="font-mono"
                         style={{
@@ -110,14 +110,16 @@ export default function AchievementsSection() {
                             : (isLight ? '#ECECE8' : '#151515'),
                           border: '1px solid',
                           borderColor: isExpanded
-                            ? 'var(--accent-border)'
+                            ? 'var(--accent-amber-border)'
                             : (isFirstPlace
                                 ? (isLight ? '#C8C8C0' : '#333333')
                                 : (isLight ? '#D4D4CD' : '#2A2A2A')),
-                          color: isFirstPlace
-                            ? (isLight ? '#1A1A18' : '#D0D0D0')
-                            : (isLight ? '#4A4A46' : '#B0B0B0'),
-                          transition: 'border-color 0.2s ease',
+                          color: isExpanded
+                            ? 'var(--accent-amber)'
+                            : (isFirstPlace
+                                ? (isLight ? '#1A1A18' : '#D0D0D0')
+                                : (isLight ? '#4A4A46' : '#B0B0B0')),
+                          transition: 'all 0.2s ease',
                         }}
                       >
                         {ach.badge}
@@ -507,7 +509,7 @@ export default function AchievementsSection() {
                             className="font-mono"
                             style={{
                               fontSize: '0.72rem',
-                              color: 'var(--accent)',
+                              color: 'var(--accent-amber)',
                               fontWeight: 600,
                             }}
                           >

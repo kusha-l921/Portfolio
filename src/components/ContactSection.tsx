@@ -136,7 +136,7 @@ export default function ContactSection() {
               href={PERSONAL_DATA.githubUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="card"
+              className="card contact-card-interactive"
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -147,7 +147,7 @@ export default function ContactSection() {
                 border: '1px solid var(--border-subtle)',
                 textDecoration: 'none',
                 color: 'inherit',
-                transition: 'all 0.2s ease',
+                transition: 'all 0.22s cubic-bezier(0.16, 1, 0.3, 1)',
               }}
             >
               <div>
@@ -158,13 +158,13 @@ export default function ContactSection() {
                   GitHub
                 </span>
                 <span
-                  className="font-mono"
-                  style={{ fontSize: '0.92rem', color: 'var(--text-white)', fontWeight: 500 }}
+                  className="font-mono contact-card-title"
+                  style={{ fontSize: '0.92rem', color: 'var(--text-white)', fontWeight: 500, transition: 'color 0.2s ease' }}
                 >
                   @kusha-l921
                 </span>
               </div>
-              <span className="font-mono" style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>
+              <span className="font-mono contact-card-arrow" style={{ fontSize: '0.9rem', color: 'var(--text-muted)', transition: 'transform 0.22s ease, color 0.2s ease' }}>
                 ↗
               </span>
             </a>
@@ -174,7 +174,7 @@ export default function ContactSection() {
               href={PERSONAL_DATA.linkedinUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="card"
+              className="card contact-card-interactive"
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -185,7 +185,7 @@ export default function ContactSection() {
                 border: '1px solid var(--border-subtle)',
                 textDecoration: 'none',
                 color: 'inherit',
-                transition: 'all 0.2s ease',
+                transition: 'all 0.22s cubic-bezier(0.16, 1, 0.3, 1)',
               }}
             >
               <div>
@@ -196,13 +196,13 @@ export default function ContactSection() {
                   LinkedIn
                 </span>
                 <span
-                  className="font-mono"
-                  style={{ fontSize: '0.92rem', color: 'var(--text-white)', fontWeight: 500 }}
+                  className="font-mono contact-card-title"
+                  style={{ fontSize: '0.92rem', color: 'var(--text-white)', fontWeight: 500, transition: 'color 0.2s ease' }}
                 >
                   /in/kushalpatel15
                 </span>
               </div>
-              <span className="font-mono" style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>
+              <span className="font-mono contact-card-arrow" style={{ fontSize: '0.9rem', color: 'var(--text-muted)', transition: 'transform 0.22s ease, color 0.2s ease' }}>
                 ↗
               </span>
             </a>
@@ -212,7 +212,7 @@ export default function ContactSection() {
               href={PERSONAL_DATA.resumeUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="card"
+              className="card contact-card-interactive"
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -223,7 +223,7 @@ export default function ContactSection() {
                 border: '1px solid var(--border-subtle)',
                 textDecoration: 'none',
                 color: 'inherit',
-                transition: 'all 0.2s ease',
+                transition: 'all 0.22s cubic-bezier(0.16, 1, 0.3, 1)',
               }}
             >
               <div>
@@ -234,19 +234,30 @@ export default function ContactSection() {
                   Resume
                 </span>
                 <span
-                  className="font-mono"
-                  style={{ fontSize: '0.92rem', color: 'var(--text-white)', fontWeight: 500 }}
+                  className="font-mono contact-card-title"
+                  style={{ fontSize: '0.92rem', color: 'var(--text-white)', fontWeight: 500, transition: 'color 0.2s ease' }}
                 >
                   Kushal_Patel.pdf
                 </span>
               </div>
-              <span className="font-mono" style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>
+              <span className="font-mono contact-card-arrow" style={{ fontSize: '0.9rem', color: 'var(--text-muted)', transition: 'transform 0.22s ease, color 0.2s ease' }}>
                 ↗
               </span>
             </a>
           </div>
         </div>
       </div>
+
+      <style jsx global>{`
+        .contact-card-interactive:hover .contact-card-arrow {
+          transform: translate(2px, -2px);
+          color: var(--accent-blue) !important;
+        }
+        .contact-card-interactive:hover {
+          border-color: var(--border-hover) !important;
+          background-color: var(--bg-card-hover) !important;
+        }
+      `}</style>
     </section>
   );
 }

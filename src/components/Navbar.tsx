@@ -159,7 +159,7 @@ export default function Navbar() {
               <a
                 key={link.href}
                 href={link.href}
-                className="font-mono"
+                className="font-mono nav-link-item"
                 style={{
                   fontSize: '0.78rem',
                   padding: '0.35rem 0.65rem',
@@ -168,7 +168,7 @@ export default function Navbar() {
                   color: isActive ? 'var(--text-white)' : 'var(--text-dim)',
                   backgroundColor: isActive ? 'var(--bg-pill-hover)' : 'transparent',
                   border: '1px solid',
-                  borderColor: isActive ? 'var(--accent-border)' : 'transparent',
+                  borderColor: isActive ? 'var(--accent-blue-border)' : 'transparent',
                   transition: 'all 0.18s ease',
                   position: 'relative',
                 }}
@@ -180,7 +180,7 @@ export default function Navbar() {
                       width: '4px',
                       height: '4px',
                       borderRadius: '50%',
-                      backgroundColor: 'var(--accent)',
+                      backgroundColor: 'var(--accent-blue)',
                       marginRight: '5px',
                       verticalAlign: 'middle',
                     }}
@@ -200,11 +200,11 @@ export default function Navbar() {
             gap: '0.55rem',
           }}
         >
-          {/* Subtle Terminal Trigger Button */}
+          {/* Subtle Terminal Trigger Button with Light Sweep */}
           <button
             onClick={toggleTerminal}
             aria-label="Toggle VS Code terminal"
-            className="font-mono"
+            className="font-mono navbar-terminal-btn"
             title="Toggle Terminal (Ctrl + ` or T)"
             style={{
               display: 'inline-flex',
@@ -216,12 +216,14 @@ export default function Navbar() {
               backgroundColor: isTerminalOpen ? 'var(--bg-pill-hover)' : 'var(--bg-card)',
               color: isTerminalOpen ? 'var(--text-white)' : 'var(--text-dim)',
               border: '1px solid',
-              borderColor: isTerminalOpen ? 'var(--accent-border)' : 'var(--border-subtle)',
+              borderColor: isTerminalOpen ? 'var(--accent-blue-border)' : 'var(--border-subtle)',
               cursor: 'pointer',
               transition: 'all 0.18s ease',
+              position: 'relative',
+              overflow: 'hidden',
             }}
           >
-            <span style={{ color: 'var(--accent)' }}>&gt;_</span>
+            <span style={{ color: 'var(--accent-blue)' }}>&gt;_</span>
             <span>terminal</span>
           </button>
 
@@ -229,7 +231,7 @@ export default function Navbar() {
           <button
             onClick={toggleTheme}
             aria-label="Toggle dark/light theme"
-            className="font-mono"
+            className="font-mono navbar-theme-btn"
             style={{
               display: 'inline-flex',
               alignItems: 'center',
@@ -249,32 +251,23 @@ export default function Navbar() {
             {theme === 'dark' ? '☀' : '☾'}
           </button>
 
-          {/* Online status indicator */}
+          {/* Online status indicator with Soft Green */}
           <div
             className="font-mono"
             style={{
               display: 'flex',
               alignItems: 'center',
-              gap: '0.4rem',
+              gap: '0.45rem',
               fontSize: '0.72rem',
               color: 'var(--text-dim)',
-              padding: '0.25rem 0.5rem',
+              padding: '0.25rem 0.55rem',
               borderRadius: '9999px',
               backgroundColor: 'var(--bg-card)',
               border: '1px solid var(--border-subtle)',
             }}
           >
-            <span
-              style={{
-                width: '6px',
-                height: '6px',
-                borderRadius: '50%',
-                backgroundColor: 'var(--accent)',
-                boxShadow: '0 0 6px var(--accent-glow)',
-                display: 'inline-block',
-              }}
-            />
-            <span>online</span>
+            <span className="status-dot-pulse" />
+            <span style={{ color: 'var(--text-secondary)' }}>online</span>
           </div>
 
           {/* Resume PDF link */}

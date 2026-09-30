@@ -9,10 +9,14 @@ import SkillsSection from '../components/SkillsSection';
 import ContactSection from '../components/ContactSection';
 import Footer from '../components/Footer';
 import PortfolioTerminal from '../components/PortfolioTerminal';
+import CardPointerLighting from '../components/CardPointerLighting';
 
 export default function HomePage() {
   return (
     <main style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', position: 'relative' }}>
+      {/* Global Card Cursor-Following Lighting Effect */}
+      <CardPointerLighting />
+
       {/* Integrated Atmospheric PFP Background Artwork (Dark & Light) */}
       <AtmosphericPFP />
 

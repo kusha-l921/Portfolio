@@ -76,7 +76,7 @@ export default function SkillsSection() {
           {SKILL_CATEGORIES.map((cat) => (
             <div
               key={cat.id}
-              className="card skill-category-row"
+              className="card skill-card-item skill-category-row"
               style={{
                 display: 'grid',
                 gridTemplateColumns: 'clamp(180px, 20vw, 260px) 1fr',
@@ -86,7 +86,8 @@ export default function SkillsSection() {
                 borderRadius: '8px',
                 backgroundColor: 'var(--bg-card)',
                 border: '1px solid var(--border-card)',
-                transition: 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
+                borderLeft: '2px solid transparent',
+                transition: 'all 0.24s cubic-bezier(0.16, 1, 0.3, 1)',
               }}
             >
               {/* Category Identity */}
@@ -131,7 +132,7 @@ export default function SkillsSection() {
                 {cat.skills.map((skill) => (
                   <span
                     key={skill}
-                    className="font-mono"
+                    className="font-mono skill-tag-item"
                     style={{
                       fontSize: '0.82rem',
                       padding: '0.35rem 0.75rem',
@@ -139,18 +140,7 @@ export default function SkillsSection() {
                       backgroundColor: 'var(--bg-surface)',
                       border: '1px solid var(--border-subtle)',
                       color: 'var(--text-light)',
-                      transition: 'all 0.15s ease',
                       cursor: 'default',
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.backgroundColor = 'var(--bg-pill-hover)';
-                      e.currentTarget.style.borderColor = 'var(--border-hover)';
-                      e.currentTarget.style.color = 'var(--text-white)';
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.backgroundColor = 'var(--bg-surface)';
-                      e.currentTarget.style.borderColor = 'var(--border-subtle)';
-                      e.currentTarget.style.color = 'var(--text-light)';
                     }}
                   >
                     {skill}
