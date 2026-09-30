@@ -1,3 +1,4 @@
+import AmbientBackground from '../components/AmbientBackground';
 import Navbar from '../components/Navbar';
 import Hero from '../components/Hero';
 import AtmosphericPFP from '../components/AtmosphericPFP';
@@ -16,6 +17,9 @@ export default function HomePage() {
     <main style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', position: 'relative' }}>
       {/* Global Card Cursor-Following Lighting Effect */}
       <CardPointerLighting />
+
+      {/* Global Ambient Moving Blue Light (Behind PFP Artwork & Content) */}
+      <AmbientBackground />
 
       {/* Integrated Atmospheric PFP Background Artwork (Dark & Light) */}
       <AtmosphericPFP />

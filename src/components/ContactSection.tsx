@@ -250,12 +250,8 @@ export default function ContactSection() {
 
       <style jsx global>{`
         .contact-card-interactive:hover .contact-card-arrow {
-          transform: translate(2px, -2px);
+          transform: translate(3px, -3px);
           color: var(--accent-blue) !important;
-        }
-        .contact-card-interactive:hover {
-          border-color: var(--border-hover) !important;
-          background-color: var(--bg-card-hover) !important;
         }
       `}</style>
     </section>

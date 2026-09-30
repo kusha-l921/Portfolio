@@ -311,21 +311,6 @@ export default function ProjectsSection() {
             height: 200px !important;
           }
         }
-        .project-card-item:hover {
-          border-color: var(--border-hover) !important;
-          transform: translateY(-2px);
-          background-color: var(--bg-card-hover) !important;
-        }
-        .project-card-item:hover .project-title {
-          transform: translateX(4px);
-        }
-        .project-card-item:hover .project-arrow {
-          transform: translateX(4px);
-        }
-        .project-card-item:hover .project-img-inner {
-          transform: scale(1.03);
-          filter: grayscale(100%) contrast(1.2) brightness(0.9) !important;
-        }
         .project-preview-wrapper:hover .project-overlay-hint {
           opacity: 1 !important;
         }

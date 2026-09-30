@@ -84,6 +84,7 @@ export default function AboutSection() {
 
           {/* Right Column: Focus & Profile Details */}
           <div
+            className="card"
             style={{
               backgroundColor: 'var(--bg-card)',
               border: '1px solid var(--border-card)',

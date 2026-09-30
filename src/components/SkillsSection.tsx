@@ -159,10 +159,6 @@ export default function SkillsSection() {
             gap: 1rem !important;
           }
         }
-        .skill-category-row:hover {
-          border-color: var(--border-hover) !important;
-          background-color: var(--bg-card-hover) !important;
-        }
       `}</style>
     </section>
   );

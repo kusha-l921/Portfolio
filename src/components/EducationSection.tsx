@@ -28,7 +28,7 @@ export default function EducationSection() {
         >
           {/* Main Institution Card */}
           <div
-            className="card"
+            className="card education-card-item"
             style={{
               padding: 'clamp(1.5rem, 2.5vw, 2.25rem)',
               backgroundColor: 'var(--bg-card)',
@@ -56,6 +56,7 @@ export default function EducationSection() {
                       fontWeight: 700,
                       color: 'var(--text-white)',
                       letterSpacing: '-0.015em',
+                      transition: 'transform 0.22s ease, color 0.2s ease',
                     }}
                   >
                     {EDUCATION_DATA.institution}
@@ -182,7 +183,7 @@ export default function EducationSection() {
           >
             {/* Relevant Coursework */}
             <div
-              className="card"
+              className="card education-card-item"
               style={{
                 padding: 'clamp(1.25rem, 2vw, 1.65rem)',
                 backgroundColor: 'var(--bg-card)',
@@ -234,7 +235,7 @@ export default function EducationSection() {
 
             {/* Academic Research Focus */}
             <div
-              className="card"
+              className="card education-card-item"
               style={{
                 padding: 'clamp(1.25rem, 2vw, 1.65rem)',
                 backgroundColor: 'var(--bg-card)',

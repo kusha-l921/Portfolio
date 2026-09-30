@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { PERSONAL_DATA } from '../data/portfolioData';
 import { useTheme } from '../context/ThemeContext';
 import { useTerminal } from '../context/TerminalContext';
+import PFPLightbox from './PFPLightbox';
 
 const NAV_LINKS = [
   { label: '/me', href: '#me' },
@@ -20,6 +21,7 @@ export default function Navbar() {
   const [activeSection, setActiveSection] = useState('me');
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isPFPLightboxOpen, setIsPFPLightboxOpen] = useState(false);
   const { theme, toggleTheme } = useTheme();
   const { isOpen: isTerminalOpen, toggleTerminal } = useTerminal();
 
@@ -87,18 +89,24 @@ export default function Navbar() {
         }}
         aria-label="Main Navigation"
       >
-        {/* Left: Avatar + Identity */}
-        <a
-          href="#me"
+        {/* Left: Avatar (Clickable for Lightbox) + Identity */}
+        <div
           style={{
             display: 'flex',
             alignItems: 'center',
             gap: '0.65rem',
-            textDecoration: 'none',
-            color: 'inherit',
           }}
         >
-          <div
+          <button
+            type="button"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              setIsPFPLightboxOpen(true);
+            }}
+            aria-label="View profile picture"
+            title="View profile picture (Click to enlarge)"
+            className="navbar-avatar-btn"
             style={{
               position: 'relative',
               width: '28px',
@@ -108,6 +116,10 @@ export default function Navbar() {
               border: '1px solid var(--border-strong)',
               backgroundColor: 'var(--bg-surface)',
               flexShrink: 0,
+              padding: 0,
+              cursor: 'pointer',
+              display: 'block',
+              transition: 'transform 0.2s cubic-bezier(0.22, 1, 0.36, 1), filter 0.2s ease, border-color 0.2s ease',
             }}
           >
             <Image
@@ -120,8 +132,18 @@ export default function Navbar() {
                 filter: 'grayscale(100%) brightness(0.95)',
               }}
             />
-          </div>
-          <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1.15 }}>
+          </button>
+
+          <a
+            href="#me"
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              lineHeight: 1.15,
+              textDecoration: 'none',
+              color: 'inherit',
+            }}
+          >
             <span
               style={{
                 fontSize: '0.85rem',
@@ -141,8 +163,8 @@ export default function Navbar() {
             >
               AI/ML Engineer
             </span>
-          </div>
-        </a>
+          </a>
+        </div>
 
         {/* Center: Desktop Navigation Links */}
         <div
@@ -356,7 +378,20 @@ export default function Navbar() {
         </div>
       )}
 
+      {/* PFP Lightbox Modal */}
+      <PFPLightbox
+        isOpen={isPFPLightboxOpen}
+        onClose={() => setIsPFPLightboxOpen(false)}
+        imageSrc={PERSONAL_DATA.avatarImage}
+        altText={PERSONAL_DATA.fullName}
+      />
+
       <style jsx global>{`
+        .navbar-avatar-btn:hover {
+          transform: scale(1.03) !important;
+          filter: brightness(1.18) !important;
+          border-color: var(--accent-blue-border) !important;
+        }
         @media (max-width: 768px) {
           .desktop-nav-links {
             display: none !important;

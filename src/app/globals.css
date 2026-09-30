@@ -83,11 +83,11 @@
   --container-width: 94vw;
   --nav-height: 58px;
 
-  /* Motion */
-  --ease-smooth: cubic-bezier(0.16, 1, 0.3, 1);
-  --transition-fast: 150ms var(--ease-smooth);
-  --transition-base: 250ms var(--ease-smooth);
-  --transition-slow: 450ms var(--ease-smooth);
+  /* Motion: cubic-bezier(0.22, 1, 0.36, 1) */
+  --ease-smooth: cubic-bezier(0.22, 1, 0.36, 1);
+  --transition-fast: 160ms var(--ease-smooth);
+  --transition-base: 260ms var(--ease-smooth);
+  --transition-slow: 420ms var(--ease-smooth);
 }
 
 /* Light Theme Variables */
@@ -429,18 +429,18 @@ body::before {
   transform: translateY(-1px);
 }
 
-/* Cards & Cursor-Following Radial Surface Lighting */
+/* Universal Master Card Hover System */
 .card {
   background: var(--bg-card);
   border: 1px solid var(--border-subtle);
   border-radius: 8px;
   position: relative;
   overflow: hidden;
-  transition: transform 0.28s var(--ease-smooth),
-              border-color 0.28s var(--ease-smooth),
-              background-color 0.28s var(--ease-smooth),
-              border-left-color 0.28s var(--ease-smooth),
-              box-shadow 0.28s var(--ease-smooth);
+  transition: transform 0.26s cubic-bezier(0.22, 1, 0.36, 1),
+              border-color 0.26s cubic-bezier(0.22, 1, 0.36, 1),
+              background-color 0.26s cubic-bezier(0.22, 1, 0.36, 1),
+              border-left-color 0.26s cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 0.26s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 /* Cursor-following spotlight effect on all cards */
@@ -450,12 +450,12 @@ body::before {
   inset: 0;
   border-radius: inherit;
   background: radial-gradient(
-    550px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+    520px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
     var(--card-spotlight, rgba(91, 140, 255, 0.07)),
-    transparent 45%
+    transparent 42%
   );
   opacity: 0;
-  transition: opacity 0.3s ease;
+  transition: opacity 0.25s ease;
   pointer-events: none;
   z-index: 1;
 }
@@ -467,8 +467,24 @@ body::before {
 .card:hover {
   background: var(--bg-card-hover);
   border-color: var(--border-hover);
-  transform: translateY(-3px);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+  transform: translateY(-4px) scale(1.008);
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.45);
+}
+
+/* Unified internal hover feedback across all card implementations */
+.card:hover h3,
+.card:hover .card-title,
+.card:hover .project-title,
+.card:hover .achievement-title {
+  transform: translateX(3px);
+  color: var(--text-white);
+}
+
+.card:hover .card-arrow,
+.card:hover .project-arrow,
+.card:hover .achievement-arrow,
+.card:hover .contact-card-arrow {
+  transform: translate(3px, -3px);
 }
 
 /* Project Cards: Electric Blue Accent */
@@ -482,14 +498,8 @@ body::before {
   border-color: var(--border-hover) !important;
 }
 
-.project-card-item:hover .project-title {
-  transform: translateX(4px);
-  color: var(--text-white);
-}
-
 .project-card-item:hover .project-arrow {
   color: var(--accent-blue);
-  transform: translateX(4px) translateY(-1px);
 }
 
 /* Achievement Cards: Soft Amber Accent */
@@ -509,17 +519,30 @@ body::before {
   color: var(--accent-amber) !important;
 }
 
+/* Education Cards: Subtle Accent Left Border */
+.education-card-item {
+  --card-spotlight: rgba(91, 140, 255, 0.06);
+  border-left: 2px solid transparent !important;
+}
+
+.education-card-item:hover {
+  border-left-color: var(--accent-blue-border) !important;
+  border-color: var(--border-hover) !important;
+}
+
 /* Skill Cards & Tags: Violet Accent */
 .skill-card-item {
   --card-spotlight: rgba(139, 124, 255, 0.07);
+  border-left: 2px solid transparent !important;
 }
 
 .skill-card-item:hover {
   border-left-color: var(--accent-violet) !important;
+  border-color: var(--border-hover) !important;
 }
 
 .skill-tag-item {
-  transition: all 0.18s var(--ease-smooth);
+  transition: all 0.18s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .skill-tag-item:hover {
@@ -527,6 +550,91 @@ body::before {
   color: var(--text-white) !important;
   background: var(--bg-surface-hover) !important;
   transform: translateY(-1px);
+}
+
+/* ============================================================
+   AMBIENT MOVING BLUE LIGHT (Behind Portfolio Content & PFP)
+   ============================================================ */
+.ambient-blue-backdrop {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.ambient-light-primary {
+  position: absolute;
+  top: 10%;
+  right: 15%;
+  width: clamp(520px, 48vw, 860px);
+  height: clamp(520px, 48vw, 860px);
+  border-radius: 50%;
+  background: radial-gradient(circle, #3F6FD9 0%, rgba(63, 111, 217, 0.45) 45%, transparent 72%);
+  opacity: 0.065;
+  filter: blur(140px);
+  animation: ambientDriftPrimary 34s ease-in-out infinite alternate;
+  will-change: transform, opacity;
+  pointer-events: none;
+}
+
+.ambient-light-secondary {
+  position: absolute;
+  bottom: 18%;
+  left: 10%;
+  width: clamp(450px, 40vw, 720px);
+  height: clamp(450px, 40vw, 720px);
+  border-radius: 50%;
+  background: radial-gradient(circle, #4A72C6 0%, rgba(74, 114, 198, 0.4) 45%, transparent 72%);
+  opacity: 0.035;
+  filter: blur(150px);
+  animation: ambientDriftSecondary 42s ease-in-out infinite alternate;
+  will-change: transform, opacity;
+  pointer-events: none;
+}
+
+@keyframes ambientDriftPrimary {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(-18vw, 16vh, 0) scale(1.08);
+  }
+  100% {
+    transform: translate3d(-36vw, 30vh, 0) scale(0.96);
+  }
+}
+
+@keyframes ambientDriftSecondary {
+  0% {
+    transform: translate3d(0, 0, 0) scale(0.96);
+  }
+  50% {
+    transform: translate3d(22vw, -12vh, 0) scale(1.06);
+  }
+  100% {
+    transform: translate3d(36vw, -24vh, 0) scale(1);
+  }
+}
+
+[data-theme='light'] .ambient-light-primary {
+  opacity: 0.035;
+  filter: blur(160px);
+}
+
+[data-theme='light'] .ambient-light-secondary {
+  opacity: 0.018;
+  filter: blur(170px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ambient-light-primary,
+  .ambient-light-secondary {
+    animation: none !important;
+    transform: none !important;
+  }
 }
 
 /* Subtle Cursor Animation with Accent */

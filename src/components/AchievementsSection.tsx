@@ -35,8 +35,16 @@ export default function AchievementsSection() {
           </p>
         </div>
 
-        {/* Compact Full-Width List Matching Project Cards */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.75rem' }}>
+        {/* Floating 2-Column Grid Matching Project Card Visual Language */}
+        <div
+          className="achievements-floating-grid"
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
+            gap: 'clamp(1.25rem, 2.5vw, 2rem)',
+            alignItems: 'start',
+          }}
+        >
           {ACHIEVEMENTS_DATA.map((ach) => {
             const isExpanded = expandedId === ach.id;
             const isFirstPlace = ach.badge.includes('1ST PLACE');
@@ -60,31 +68,31 @@ export default function AchievementsSection() {
                     : 'var(--bg-card)',
                   border: '1px solid',
                   borderColor: isExpanded
-                    ? (isLight ? 'var(--border-strong)' : 'var(--border-hover)')
+                    ? (isLight ? 'var(--border-strong)' : 'var(--accent-amber-border)')
                     : 'var(--border-card)',
-                  padding: 'clamp(1.5rem, 3vw, 2.25rem)',
+                  padding: 'clamp(1.4rem, 2.2vw, 2rem)',
                   cursor: 'pointer',
                   outline: 'none',
                   position: 'relative',
                   overflow: 'hidden',
                   boxShadow: isExpanded
-                    ? (isLight ? '0 10px 30px rgba(0, 0, 0, 0.06)' : '0 12px 36px rgba(0, 0, 0, 0.45)')
+                    ? (isLight ? '0 10px 30px rgba(0, 0, 0, 0.06)' : '0 14px 36px rgba(0, 0, 0, 0.55)')
                     : 'none',
+                  transition: 'transform 0.26s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.26s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.26s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.26s cubic-bezier(0.22, 1, 0.36, 1)',
                 }}
               >
-                {/* Collapsed Top Header (Always Visible) */}
+                {/* Header Row: Number + Placement Badge + Date + Expand Arrow */}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
-                  {/* Row 1: Number + Placement Badge + Year + Expand Arrow */}
                   <div
                     style={{
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'space-between',
                       flexWrap: 'wrap',
-                      gap: '0.65rem',
+                      gap: '0.5rem',
                     }}
                   >
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', flexWrap: 'wrap' }}>
                       <span
                         className="font-mono"
                         style={{
@@ -96,18 +104,18 @@ export default function AchievementsSection() {
                       </span>
                       <span style={{ color: 'var(--border-card)' }}>·</span>
 
-                      {/* Grayscale Badge with subtle amber accent on expand/highlight */}
+                      {/* Amber Badge */}
                       <span
                         className="font-mono"
                         style={{
-                          fontSize: '0.74rem',
+                          fontSize: '0.72rem',
                           fontWeight: 600,
                           letterSpacing: '0.04em',
-                          padding: '0.25rem 0.7rem',
+                          padding: '0.22rem 0.65rem',
                           borderRadius: '4px',
                           backgroundColor: isFirstPlace
-                            ? (isLight ? '#E5E5E0' : '#1B1B1B')
-                            : (isLight ? '#ECECE8' : '#151515'),
+                            ? (isLight ? '#E5E5E0' : '#181818')
+                            : (isLight ? '#ECECE8' : '#141414'),
                           border: '1px solid',
                           borderColor: isExpanded
                             ? 'var(--accent-amber-border)'
@@ -126,7 +134,7 @@ export default function AchievementsSection() {
                       </span>
                     </div>
 
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
                       <span
                         className="font-mono"
                         style={{
@@ -144,10 +152,10 @@ export default function AchievementsSection() {
                           display: 'inline-flex',
                           alignItems: 'center',
                           justifyContent: 'center',
-                          fontSize: '1rem',
-                          color: isExpanded ? 'var(--accent)' : 'var(--text-secondary)',
-                          transform: isExpanded ? 'rotate(-45deg)' : 'rotate(0deg)',
-                          transition: 'transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), color 0.2s ease',
+                          fontSize: '0.95rem',
+                          color: isExpanded ? 'var(--accent-amber)' : 'var(--text-secondary)',
+                          transform: isExpanded ? 'rotate(45deg)' : 'none',
+                          transition: 'transform 0.24s cubic-bezier(0.22, 1, 0.36, 1), color 0.2s ease',
                         }}
                       >
                         ↗
@@ -155,12 +163,24 @@ export default function AchievementsSection() {
                     </div>
                   </div>
 
-                  {/* Row 2: Title & One-Liner */}
+                  {/* Title & Project Name */}
                   <div>
+                    <div
+                      className="font-mono"
+                      style={{
+                        fontSize: '0.74rem',
+                        color: 'var(--accent-amber)',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.04em',
+                        marginBottom: '0.25rem',
+                      }}
+                    >
+                      {ach.projectName}
+                    </div>
                     <h3
                       className="achievement-title"
                       style={{
-                        fontSize: 'clamp(1.25rem, 1.9vw, 1.6rem)',
+                        fontSize: 'clamp(1.2rem, 1.6vw, 1.45rem)',
                         fontWeight: 700,
                         color: 'var(--text-primary)',
                         letterSpacing: '-0.02em',
@@ -172,102 +192,172 @@ export default function AchievementsSection() {
 
                     <p
                       style={{
-                        fontSize: 'clamp(0.92rem, 1.1vw, 1rem)',
+                        fontSize: '0.92rem',
                         color: 'var(--text-secondary)',
-                        marginTop: '0.4rem',
+                        marginTop: '0.45rem',
                         lineHeight: 1.55,
                       }}
                     >
                       {ach.collapsedSummary}
                     </p>
                   </div>
+
+                  {/* Tech Tags */}
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem', marginTop: '0.2rem' }}>
+                    {(ach.id === 'loc-8-exportify'
+                      ? ['Python', 'PostgreSQL', 'Operations Research', 'Risk Engine']
+                      : ['Computer Vision', 'Temporal Tracking', 'Edge AI', 'Risk Scoring']
+                    ).map((tag, idx) => (
+                      <span
+                        key={idx}
+                        className="font-mono"
+                        style={{
+                          fontSize: '0.74rem',
+                          padding: '0.22rem 0.55rem',
+                          borderRadius: '4px',
+                          backgroundColor: 'var(--bg-surface)',
+                          border: '1px solid var(--border-subtle)',
+                          color: 'var(--text-light)',
+                        }}
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+
+                  {/* Key Verified Result Pill */}
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.55rem',
+                      padding: '0.4rem 0.75rem',
+                      borderRadius: '6px',
+                      backgroundColor: 'var(--bg-surface)',
+                      border: '1px solid var(--border-subtle)',
+                      width: 'fit-content',
+                      marginTop: '0.25rem',
+                    }}
+                  >
+                    <span
+                      className="font-mono"
+                      style={{
+                        fontSize: '0.72rem',
+                        color: 'var(--accent-amber)',
+                        fontWeight: 600,
+                      }}
+                    >
+                      // RESULT:
+                    </span>
+                    <span
+                      style={{
+                        fontSize: '0.82rem',
+                        color: 'var(--text-primary)',
+                        fontWeight: 500,
+                      }}
+                    >
+                      {ach.resultSummary}
+                    </span>
+                  </div>
+
+                  {/* View Details Action Prompt */}
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      paddingTop: '0.5rem',
+                      marginTop: '0.25rem',
+                    }}
+                  >
+                    <span
+                      className="font-mono"
+                      style={{
+                        fontSize: '0.78rem',
+                        color: isExpanded ? 'var(--accent-amber)' : 'var(--text-light)',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '0.4rem',
+                        fontWeight: 500,
+                      }}
+                    >
+                      <span>{isExpanded ? 'Hide Details' : 'View Architecture & Results'}</span>
+                      <span
+                        style={{
+                          transform: isExpanded ? 'rotate(180deg)' : 'none',
+                          transition: 'transform 0.22s ease',
+                        }}
+                      >
+                        ↓
+                      </span>
+                    </span>
+
+                    <span
+                      className="font-mono"
+                      style={{
+                        fontSize: '0.7rem',
+                        color: 'var(--text-muted)',
+                      }}
+                    >
+                      click card
+                    </span>
+                  </div>
                 </div>
 
-                {/* Expanded In-Place Content (Smooth Grid Transition) */}
+                {/* Expanded In-Place Content (Smooth Height Transition) */}
                 <div
                   id={`achievement-details-${ach.id}`}
                   style={{
                     display: 'grid',
                     gridTemplateRows: isExpanded ? '1fr' : '0fr',
-                    transition: 'grid-template-rows 280ms cubic-bezier(0.16, 1, 0.3, 1)',
+                    transition: 'grid-template-rows 280ms cubic-bezier(0.22, 1, 0.36, 1)',
                   }}
                 >
                   <div style={{ overflow: 'hidden' }}>
                     <div
                       style={{
-                        paddingTop: '1.5rem',
-                        marginTop: '1.35rem',
+                        paddingTop: '1.25rem',
+                        marginTop: '1.15rem',
                         borderTop: '1px solid',
                         borderColor: isLight ? 'var(--border-subtle)' : 'var(--border-dark)',
                         display: 'flex',
                         flexDirection: 'column',
-                        gap: '1.35rem',
+                        gap: '1.15rem',
                         opacity: isExpanded ? 1 : 0,
                         transform: isExpanded ? 'translateY(0)' : 'translateY(-6px)',
                         transition: 'opacity 240ms ease, transform 240ms ease',
                       }}
                     >
-                      {/* Project Name + Overview */}
+                      {/* Project Overview */}
                       <div>
                         <div
+                          className="font-mono"
                           style={{
-                            fontSize: '1.2rem',
-                            fontWeight: 700,
-                            color: 'var(--text-primary)',
-                            letterSpacing: '-0.015em',
-                            marginBottom: '0.4rem',
+                            fontSize: '0.72rem',
+                            color: 'var(--text-muted)',
+                            letterSpacing: '0.04em',
+                            marginBottom: '0.35rem',
                           }}
                         >
-                          {ach.projectName}
+                          // SYSTEM_OVERVIEW
                         </div>
-
                         <p
                           style={{
-                            fontSize: '0.92rem',
+                            fontSize: '0.88rem',
                             color: 'var(--text-secondary)',
-                            lineHeight: 1.65,
+                            lineHeight: 1.6,
                           }}
                         >
                           {ach.whatWeBuilt}
                         </p>
                       </div>
 
-                      {/* Tech Stack Pills */}
-                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.45rem' }}>
-                        {(ach.id === 'loc-8-exportify'
-                          ? ['Python', 'PostgreSQL', 'Operations Research', 'Multi-Factor Scoring', 'Risk Engine']
-                          : ['Computer Vision', 'Multi-Person Tracking', 'Temporal Analysis', 'Risk Scoring', 'Edge AI']
-                        ).map((tag, idx) => (
-                          <span
-                            key={idx}
-                            className="font-mono"
-                            style={{
-                              fontSize: '0.76rem',
-                              padding: '0.25rem 0.6rem',
-                              borderRadius: '4px',
-                              backgroundColor: 'var(--bg-surface)',
-                              border: '1px solid var(--border-subtle)',
-                              color: 'var(--text-light)',
-                            }}
-                          >
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
-
-                      {/* Structured Technical Architecture Grid (Compact Project Density) */}
+                      {/* Technical Architecture Blocks (Clean Stacking for 2-Column Grid) */}
                       {ach.id === 'loc-8-exportify' ? (
-                        <div
-                          style={{
-                            display: 'grid',
-                            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-                            gap: '0.85rem',
-                          }}
-                        >
-                          {/* Architecture */}
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                           <div
                             style={{
-                              padding: '0.85rem 1rem',
+                              padding: '0.75rem 0.9rem',
                               borderRadius: '6px',
                               backgroundColor: isLight ? '#EAEAE5' : '#080808',
                               border: '1px solid',
@@ -277,24 +367,23 @@ export default function AchievementsSection() {
                             <div
                               className="font-mono"
                               style={{
-                                fontSize: '0.72rem',
+                                fontSize: '0.7rem',
                                 fontWeight: 600,
                                 color: 'var(--text-muted)',
                                 letterSpacing: '0.04em',
-                                marginBottom: '0.35rem',
+                                marginBottom: '0.25rem',
                               }}
                             >
-                              // ARCHITECTURE
+                              // MATCHING ENGINE & OPTIMIZATION
                             </div>
-                            <p style={{ fontSize: '0.86rem', color: 'var(--text-secondary)', lineHeight: 1.55 }}>
-                              Python full-stack request routing, PostgreSQL transactional records, multi-factor scoring engine, operations research allocation, and logistics risk indexing.
+                            <p style={{ fontSize: '0.84rem', color: 'var(--text-secondary)', lineHeight: 1.5 }}>
+                              Multi-criteria compatibility scoring on product specifications, trade certifications, and supplier capacity constraints with operations research allocation.
                             </p>
                           </div>
 
-                          {/* Matching Engine */}
                           <div
                             style={{
-                              padding: '0.85rem 1rem',
+                              padding: '0.75rem 0.9rem',
                               borderRadius: '6px',
                               backgroundColor: isLight ? '#EAEAE5' : '#080808',
                               border: '1px solid',
@@ -304,80 +393,25 @@ export default function AchievementsSection() {
                             <div
                               className="font-mono"
                               style={{
-                                fontSize: '0.72rem',
+                                fontSize: '0.7rem',
                                 fontWeight: 600,
                                 color: 'var(--text-muted)',
                                 letterSpacing: '0.04em',
-                                marginBottom: '0.35rem',
+                                marginBottom: '0.25rem',
                               }}
                             >
-                              // MATCHING ENGINE
+                              // RISK & LOGISTICS ENGINE
                             </div>
-                            <p style={{ fontSize: '0.86rem', color: 'var(--text-secondary)', lineHeight: 1.55 }}>
-                              Multi-criteria compatibility scoring on product specifications, verified trade certifications, pricing tolerances, and historical fulfillment reliability.
-                            </p>
-                          </div>
-
-                          {/* Optimization */}
-                          <div
-                            style={{
-                              padding: '0.85rem 1rem',
-                              borderRadius: '6px',
-                              backgroundColor: isLight ? '#EAEAE5' : '#080808',
-                              border: '1px solid',
-                              borderColor: isLight ? 'var(--border-subtle)' : 'var(--border-dark)',
-                            }}
-                          >
-                            <div
-                              className="font-mono"
-                              style={{
-                                fontSize: '0.72rem',
-                                fontWeight: 600,
-                                color: 'var(--text-muted)',
-                                letterSpacing: '0.04em',
-                                marginBottom: '0.35rem',
-                              }}
-                            >
-                              // OPTIMIZATION
-                            </div>
-                            <p style={{ fontSize: '0.86rem', color: 'var(--text-secondary)', lineHeight: 1.55 }}>
-                              Mathematical allocation factoring supplier capacity constraints, minimum order quantities (MOQs), and tight delivery production deadlines.
-                            </p>
-                          </div>
-
-                          {/* Risk Engine */}
-                          <div
-                            style={{
-                              padding: '0.85rem 1rem',
-                              borderRadius: '6px',
-                              backgroundColor: isLight ? '#EAEAE5' : '#080808',
-                              border: '1px solid',
-                              borderColor: isLight ? 'var(--border-subtle)' : 'var(--border-dark)',
-                            }}
-                          >
-                            <div
-                              className="font-mono"
-                              style={{
-                                fontSize: '0.72rem',
-                                fontWeight: 600,
-                                color: 'var(--text-muted)',
-                                letterSpacing: '0.04em',
-                                marginBottom: '0.35rem',
-                              }}
-                            >
-                              // RISK ENGINE
-                            </div>
-                            <p style={{ fontSize: '0.86rem', color: 'var(--text-secondary)', lineHeight: 1.55 }}>
-                              Continuous risk evaluation assessing transit lead times, geopolitical / shipping-lane disruption indices, and cross-border regulatory compliance.
+                            <p style={{ fontSize: '0.84rem', color: 'var(--text-secondary)', lineHeight: 1.5 }}>
+                              Continuous risk evaluation assessing transit lead times, geopolitical disruption indices, and cross-border customs regulations.
                             </p>
                           </div>
                         </div>
                       ) : (
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
-                          {/* Pipeline Step Ribbon */}
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                           <div
                             style={{
-                              padding: '0.85rem 1rem',
+                              padding: '0.75rem 0.9rem',
                               borderRadius: '6px',
                               backgroundColor: isLight ? '#EAEAE5' : '#080808',
                               border: '1px solid',
@@ -387,14 +421,14 @@ export default function AchievementsSection() {
                             <div
                               className="font-mono"
                               style={{
-                                fontSize: '0.72rem',
+                                fontSize: '0.7rem',
                                 fontWeight: 600,
                                 color: 'var(--text-muted)',
                                 letterSpacing: '0.04em',
-                                marginBottom: '0.45rem',
+                                marginBottom: '0.35rem',
                               }}
                             >
-                              // TECHNICAL PIPELINE
+                              // PIPELINE FLOW
                             </div>
                             <div
                               className="font-mono"
@@ -402,8 +436,8 @@ export default function AchievementsSection() {
                                 display: 'flex',
                                 alignItems: 'center',
                                 flexWrap: 'wrap',
-                                gap: '0.35rem',
-                                fontSize: '0.74rem',
+                                gap: '0.3rem',
+                                fontSize: '0.72rem',
                                 color: 'var(--text-primary)',
                               }}
                             >
@@ -411,7 +445,7 @@ export default function AchievementsSection() {
                                 <React.Fragment key={idx}>
                                   <span
                                     style={{
-                                      padding: '0.2rem 0.5rem',
+                                      padding: '0.15rem 0.45rem',
                                       borderRadius: '4px',
                                       backgroundColor: isLight ? '#DFDFD9' : '#151515',
                                       border: '1px solid',
@@ -428,108 +462,60 @@ export default function AchievementsSection() {
                             </div>
                           </div>
 
-                          {/* Core System & Edge/Privacy */}
                           <div
                             style={{
-                              display: 'grid',
-                              gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-                              gap: '0.85rem',
+                              padding: '0.75rem 0.9rem',
+                              borderRadius: '6px',
+                              backgroundColor: isLight ? '#EAEAE5' : '#080808',
+                              border: '1px solid',
+                              borderColor: isLight ? 'var(--border-subtle)' : 'var(--border-dark)',
                             }}
                           >
                             <div
+                              className="font-mono"
                               style={{
-                                padding: '0.85rem 1rem',
-                                borderRadius: '6px',
-                                backgroundColor: isLight ? '#EAEAE5' : '#080808',
-                                border: '1px solid',
-                                borderColor: isLight ? 'var(--border-subtle)' : 'var(--border-dark)',
+                                fontSize: '0.7rem',
+                                fontWeight: 600,
+                                color: 'var(--text-muted)',
+                                letterSpacing: '0.04em',
+                                marginBottom: '0.25rem',
                               }}
                             >
-                              <div
-                                className="font-mono"
-                                style={{
-                                  fontSize: '0.72rem',
-                                  fontWeight: 600,
-                                  color: 'var(--text-muted)',
-                                  letterSpacing: '0.04em',
-                                  marginBottom: '0.35rem',
-                                }}
-                              >
-                                // CORE SYSTEM
-                              </div>
-                              <p style={{ fontSize: '0.86rem', color: 'var(--text-secondary)', lineHeight: 1.55 }}>
-                                Person detection, multi-person temporal tracking across frames (Person #17 → Frame 100-103), continuous behavioral risk scoring (0-100 gradient), and anomaly detection surfacing critical misconduct alerts.
-                              </p>
+                              // EDGE INFERENCE & PRIVACY
                             </div>
-
-                            <div
-                              style={{
-                                padding: '0.85rem 1rem',
-                                borderRadius: '6px',
-                                backgroundColor: isLight ? '#EAEAE5' : '#080808',
-                                border: '1px solid',
-                                borderColor: isLight ? 'var(--border-subtle)' : 'var(--border-dark)',
-                              }}
-                            >
-                              <div
-                                className="font-mono"
-                                style={{
-                                  fontSize: '0.72rem',
-                                  fontWeight: 600,
-                                  color: 'var(--text-muted)',
-                                  letterSpacing: '0.04em',
-                                  marginBottom: '0.35rem',
-                                }}
-                              >
-                                // EDGE / PRIVACY
-                              </div>
-                              <p style={{ fontSize: '0.86rem', color: 'var(--text-secondary)', lineHeight: 1.55 }}>
-                                Privacy-preserving edge alerts: Camera → Local edge inference → Behavioral analysis → Real-time alert metadata. Raw CCTV frames remain localized on-device.
-                              </p>
-                            </div>
+                            <p style={{ fontSize: '0.84rem', color: 'var(--text-secondary)', lineHeight: 1.5 }}>
+                              Privacy-preserving edge alert architecture: camera → local inference → behavioral risk scoring (0-100 gradient). Raw frames remain localized on-device.
+                            </p>
                           </div>
                         </div>
                       )}
 
-                      {/* Result & Actions Footer */}
+                      {/* Collapse Footer Action */}
                       <div
                         style={{
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'space-between',
-                          flexWrap: 'wrap',
-                          gap: '0.75rem',
                           paddingTop: '0.65rem',
                           borderTop: '1px solid',
                           borderColor: isLight ? 'var(--border-subtle)' : 'var(--border-dark)',
                         }}
                       >
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-                          <span
-                            className="font-mono"
-                            style={{
-                              fontSize: '0.72rem',
-                              color: 'var(--accent-amber)',
-                              fontWeight: 600,
-                            }}
-                          >
-                            // RESULT
-                          </span>
-                          <span
-                            style={{
-                              fontSize: '0.88rem',
-                              fontWeight: 600,
-                              color: 'var(--text-primary)',
-                            }}
-                          >
-                            {ach.resultSummary}
-                          </span>
-                        </div>
+                        <span
+                          className="font-mono"
+                          style={{
+                            fontSize: '0.72rem',
+                            color: 'var(--accent-amber)',
+                            fontWeight: 600,
+                          }}
+                        >
+                          // AWARD VERIFIED
+                        </span>
 
                         <span
                           className="font-mono"
                           style={{
-                            fontSize: '0.78rem',
+                            fontSize: '0.76rem',
                             color: 'var(--text-muted)',
                             display: 'inline-flex',
                             alignItems: 'center',
@@ -548,6 +534,14 @@ export default function AchievementsSection() {
           })}
         </div>
       </div>
+
+      <style jsx global>{`
+        @media (max-width: 900px) {
+          .achievements-floating-grid {
+            grid-template-columns: 1fr !important;
+          }
+        }
+      `}</style>
     </section>
   );
 }
