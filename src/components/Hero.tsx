@@ -131,12 +131,12 @@ export default function Hero() {
             </a>
             <a
               href={PERSONAL_DATA.resumeUrl}
-              target="_blank"
-              rel="noopener noreferrer"
+              download="Kushal_Patel_Resume.pdf"
               className="btn btn-secondary"
+              title="Download Kushal Patel's Resume (PDF)"
             >
               <span>Download Resume</span>
-              <span style={{ fontSize: '0.95rem', lineHeight: 1 }}>↗</span>
+              <span style={{ fontSize: '0.95rem', lineHeight: 1 }}>↓</span>
             </a>
           </div>
 

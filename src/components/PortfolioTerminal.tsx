@@ -155,9 +155,14 @@ export default function PortfolioTerminal() {
     }
 
     // 5. RESUME
-    else if (cmdLower === 'resume') {
-      response = 'opening resume.pdf in new tab...';
-      window.open('/docs/Kushal_Patel_Resume.pdf', '_blank');
+    else if (cmdLower === 'resume' || cmdLower === 'download resume') {
+      response = 'downloading Kushal_Patel_Resume.pdf...';
+      const link = document.createElement('a');
+      link.href = '/docs/Kushal_Patel_Resume.pdf';
+      link.download = 'Kushal_Patel_Resume.pdf';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
     }
 
     // 6. LS

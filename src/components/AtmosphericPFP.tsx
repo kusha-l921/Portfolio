@@ -1,66 +1,80 @@
 'use client';
 
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { useTheme } from '../context/ThemeContext';
 
 export default function AtmosphericPFP() {
   const { theme } = useTheme();
-  const [offset, setOffset] = useState({ x: 0, y: 0 });
+  const containerRef = useRef<HTMLDivElement | null>(null);
   const targetOffset = useRef({ x: 0, y: 0 });
+  const currentOffset = useRef({ x: 0, y: 0 });
   const animFrame = useRef<number | null>(null);
+  const isRunning = useRef(false);
 
   const isLight = theme === 'light';
   const imageSrc = isLight ? '/images/light_pfp.jpg' : '/images/inverted_pfp(1).jpeg';
 
   useEffect(() => {
-    // Respect prefers-reduced-motion
     if (typeof window === 'undefined') return;
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (prefersReducedMotion) return;
 
-    let currentX = 0;
-    let currentY = 0;
+    const updateParallax = () => {
+      const diffX = targetOffset.current.x - currentOffset.current.x;
+      const diffY = targetOffset.current.y - currentOffset.current.y;
+
+      currentOffset.current.x += diffX * 0.08;
+      currentOffset.current.y += diffY * 0.08;
+
+      if (containerRef.current) {
+        containerRef.current.style.transform = `translate3d(${currentOffset.current.x.toFixed(2)}px, ${currentOffset.current.y.toFixed(2)}px, 0)`;
+      }
+
+      // Keep running while there is perceptible motion (> 0.02px)
+      if (Math.abs(diffX) > 0.02 || Math.abs(diffY) > 0.02) {
+        animFrame.current = requestAnimationFrame(updateParallax);
+      } else {
+        isRunning.current = false;
+        animFrame.current = null;
+      }
+    };
 
     const handleMouseMove = (e: MouseEvent) => {
-      // Subtle 6-12px parallax range relative to viewport center
       const centerX = window.innerWidth / 2;
       const centerY = window.innerHeight / 2;
       const factorX = (e.clientX - centerX) / centerX;
       const factorY = (e.clientY - centerY) / centerY;
 
       targetOffset.current = {
-        x: factorX * 9, // ~9px subtle horizontal shift
-        y: factorY * 7, // ~7px subtle vertical shift
+        x: factorX * 9,
+        y: factorY * 7,
       };
-    };
 
-    const updateParallax = () => {
-      // Smooth interpolation (lerp)
-      currentX += (targetOffset.current.x - currentX) * 0.08;
-      currentY += (targetOffset.current.y - currentY) * 0.08;
-
-      setOffset({ x: currentX, y: currentY });
-      animFrame.current = requestAnimationFrame(updateParallax);
+      if (!isRunning.current) {
+        isRunning.current = true;
+        animFrame.current = requestAnimationFrame(updateParallax);
+      }
     };
 
     window.addEventListener('mousemove', handleMouseMove, { passive: true });
-    animFrame.current = requestAnimationFrame(updateParallax);
 
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
-      if (animFrame.current) cancelAnimationFrame(animFrame.current);
+      if (animFrame.current) {
+        cancelAnimationFrame(animFrame.current);
+      }
     };
   }, []);
 
   return (
     <div
+      ref={containerRef}
       className="atmospheric-pfp-container"
       aria-hidden="true"
       style={{
         position: 'absolute',
         top: 'clamp(1rem, 4vw, 4.5rem)',
-        // Positioned toward center: center of artwork sits around 65-70% of viewport width
         right: 'clamp(6%, 11vw, 15%)',
         width: 'clamp(440px, 46vw, 720px)',
         height: 'clamp(460px, 46vw, 760px)',
@@ -68,7 +82,6 @@ export default function AtmosphericPFP() {
         userSelect: 'none',
         zIndex: 1,
         overflow: 'hidden',
-        transform: `translate3d(${offset.x.toFixed(2)}px, ${offset.y.toFixed(2)}px, 0)`,
         willChange: 'transform',
       }}
     >

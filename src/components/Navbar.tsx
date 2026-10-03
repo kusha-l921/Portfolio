@@ -295,9 +295,9 @@ export default function Navbar() {
           {/* Resume PDF link */}
           <a
             href={PERSONAL_DATA.resumeUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="font-mono"
+            download="Kushal_Patel_Resume.pdf"
+            className="font-mono navbar-resume-btn"
+            title="Download Kushal Patel's Resume (PDF)"
             style={{
               display: 'inline-flex',
               alignItems: 'center',
@@ -313,7 +313,7 @@ export default function Navbar() {
             }}
           >
             <span>resume.pdf</span>
-            <span style={{ fontSize: '0.85rem', lineHeight: 1 }}>↗</span>
+            <span style={{ fontSize: '0.85rem', lineHeight: 1 }}>↓</span>
           </a>
 
           {/* Mobile hamburger toggle */}

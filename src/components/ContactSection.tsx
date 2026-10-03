@@ -210,9 +210,9 @@ export default function ContactSection() {
             {/* Resume Card */}
             <a
               href={PERSONAL_DATA.resumeUrl}
-              target="_blank"
-              rel="noopener noreferrer"
+              download="Kushal_Patel_Resume.pdf"
               className="card contact-card-interactive"
+              title="Download Kushal Patel's Resume (PDF)"
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -237,11 +237,11 @@ export default function ContactSection() {
                   className="font-mono contact-card-title"
                   style={{ fontSize: '0.92rem', color: 'var(--text-white)', fontWeight: 500, transition: 'color 0.2s ease' }}
                 >
-                  Kushal_Patel.pdf
+                  Kushal_Patel_Resume.pdf
                 </span>
               </div>
               <span className="font-mono contact-card-arrow" style={{ fontSize: '0.9rem', color: 'var(--text-muted)', transition: 'transform 0.22s ease, color 0.2s ease' }}>
-                ↗
+                ↓
               </span>
             </a>
           </div>
