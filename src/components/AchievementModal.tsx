@@ -3,6 +3,7 @@
 import React, { useEffect } from 'react';
 import { Achievement } from '../types';
 import { useTheme } from '../context/ThemeContext';
+import TerminalPromptBlock from './TerminalPromptBlock';
 
 interface AchievementModalProps {
   achievement: Achievement | null;
@@ -189,20 +190,20 @@ export default function AchievementModal({ achievement, onClose }: AchievementMo
             </p>
           </div>
 
-          {/* Technical Execution Terminal Box (Matching Project Box) */}
+          {/* Technical Execution Terminal Box (Matching Real Linux Terminal) */}
           <div
             style={{
               width: '100%',
               borderRadius: '6px',
               overflow: 'hidden',
-              border: '1px solid var(--border-card)',
-              backgroundColor: isLight ? '#EFEFEA' : '#090909',
+              border: isLight ? '1px solid rgba(0, 0, 0, 0.12)' : '1px solid rgba(255, 255, 255, 0.10)',
+              backgroundColor: isLight ? '#F5F6F8' : '#08090B',
               display: 'flex',
               flexDirection: 'column',
               fontFamily: 'var(--font-mono)',
-              fontSize: '0.74rem',
+              fontSize: '0.73rem',
               lineHeight: 1.55,
-              boxShadow: isLight ? '0 4px 16px rgba(0,0,0,0.04)' : '0 4px 20px rgba(0,0,0,0.5)',
+              boxShadow: isLight ? '0 4px 16px rgba(0,0,0,0.04)' : '0 4px 20px rgba(0,0,0,0.55)',
             }}
           >
             {/* Terminal Title Bar */}
@@ -213,17 +214,53 @@ export default function AchievementModal({ achievement, onClose }: AchievementMo
                 justifyContent: 'space-between',
                 height: '32px',
                 padding: '0 0.85rem',
-                backgroundColor: isLight ? '#E2E2DC' : '#111111',
-                borderBottom: '1px solid',
-                borderColor: isLight ? 'var(--border-subtle)' : '#1C1C1C',
+                backgroundColor: isLight ? '#E5E7EB' : '#111318',
+                borderBottom: isLight ? '1px solid rgba(0, 0, 0, 0.08)' : '1px solid rgba(255, 255, 255, 0.08)',
                 userSelect: 'none',
               }}
             >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                <span style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#2A2A2A', display: 'inline-block' }} />
-                <span style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#2A2A2A', display: 'inline-block' }} />
-                <span style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#2A2A2A', display: 'inline-block' }} />
-                <span style={{ marginLeft: '0.4rem', fontSize: '0.7rem', color: 'var(--text-dim)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+                  <span
+                    style={{
+                      width: '7.5px',
+                      height: '7.5px',
+                      borderRadius: '50%',
+                      backgroundColor: isLight ? '#D1D5DB' : '#2A2D35',
+                      border: isLight ? '1px solid #9CA3AF' : '1px solid #3F4450',
+                      display: 'inline-block',
+                    }}
+                  />
+                  <span
+                    style={{
+                      width: '7.5px',
+                      height: '7.5px',
+                      borderRadius: '50%',
+                      backgroundColor: isLight ? '#D1D5DB' : '#2A2D35',
+                      border: isLight ? '1px solid #9CA3AF' : '1px solid #3F4450',
+                      display: 'inline-block',
+                    }}
+                  />
+                  <span
+                    style={{
+                      width: '7.5px',
+                      height: '7.5px',
+                      borderRadius: '50%',
+                      backgroundColor: isLight ? '#D1D5DB' : '#2A2D35',
+                      border: isLight ? '1px solid #9CA3AF' : '1px solid #3F4450',
+                      display: 'inline-block',
+                    }}
+                  />
+                </div>
+                <span
+                  style={{
+                    marginLeft: '0.45rem',
+                    fontSize: '0.7rem',
+                    color: isLight ? '#555A63' : '#8B8F98',
+                    letterSpacing: '0.02em',
+                    fontWeight: 500,
+                  }}
+                >
                   {scriptName}
                 </span>
               </div>
@@ -231,15 +268,23 @@ export default function AchievementModal({ achievement, onClose }: AchievementMo
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
                 <span
                   style={{
-                    width: '5px',
-                    height: '5px',
+                    width: '4.5px',
+                    height: '4.5px',
                     borderRadius: '50%',
                     backgroundColor: 'var(--accent-amber)',
-                    boxShadow: '0 0 6px var(--accent-amber-glow)',
+                    boxShadow: '0 0 6px var(--accent-amber)',
                     display: 'inline-block',
                   }}
                 />
-                <span style={{ fontSize: '0.65rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                <span
+                  style={{
+                    fontSize: '0.64rem',
+                    color: isLight ? '#555A63' : '#8B8F98',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.06em',
+                    fontWeight: 600,
+                  }}
+                >
                   eval · ok
                 </span>
               </div>
@@ -252,41 +297,42 @@ export default function AchievementModal({ achievement, onClose }: AchievementMo
                 display: 'flex',
                 flexDirection: 'column',
                 gap: '0.28rem',
-                backgroundColor: isLight ? '#F5F5F2' : '#080808',
-                color: isLight ? '#222220' : '#D0D0D0',
+                backgroundColor: isLight ? '#F5F6F8' : '#08090B',
+                color: isLight ? '#1A1D24' : '#E6E6E6',
               }}
             >
-              <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.45rem' }}>
-                <span style={{ color: isLight ? '#777770' : '#666666' }}>kushal@edge:~$</span>
-                <span style={{ color: isLight ? '#0A0A0A' : '#FFFFFF', fontWeight: 500 }}>
-                  ./eval --achievement {achievement.id}
-                </span>
-              </div>
+              <TerminalPromptBlock
+                path={`~/achievements/${achievement.id}`}
+                user="kushal@portfolio"
+                commandText={`run ./eval --achievement ${achievement.id}`}
+                compact={true}
+                accentColor="var(--accent-amber)"
+              />
 
-              <div style={{ display: 'flex', gap: '0.4rem', color: isLight ? '#555550' : '#888888' }}>
-                <span style={{ color: isLight ? '#888880' : '#555555' }}>[arch]</span>
-                <span style={{ color: isLight ? '#1A1A18' : '#CCCCCC' }}>
+              <div style={{ display: 'flex', gap: '0.45rem' }}>
+                <span style={{ color: isLight ? '#7A808C' : '#555A63', flexShrink: 0 }}>[arch]</span>
+                <span style={{ color: isLight ? '#2D3139' : '#D0D3DA' }}>
                   {isExportify ? 'Operations Research & Multi-Criteria Trade Matching Engine' : 'Temporal Multi-Tracking & Behavioral Risk Gradient Engine'}
                 </span>
               </div>
 
-              <div style={{ display: 'flex', gap: '0.4rem', color: isLight ? '#555550' : '#888888' }}>
-                <span style={{ color: isLight ? '#888880' : '#555555' }}>[pipe]</span>
-                <span style={{ color: isLight ? '#2A2A26' : '#B8B8B8' }}>
+              <div style={{ display: 'flex', gap: '0.45rem' }}>
+                <span style={{ color: isLight ? '#7A808C' : '#555A63', flexShrink: 0 }}>[pipe]</span>
+                <span style={{ color: isLight ? '#4B5262' : '#A6AAB4' }}>
                   {isExportify ? 'Weighted Scoring · Capacity Constraints · Dynamic Lead-Time Risk Indexing' : 'Edge Inference · Frame Permutation · 0-100 Behavioral Risk Scoring'}
                 </span>
               </div>
 
-              <div style={{ display: 'flex', gap: '0.4rem', marginTop: '0.1rem' }}>
-                <span style={{ color: isLight ? '#888880' : '#555555' }}>[eval]</span>
+              <div style={{ display: 'flex', gap: '0.45rem', marginTop: '0.08rem' }}>
+                <span style={{ color: isLight ? '#7A808C' : '#555A63', flexShrink: 0 }}>[eval]</span>
                 <span style={{ color: isLight ? '#111111' : '#FFFFFF' }}>
                   Result: <strong style={{ fontWeight: 600, color: 'var(--accent-amber)' }}>{achievement.badge}</strong>
                 </span>
               </div>
 
-              <div style={{ display: 'flex', gap: '0.4rem', color: isLight ? '#555550' : '#888888' }}>
-                <span style={{ color: isLight ? '#888880' : '#555555' }}>[stack]</span>
-                <span style={{ color: isLight ? '#444440' : '#AAAAAA' }}>
+              <div style={{ display: 'flex', gap: '0.45rem' }}>
+                <span style={{ color: isLight ? '#7A808C' : '#555A63', flexShrink: 0 }}>[stack]</span>
+                <span style={{ color: isLight ? '#555A63' : '#8B8F98' }}>
                   {tags.slice(0, 4).join(' · ')}
                 </span>
               </div>
@@ -299,29 +345,26 @@ export default function AchievementModal({ achievement, onClose }: AchievementMo
                   justifyContent: 'space-between',
                   marginTop: '0.4rem',
                   paddingTop: '0.35rem',
-                  borderTop: '1px solid',
-                  borderColor: isLight ? '#E5E5E0' : '#141414',
+                  borderTop: isLight ? '1px solid rgba(0, 0, 0, 0.08)' : '1px solid rgba(255, 255, 255, 0.08)',
                   fontSize: '0.68rem',
-                  color: isLight ? '#777770' : '#666666',
                 }}
               >
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
                   <span>
-                    <span style={{ color: isLight ? '#777770' : '#666666' }}>kushal@edge:</span>
+                    <span style={{ color: isLight ? '#555A63' : '#8B8F98' }}>kushal@edge</span>
+                    <span style={{ color: isLight ? '#7A808C' : '#555A63' }}>:</span>
                     <span style={{ color: 'var(--accent-amber)' }}>~$</span>
                   </span>
                   <span
-                    className="cursor-blink"
+                    className="terminal-cursor-block amber"
                     style={{
-                      display: 'inline-block',
                       width: '6px',
                       height: '1.05em',
-                      backgroundColor: 'var(--accent-amber)',
                     }}
                   />
                 </div>
 
-                <span style={{ fontSize: '0.65rem', color: isLight ? '#888880' : '#555555' }}>
+                <span style={{ fontSize: '0.65rem', color: isLight ? '#7A808C' : '#555A63' }}>
                   verified evaluation output ✓
                 </span>
               </div>

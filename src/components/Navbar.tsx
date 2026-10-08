@@ -11,6 +11,7 @@ const NAV_LINKS = [
   { label: '/me', href: '#me' },
   { label: '/about', href: '#about' },
   { label: '/education', href: '#education' },
+  { label: '/experience', href: '#experience' },
   { label: '/projects', href: '#projects' },
   { label: '/achievements', href: '#achievements' },
   { label: '/skills', href: '#skills' },
@@ -35,7 +36,7 @@ export default function Navbar() {
           setIsScrolled(scrollY > 25);
 
           // Section spy
-          const sections = ['me', 'about', 'education', 'projects', 'achievements', 'skills', 'contact'];
+          const sections = ['me', 'about', 'education', 'experience', 'projects', 'achievements', 'skills', 'contact'];
           const scrollPos = scrollY + 200;
 
           for (let i = sections.length - 1; i >= 0; i--) {
@@ -61,7 +62,7 @@ export default function Navbar() {
         position: 'sticky',
         top: '12px',
         zIndex: 50,
-        width: '94vw',
+        width: 'min(94%, 1560px)',
         maxWidth: '1560px',
         margin: '0 auto',
         padding: '0 clamp(10px, 2vw, 24px)',

@@ -260,9 +260,9 @@ body::before {
   color: var(--text-muted);
 }
 
-/* Container — Unified 94vw Canvas (max 1560px) across Hero & All Sections */
+/* Container — Unified Canvas (max 1560px) across Hero & All Sections that reflows when docked */
 .container {
-  width: 94vw;
+  width: min(94%, 1560px);
   max-width: 1560px;
   margin-left: auto;
   margin-right: auto;
@@ -281,7 +281,7 @@ body::before {
 
 @media (max-width: 1024px) {
   .container {
-    width: 94vw;
+    width: 94%;
     padding-left: 32px;
     padding-right: 32px;
   }
@@ -549,6 +549,22 @@ body::before {
   border-color: var(--border-hover) !important;
 }
 
+/* Experience Cards: Soft Amber Accent (Matches Achievements) */
+.experience-card-item {
+  --card-spotlight: rgba(214, 168, 95, 0.08);
+  border-left: 2px solid transparent !important;
+}
+
+.experience-card-item:hover {
+  border-left-color: var(--accent-amber) !important;
+  border-color: var(--accent-amber-border) !important;
+}
+
+.experience-card-item:hover .experience-arrow {
+  color: var(--accent-amber) !important;
+  transform: translate(3px, -3px);
+}
+
 /* Skill Cards & Tags: Violet Accent */
 .skill-card-item {
   --card-spotlight: rgba(139, 124, 255, 0.07);
@@ -657,6 +673,21 @@ body::before {
   vertical-align: -0.15em;
   margin-left: 2px;
   animation: blink 1.1s infinite;
+}
+
+/* Real Linux Terminal Block Cursor */
+.terminal-cursor-block {
+  display: inline-block;
+  width: 7px;
+  height: 1.12em;
+  background-color: var(--accent-blue);
+  vertical-align: -0.15em;
+  margin-left: 2px;
+  animation: blink 1.05s infinite;
+}
+
+.terminal-cursor-block.amber {
+  background-color: var(--accent-amber);
 }
 
 .accent-text {
@@ -785,6 +816,37 @@ body::before {
 .stagger-3 { animation-delay: 120ms !important; }
 .stagger-4 { animation-delay: 160ms !important; }
 
+/* Subtle Experience Section Entrance Reveal */
+@keyframes experienceSectionFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(var(--reveal-y, 14px));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.experience-reveal {
+  animation: experienceSectionFadeIn 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.experience-reveal-heading {
+  --reveal-y: 12px;
+  animation-delay: 60ms;
+}
+
+.experience-reveal-desc {
+  --reveal-y: 12px;
+  animation-delay: 120ms;
+}
+
+.experience-reveal-card {
+  --reveal-y: 16px;
+  animation-delay: 180ms;
+}
+
 /* Respect Reduced Motion */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
@@ -794,6 +856,7 @@ body::before {
     scroll-behavior: auto !important;
   }
 
+  .experience-reveal,
   .portfolio-card-open,
   .portfolio-open-animation,
   .portfolio-reveal-item,
@@ -803,3 +866,4 @@ body::before {
     transform: none !important;
   }
 }
+

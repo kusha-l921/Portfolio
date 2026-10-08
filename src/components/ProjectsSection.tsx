@@ -1,27 +1,76 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
+import { motion, useScroll, useTransform, useSpring, useReducedMotion } from 'framer-motion';
 import { PROJECTS_DATA } from '../data/portfolioData';
 import { Project } from '../types';
 import ProjectModal from './ProjectModal';
-import ProjectTerminalBox from './ProjectTerminalBox';
+import ProjectStackItem from './ProjectStackItem';
 
 const FILTERS = ['All', 'AI / ML', 'Computer Vision', 'Systems'] as const;
 
 export default function ProjectsSection() {
   const [selectedFilter, setSelectedFilter] = useState<string>('All');
   const [activeModalProject, setActiveModalProject] = useState<Project | null>(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth <= 860);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const filteredProjects = PROJECTS_DATA.filter((proj) => {
     if (selectedFilter === 'All') return true;
     return proj.category === selectedFilter;
   });
 
+  const count = filteredProjects.length;
+
+  const stageRef = useRef<HTMLDivElement>(null);
+  const shouldReduceMotion = useReducedMotion();
+
+  const { scrollYProgress } = useScroll({
+    target: stageRef,
+    offset: ['start start', 'end end'],
+  });
+
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 90,
+    damping: 24,
+    mass: 0.7,
+  });
+
+  const progressToUse = shouldReduceMotion ? scrollYProgress : smoothProgress;
+
+  // For N projects, the transition from project 0 to project N-1 completes at (count - 1) / count.
+  // The final project then remains comfortably settled and centered for the remaining progress interval.
+  const lastSettlePoint = count > 1 ? (count - 1) / count : 1;
+  const maxOffsetVw = count > 1 ? (count - 1) * 100 : 0;
+
+  const trackX = useTransform(
+    progressToUse,
+    count > 1 ? [0, lastSettlePoint, 1] : [0, 1],
+    count > 1 ? ['0vw', `-${maxOffsetVw}vw`, `-${maxOffsetVw}vw`] : ['0vw', '0vw']
+  );
+
+  const handleFilterChange = (f: string) => {
+    setSelectedFilter(f);
+    if (stageRef.current) {
+      const rect = stageRef.current.getBoundingClientRect();
+      if (rect.top < 0) {
+        const targetScroll = window.scrollY + rect.top - 70;
+        window.scrollTo({ top: targetScroll, behavior: 'smooth' });
+      }
+    }
+  };
+
   return (
-    <section id="projects" className="section">
+    <section id="projects" className="section" style={{ position: 'relative', paddingBottom: '3.5rem' }}>
       <div className="container">
         {/* Section Header */}
-        <div className="section-header">
+        <div className="section-header" style={{ marginBottom: '2.25rem' }}>
           <div className="terminal-label">
             <span>&gt; projects/</span>
           </div>
@@ -46,7 +95,7 @@ export default function ProjectsSection() {
               return (
                 <button
                   key={f}
-                  onClick={() => setSelectedFilter(f)}
+                  onClick={() => handleFilterChange(f)}
                   className="font-mono"
                   style={{
                     fontSize: '0.8rem',
@@ -79,221 +128,80 @@ export default function ProjectsSection() {
             })}
           </div>
         </div>
+      </div>
 
-        {/* Project Full-Width Panels List */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.75rem' }}>
-          {filteredProjects.map((project) => (
-            <div
+      {/* Responsive Presentation: Desktop/Tablet Horizontal Stage vs Mobile Vertical Flow */}
+      {isMobile ? (
+        <div className="container" style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+          {filteredProjects.map((project, index) => (
+            <ProjectStackItem
               key={project.id}
-              id={`project-${project.id}`}
-              className="card project-card-item"
+              project={project}
+              index={index}
+              total={count}
+              onSelectProject={setActiveModalProject}
+            />
+          ))}
+        </div>
+      ) : (
+        <div
+          ref={stageRef}
+          className="projects-horizontal-stage"
+          style={{
+            position: 'relative',
+            width: '100%',
+            height: `${Math.max(1, count) * 100}svh`,
+          }}
+        >
+          <div
+            className="projects-horizontal-viewport"
+            style={{
+              position: 'sticky',
+              top: 0,
+              height: '100svh',
+              width: '100%',
+              overflow: 'hidden',
+              display: 'flex',
+              alignItems: 'center',
+            }}
+          >
+            <motion.div
+              className="projects-horizontal-track"
               style={{
-                borderRadius: '8px',
-                backgroundColor: 'var(--bg-card)',
-                border: '1px solid var(--border-card)',
-                overflow: 'hidden',
-                transition: 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
-                scrollMarginTop: '100px',
+                display: 'flex',
+                width: `${Math.max(1, count) * 100}vw`,
+                height: '100%',
+                x: trackX,
+                willChange: 'transform',
               }}
             >
-              <div
-                style={{
-                  display: 'grid',
-                  gridTemplateColumns: 'minmax(0, 1.55fr) minmax(0, 1fr)',
-                  gap: 'clamp(1.5rem, 3.5vw, 3rem)',
-                  padding: 'clamp(1.5rem, 3vw, 2.5rem)',
-                  alignItems: 'center',
-                }}
-                className="project-grid"
-              >
-                {/* Left: Project Information */}
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                  {/* Micro header: Number + Category */}
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
-                    <span
-                      className="font-mono"
-                      style={{
-                        fontSize: '0.82rem',
-                        color: 'var(--text-muted)',
-                      }}
-                    >
-                      {project.number}
-                    </span>
-                    <span style={{ color: 'var(--border-card)' }}>·</span>
-                    <span
-                      className="font-mono"
-                      style={{
-                        fontSize: '0.75rem',
-                        color: 'var(--text-secondary)',
-                        textTransform: 'uppercase',
-                        letterSpacing: '0.05em',
-                      }}
-                    >
-                      {project.category}
-                    </span>
-                    <span style={{ color: 'var(--border-card)' }}>·</span>
-                    <span
-                      className="font-mono"
-                      style={{
-                        fontSize: '0.75rem',
-                        color: 'var(--text-muted)',
-                      }}
-                    >
-                      {project.period}
-                    </span>
-                  </div>
-
-                  {/* Title (Large Desktop Scale 28-36px) */}
-                  <h3
-                    className="project-title"
-                    style={{
-                      fontSize: 'clamp(1.5rem, 2.3vw, 2.15rem)',
-                      fontWeight: 700,
-                      color: 'var(--text-primary)',
-                      letterSpacing: '-0.025em',
-                      lineHeight: 1.18,
-                      transition: 'transform 0.2s ease',
-                      cursor: 'pointer',
-                    }}
-                    onClick={() => setActiveModalProject(project)}
-                  >
-                    {project.title}
-                  </h3>
-
-                  {/* Tagline / Description */}
-                  <p
-                    style={{
-                      fontSize: 'clamp(0.95rem, 1.15vw, 1.05rem)',
-                      color: 'var(--text-secondary)',
-                      lineHeight: 1.65,
-                    }}
-                  >
-                    {project.tagline}
-                  </p>
-
-                  {/* Technology Tags */}
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.45rem' }}>
-                    {project.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="font-mono"
-                        style={{
-                          fontSize: '0.76rem',
-                          padding: '0.25rem 0.6rem',
-                          borderRadius: '4px',
-                          backgroundColor: 'var(--bg-surface)',
-                          border: '1px solid var(--border-subtle)',
-                          color: 'var(--text-light)',
-                        }}
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-
-                  {/* Verified Key Metric Pill */}
-                  {project.results.length > 0 && (
-                    <div
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '0.6rem',
-                        padding: '0.45rem 0.85rem',
-                        borderRadius: '6px',
-                        backgroundColor: 'var(--bg-surface)',
-                        border: '1px solid var(--border-subtle)',
-                        width: 'fit-content',
-                      }}
-                    >
-                      <span className="font-mono" style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>
-                        {project.results[0].metric}:
-                      </span>
-                      <span
-                        className="font-mono"
-                        style={{ fontSize: '0.82rem', color: 'var(--text-white)', fontWeight: 600 }}
-                      >
-                        {project.results[0].value}
-                      </span>
-                      <span style={{ fontSize: '0.74rem', color: 'var(--text-muted)' }}>
-                        ({project.results[0].detail})
-                      </span>
-                    </div>
-                  )}
-
-                  {/* Action Buttons */}
-                  <div
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '1.25rem',
-                      marginTop: '0.5rem',
-                    }}
-                  >
-                    <button
-                      onClick={() => setActiveModalProject(project)}
-                      className="project-action-btn font-mono"
-                      style={{
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        gap: '0.5rem',
-                        fontSize: '0.84rem',
-                        color: 'var(--text-white)',
-                        background: 'transparent',
-                        border: 'none',
-                        cursor: 'pointer',
-                        padding: 0,
-                      }}
-                    >
-                      <span>View Details</span>
-                      <span className="project-arrow" style={{ transition: 'transform 0.2s ease' }}>
-                        →
-                      </span>
-                    </button>
-
-                    <a
-                      href={project.githubUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="font-mono"
-                      style={{
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        gap: '0.4rem',
-                        fontSize: '0.84rem',
-                        color: 'var(--text-secondary)',
-                        textDecoration: 'none',
-                        transition: 'color 0.18s ease',
-                      }}
-                      onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--text-white)')}
-                      onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--text-secondary)')}
-                    >
-                      <span>GitHub</span>
-                      <span style={{ fontSize: '0.9rem' }}>↗</span>
-                    </a>
-                  </div>
-                </div>
-
-                {/* Right: Technical Terminal Preview Box */}
+              {filteredProjects.map((project, index) => (
                 <div
-                  className="project-preview-wrapper"
+                  key={project.id}
+                  className="project-horizontal-slide"
                   style={{
-                    position: 'relative',
-                    width: '100%',
+                    width: '100vw',
+                    minWidth: '100vw',
                     height: '100%',
                     display: 'flex',
                     alignItems: 'center',
+                    justifyContent: 'center',
+                    boxSizing: 'border-box',
+                    padding: 'clamp(64px, 8.5vh, 80px) clamp(1rem, 2.5vw, 2.5rem) 1.5rem',
                   }}
                 >
-                  <ProjectTerminalBox
+                  <ProjectStackItem
                     project={project}
-                    onClick={() => setActiveModalProject(project)}
+                    index={index}
+                    total={count}
+                    onSelectProject={setActiveModalProject}
                   />
                 </div>
-              </div>
-            </div>
-          ))}
+              ))}
+            </motion.div>
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Project Detail Modal */}
       <ProjectModal
@@ -308,11 +216,8 @@ export default function ProjectsSection() {
             gap: 1.5rem !important;
           }
           .project-preview-wrapper {
-            height: 200px !important;
+            min-height: 230px !important;
           }
-        }
-        .project-preview-wrapper:hover .project-overlay-hint {
-          opacity: 1 !important;
         }
       `}</style>
     </section>

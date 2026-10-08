@@ -1,13 +1,16 @@
 'use client';
 
-import React, { useState, useRef, useEffect } from 'react';
-import { useTerminal } from '../context/TerminalContext';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
+import { useTerminal, DockPosition } from '../context/TerminalContext';
 import { useTheme } from '../context/ThemeContext';
+import TerminalPromptBlock from './TerminalPromptBlock';
 
 interface TerminalLine {
   id: string;
   type: 'command' | 'output' | 'info';
-  text: string;
+  text?: string;
+  cmdText?: string;
+  path?: string;
 }
 
 const KNOWN_COMMANDS = [
@@ -16,9 +19,12 @@ const KNOWN_COMMANDS = [
   'pwd',
   'ls',
   'whoami',
+  'sysfetch',
+  'uname',
   'home',
   'about',
   'education',
+  'experience',
   'projects',
   'achievements',
   'skills',
@@ -26,18 +32,13 @@ const KNOWN_COMMANDS = [
   'resume',
   'cd about',
   'cd education',
+  'cd experience',
   'cd projects',
   'cd achievements',
   'cd skills',
   'cd contact',
   'cd ~',
   'cd ..',
-  'cd ../..',
-  'cd projects/prometheus',
-  'cd projects/llm-council',
-  'cd projects/solarflare',
-  'cd projects/fieldsight',
-  'cd projects/firsefile',
   'cd prometheus',
   'cd llm-council',
   'cd solarflare',
@@ -45,59 +46,128 @@ const KNOWN_COMMANDS = [
   'cd firsefile',
   'sudo light-mode',
   'sudo dark-mode',
-  'sudo about',
-  'sudo projects',
-  'sudo achievements',
-  'sudo contact',
   'theme light',
   'theme dark',
 ];
 
 export default function PortfolioTerminal() {
-  const { isOpen, closeTerminal } = useTerminal();
-  const { theme, toggleTheme } = useTheme();
+  const {
+    isOpen,
+    closeTerminal,
+    dock,
+    setDock,
+    dockWidth,
+    setDockWidth,
+    dockHeight,
+    setDockHeight,
+    floatingPos,
+    setFloatingPos,
+    isDragging,
+    setIsDragging,
+  } = useTerminal();
 
+  const { theme, toggleTheme } = useTheme();
+  const isLight = theme === 'light';
+
+  // State
   const [currentPath, setCurrentPath] = useState('~');
-  const [activeTab, setActiveTab] = useState<'terminal' | 'output'>('terminal');
   const [inputVal, setInputVal] = useState('');
+  const [ghostDock, setGhostDock] = useState<DockPosition | null>(null);
+  const [isMobile, setIsMobile] = useState(false);
+
   const [history, setHistory] = useState<TerminalLine[]>([
     {
-      id: 'init-1',
+      id: 'init-info',
       type: 'info',
-      text: 'Kushal Patel — Interactive Portfolio Shell [v2.4 x86_64]',
-    },
-    {
-      id: 'init-2',
-      type: 'output',
-      text: "Type 'help' for commands, 'cd projects' to browse work, or 'sudo light-mode' / 'sudo dark-mode' to switch theme.\nUse [Tab] to autocomplete and [↑/↓] for history. Press Ctrl+` or T to toggle panel.",
+      text:
+        "Kushal Patel — Interactive Workspace Shell\n" +
+        "Type 'help' for navigation & utilities, or 'cd projects' to inspect work.\n" +
+        "Drag header to move/dock. Use controls to snap Left, Right, Bottom or Float.",
     },
   ]);
   const [commandHistory, setCommandHistory] = useState<string[]>([]);
   const [historyIdx, setHistoryIdx] = useState<number>(-1);
 
+  // Refs
   const inputRef = useRef<HTMLInputElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const terminalRef = useRef<HTMLDivElement>(null);
+
+  // Drag ref tracking
+  const dragRef = useRef<{
+    startX: number;
+    startY: number;
+    initialX: number;
+    initialY: number;
+    initialDock: DockPosition;
+    active: boolean;
+  }>({
+    startX: 0,
+    startY: 0,
+    initialX: 0,
+    initialY: 0,
+    initialDock: 'bottom',
+    active: false,
+  });
+
+  // Resize ref tracking
+  const resizeRef = useRef<{
+    active: boolean;
+    handle: string;
+    startX: number;
+    startY: number;
+    startW: number;
+    startH: number;
+    startPosX: number;
+    startPosY: number;
+  }>({
+    active: false,
+    handle: '',
+    startX: 0,
+    startY: 0,
+    startW: 0,
+    startH: 0,
+    startPosX: 0,
+    startPosY: 0,
+  });
+
+  // Check mobile screen
+  useEffect(() => {
+    const checkScreen = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    checkScreen();
+    window.addEventListener('resize', checkScreen);
+    return () => window.removeEventListener('resize', checkScreen);
+  }, []);
 
   // Auto-focus when opened
   useEffect(() => {
     if (isOpen) {
       const timer = setTimeout(() => {
         inputRef.current?.focus();
-      }, 60);
+      }, 70);
       return () => clearTimeout(timer);
     }
   }, [isOpen]);
 
-  // Auto-scroll to bottom of terminal screen
+  // Auto-scroll to bottom of terminal
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
   }, [history, inputVal, isOpen]);
 
-  const getPromptString = () => {
-    if (currentPath === '~') return 'kushal@portfolio:~$ ';
-    return `kushal@portfolio:${currentPath}$ `;
+  // Color Palette — Minimal Developer Workspace
+  const colors = {
+    bgBase: isLight ? '#F5F6F8' : '#090A0D',
+    bgHeader: isLight ? '#E5E7EB' : '#12141A',
+    border: isLight ? 'rgba(0, 0, 0, 0.12)' : 'rgba(255, 255, 255, 0.10)',
+    borderSubtle: isLight ? 'rgba(0, 0, 0, 0.08)' : 'rgba(255, 255, 255, 0.07)',
+    textPrimary: isLight ? '#1A1D24' : '#E6E6E6',
+    textSecondary: isLight ? '#555A63' : '#8B8F98',
+    textMuted: isLight ? '#7A808C' : '#555A63',
+    accent: isLight ? '#3E72EC' : '#5B8CFF',
   };
 
   const smoothScrollTo = (targetId: string) => {
@@ -107,19 +177,13 @@ export default function PortfolioTerminal() {
     }
   };
 
+  // Command Execution
   const handleCommand = (rawInput: string) => {
     const trimmed = rawInput.trim();
     if (!trimmed) return;
 
     setCommandHistory((prev) => [...prev, trimmed]);
     setHistoryIdx(-1);
-
-    const promptText = `${getPromptString()}${trimmed}`;
-    const userCmdEntry: TerminalLine = {
-      id: `cmd-${Date.now()}`,
-      type: 'command',
-      text: promptText,
-    };
 
     const cmdLower = trimmed.toLowerCase();
 
@@ -130,247 +194,199 @@ export default function PortfolioTerminal() {
       return;
     }
 
+    const userCmdEntry: TerminalLine = {
+      id: `cmd-${Date.now()}`,
+      type: 'command',
+      cmdText: trimmed,
+      path: currentPath,
+    };
+
     let response = '';
 
     // 2. HELP
     if (cmdLower === 'help') {
       response =
-        "Available commands:\n" +
-        "  navigation:  cd about | cd education | cd projects | cd achievements | cd skills | cd contact | cd ~\n" +
-        "  projects:    cd prometheus | cd llm-council | cd solarflare | cd fieldsight | cd firsefile\n" +
-        "  utilities:   ls, pwd, whoami, clear, resume, help\n" +
-        "  theme:       sudo light-mode | sudo dark-mode | theme light | theme dark\n" +
-        "  shortcuts:   [tab] autocomplete, [↑/↓] history, [ctrl+` / T] toggle terminal";
+        "Kushal Patel — Terminal Navigation & Workspace Commands\n\n" +
+        "SECTIONS:\n" +
+        "  cd about         Navigate to Personal Profile & Background\n" +
+        "  cd education     Dwarkadas J. Sanghvi College of Engineering\n" +
+        "  cd experience    iPolygon — AI/ML & Product Development Intern\n" +
+        "  cd projects      Selected Work & Benchmarks\n" +
+        "  cd achievements  LOC 8.0 Winner & Drishti AI 1st Runner-Up\n" +
+        "  cd skills        Machine Learning, PyTorch, Edge AI toolchain\n" +
+        "  cd contact       Direct communication & verified profiles\n" +
+        "  cd ~ | home      Return to Hero overview\n\n" +
+        "PROJECT SPECIFICS:\n" +
+        "  cd prometheus    LLM prompt detection & requirements\n" +
+        "  cd llm-council   Stateful multi-agent DAG consensus\n" +
+        "  cd solarflare    Vision Transformer for solar flare prediction\n" +
+        "  cd fieldsight    Edge vision defect detection\n" +
+        "  cd firsefile     Forensic Swin Transformer carving platform\n\n" +
+        "UTILITIES:\n" +
+        "  pwd, ls, whoami, sysfetch, clear, resume, help\n" +
+        "  sudo light-mode | sudo dark-mode | theme light | theme dark\n\n" +
+        "TIPS:\n" +
+        "  [Tab] Autocomplete   [↑/↓] Command history   [Ctrl+` / T] Toggle terminal";
     }
 
     // 3. WHOAMI
     else if (cmdLower === 'whoami') {
-      response = 'Kushal Patel — AI/ML Engineer · Systems Builder\nDwarkadas J. Sanghvi College of Engineering, Mumbai';
+      response =
+        "kushal (Kushal Patel) — AI/ML Engineer · Systems Builder\n" +
+        "Dwarkadas J. Sanghvi College of Engineering, Mumbai\n" +
+        "Specialization: Deep Learning, Computer Vision, Multi-Agent LLMs, Edge AI.";
     }
 
-    // 4. PWD
+    // 4. SYSFETCH
+    else if (cmdLower === 'sysfetch' || cmdLower === 'neofetch' || cmdLower === 'fetch') {
+      response =
+        "--------------------------------------------------\n" +
+        "  OS:        Kushal Patel Portfolio Workspace v2.4\n" +
+        "  Host:      Next.js 14 · React 18 · TypeScript\n" +
+        "  Kernel:    Linux / WebAssembly Preempt Engine\n" +
+        "  Role:      AI/ML & Product Development Intern @ iPolygon\n" +
+        "  College:   D.J. Sanghvi College of Engineering, Mumbai\n" +
+        "  Toolkit:   PyTorch, OpenCV, Transformers, Docker, FastAPI\n" +
+        "  Hardware:  RTX 4060 GPU / Apple Silicon Accelerators\n" +
+        "  Status:    Active Session · All systems nominal\n" +
+        "--------------------------------------------------";
+    }
+
+    // 5. UNAME
+    else if (cmdLower === 'uname' || cmdLower === 'uname -a') {
+      response = "Linux portfolio-core 6.10.8-arch1-1 #1 SMP PREEMPT_DYNAMIC x86_64 GNU/Linux";
+    }
+
+    // 6. PWD
     else if (cmdLower === 'pwd') {
-      const relative = currentPath.replace('~', '');
-      response = `/home/kushal${relative || ''}`;
+      if (currentPath === '~') response = '/home/kushal';
+      else response = `/home/kushal/${currentPath.replace('~/', '')}`;
     }
 
-    // 5. RESUME
-    else if (cmdLower === 'resume' || cmdLower === 'download resume') {
-      response = 'downloading Kushal_Patel_Resume.pdf...';
-      const link = document.createElement('a');
-      link.href = '/docs/Kushal_Patel_Resume.pdf';
-      link.download = 'Kushal_Patel_Resume.pdf';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    }
-
-    // 6. LS
-    else if (cmdLower === 'ls' || cmdLower.startsWith('ls ')) {
+    // 7. LS
+    else if (cmdLower === 'ls' || cmdLower === 'ls -la' || cmdLower === 'ls -l') {
       if (currentPath === '~') {
-        response = 'about/        education/    projects/     achievements/ skills/       contact/      resume.pdf';
+        response =
+          "drwxr-xr-x  about/\n" +
+          "drwxr-xr-x  education/\n" +
+          "drwxr-xr-x  experience/\n" +
+          "drwxr-xr-x  projects/\n" +
+          "drwxr-xr-x  achievements/\n" +
+          "drwxr-xr-x  skills/\n" +
+          "drwxr-xr-x  contact/\n" +
+          "-rw-r--r--  Kushal_Patel_Resume.pdf";
       } else if (currentPath === '~/projects') {
-        response = '01 prometheus/  02 llm-council/  03 solarflare/  04 fieldsight/  05 firsefile/';
-      } else if (currentPath === '~/achievements') {
-        response = '01 exportify-loc8.log   02 copycop-drishti.log';
-      } else if (currentPath.startsWith('~/projects/')) {
-        response = 'overview.md   architecture.onnx   empirical_metrics.csv   github_repo.url';
-      } else if (currentPath === '~/about') {
-        response = 'bio.txt   interests.json   domains.list   academic_background.md';
-      } else if (currentPath === '~/education') {
-        response = 'djsanghvi_coe.md   curriculum.txt   competitive_honors.log';
-      } else if (currentPath === '~/skills') {
-        response = 'machine_learning.py   computer_vision.onnx   development.cpp   web_tools.ts';
-      } else if (currentPath === '~/contact') {
-        response = 'direct_email.txt   github.url   linkedin.url';
+        response =
+          "drwxr-xr-x  prometheus/     (Prompt Requirement Extraction)\n" +
+          "drwxr-xr-x  llm-council/    (Multi-Agent DAG Consensus)\n" +
+          "drwxr-xr-x  solarflare/     (Spatiotemporal Vision Transformer)\n" +
+          "drwxr-xr-x  fieldsight/     (Edge Defect Vision Engine)\n" +
+          "drwxr-xr-x  firsefile/      (Forensic Swin Transformer)";
       } else {
-        response = 'README.md';
+        response = "total 2\n-rw-r--r--  README.md\n-rwxr-xr-x  eval.py";
       }
     }
 
-    // 7. HOME
-    else if (cmdLower === 'home') {
-      response = 'navigating to ~/home...';
+    // 8. RESUME
+    else if (cmdLower === 'resume' || cmdLower === 'cv') {
+      response = "opening /docs/Kushal_Patel_Resume.pdf...";
+      window.open('/docs/Kushal_Patel_Resume.pdf', '_blank');
+    }
+
+    // 9. NAVIGATION
+    else if (cmdLower === 'cd ~' || cmdLower === 'cd' || cmdLower === 'home') {
       setCurrentPath('~');
-      setTimeout(() => smoothScrollTo('me'), 240);
-    }
-
-    // 8. DIRECT SECTION COMMANDS
-    else if (cmdLower === 'about') {
-      response = 'navigating to ~/about...';
-      setCurrentPath('~/about');
-      setTimeout(() => smoothScrollTo('about'), 240);
-    } else if (cmdLower === 'education') {
-      response = 'navigating to ~/education...';
-      setCurrentPath('~/education');
-      setTimeout(() => smoothScrollTo('education'), 240);
-    } else if (cmdLower === 'projects') {
-      response = 'navigating to ~/projects...';
-      setCurrentPath('~/projects');
-      setTimeout(() => smoothScrollTo('projects'), 240);
-    } else if (cmdLower === 'achievements') {
-      response = 'navigating to ~/achievements...';
-      setCurrentPath('~/achievements');
-      setTimeout(() => smoothScrollTo('achievements'), 240);
-    } else if (cmdLower === 'skills') {
-      response = 'navigating to ~/skills...';
-      setCurrentPath('~/skills');
-      setTimeout(() => smoothScrollTo('skills'), 240);
-    } else if (cmdLower === 'contact') {
-      response = 'navigating to ~/contact...';
-      setCurrentPath('~/contact');
-      setTimeout(() => smoothScrollTo('contact'), 240);
-    }
-
-    // 9. SUDO & THEME SWITCHING
-    else if (cmdLower === 'sudo light-mode' || cmdLower === 'theme light') {
-      response = '[sudo] switching interface theme to light mode...';
-      if (theme !== 'light') {
-        toggleTheme();
-      }
-    } else if (cmdLower === 'sudo dark-mode' || cmdLower === 'theme dark') {
-      response = '[sudo] switching interface theme to dark mode...';
-      if (theme !== 'dark') {
-        toggleTheme();
-      }
-    } else if (cmdLower === 'sudo about') {
-      response = '[sudo] authorized navigation: navigating to ~/about...';
-      setCurrentPath('~/about');
-      setTimeout(() => smoothScrollTo('about'), 240);
-    } else if (cmdLower === 'sudo projects') {
-      response = '[sudo] authorized navigation: navigating to ~/projects...';
-      setCurrentPath('~/projects');
-      setTimeout(() => smoothScrollTo('projects'), 240);
-    } else if (cmdLower === 'sudo achievements') {
-      response = '[sudo] authorized navigation: navigating to ~/achievements...';
-      setCurrentPath('~/achievements');
-      setTimeout(() => smoothScrollTo('achievements'), 240);
-    } else if (cmdLower === 'sudo contact') {
-      response = '[sudo] authorized navigation: navigating to ~/contact...';
-      setCurrentPath('~/contact');
-      setTimeout(() => smoothScrollTo('contact'), 240);
-    } else if (cmdLower.startsWith('sudo ')) {
-      response = '[sudo] command recognized. Sudo privileges granted for navigation and theme switches.';
-    }
-
-    // 10. CD COMMANDS & DIRECTORY TRAVERSAL
-    else if (cmdLower === 'cd' || cmdLower === 'cd ~' || cmdLower === 'cd /') {
-      response = 'navigating to ~/home...';
-      setCurrentPath('~');
-      setTimeout(() => smoothScrollTo('me'), 240);
+      smoothScrollTo('me');
+      response = 'navigating to ~ (Hero)';
     } else if (cmdLower === 'cd ..') {
-      if (currentPath.startsWith('~/projects/')) {
-        response = 'navigating to ~/projects...';
+      if (currentPath.includes('/')) {
         setCurrentPath('~/projects');
-        setTimeout(() => smoothScrollTo('projects'), 240);
+        smoothScrollTo('projects');
+        response = 'navigating to ~/projects';
       } else {
-        response = 'navigating to ~/home...';
         setCurrentPath('~');
-        setTimeout(() => smoothScrollTo('me'), 240);
+        smoothScrollTo('me');
+        response = 'navigating to ~';
       }
-    } else if (cmdLower === 'cd ../..' || cmdLower === 'cd ../../') {
-      response = 'navigating to ~/home...';
-      setCurrentPath('~');
-      setTimeout(() => smoothScrollTo('me'), 240);
-    }
-
-    // Section CDs
-    else if (cmdLower === 'cd about' || cmdLower === 'cd /about' || cmdLower === 'cd ~/about') {
-      response = 'navigating to ~/about...';
+    } else if (cmdLower === 'cd about' || cmdLower === 'about') {
       setCurrentPath('~/about');
-      setTimeout(() => smoothScrollTo('about'), 240);
-    } else if (cmdLower === 'cd education' || cmdLower === 'cd /education' || cmdLower === 'cd ~/education') {
-      response = 'navigating to ~/education...';
+      smoothScrollTo('about');
+      response = 'navigating to ~/about';
+    } else if (cmdLower === 'cd education' || cmdLower === 'education') {
       setCurrentPath('~/education');
-      setTimeout(() => smoothScrollTo('education'), 240);
-    } else if (cmdLower === 'cd projects' || cmdLower === 'cd /projects' || cmdLower === 'cd ~/projects') {
-      response = 'navigating to ~/projects...';
+      smoothScrollTo('education');
+      response = 'navigating to ~/education';
+    } else if (cmdLower === 'cd experience' || cmdLower === 'experience') {
+      setCurrentPath('~/experience');
+      smoothScrollTo('experience');
+      response = 'navigating to ~/experience';
+    } else if (cmdLower === 'cd projects' || cmdLower === 'projects') {
       setCurrentPath('~/projects');
-      setTimeout(() => smoothScrollTo('projects'), 240);
-    } else if (cmdLower === 'cd achievements' || cmdLower === 'cd /achievements' || cmdLower === 'cd ~/achievements') {
-      response = 'navigating to ~/achievements...';
+      smoothScrollTo('projects');
+      response = 'navigating to ~/projects';
+    } else if (cmdLower === 'cd achievements' || cmdLower === 'achievements') {
       setCurrentPath('~/achievements');
-      setTimeout(() => smoothScrollTo('achievements'), 240);
-    } else if (cmdLower === 'cd skills' || cmdLower === 'cd /skills' || cmdLower === 'cd ~/skills') {
-      response = 'navigating to ~/skills...';
+      smoothScrollTo('achievements');
+      response = 'navigating to ~/achievements';
+    } else if (cmdLower === 'cd skills' || cmdLower === 'skills') {
       setCurrentPath('~/skills');
-      setTimeout(() => smoothScrollTo('skills'), 240);
-    } else if (cmdLower === 'cd contact' || cmdLower === 'cd /contact' || cmdLower === 'cd ~/contact') {
-      response = 'navigating to ~/contact...';
+      smoothScrollTo('skills');
+      response = 'navigating to ~/skills';
+    } else if (cmdLower === 'cd contact' || cmdLower === 'contact') {
       setCurrentPath('~/contact');
-      setTimeout(() => smoothScrollTo('contact'), 240);
+      smoothScrollTo('contact');
+      response = 'navigating to ~/contact';
     }
 
-    // Project Nested CDs (prometheus, llm-council, solarflare, fieldsight, firsefile, rewear)
-    else if (
-      cmdLower === 'cd prometheus' ||
-      cmdLower === 'cd projects/prometheus' ||
-      cmdLower === 'cd /projects/prometheus'
-    ) {
-      response = 'navigating to ~/projects/prometheus...\n[PROMETHEUS: Browser-based prompt intelligence engine]';
+    // Project deep links
+    else if (cmdLower.includes('prometheus')) {
       setCurrentPath('~/projects/prometheus');
-      setTimeout(() => smoothScrollTo('project-prometheus'), 240);
-    } else if (
-      cmdLower === 'cd llm-council' ||
-      cmdLower === 'cd llm_council' ||
-      cmdLower === 'cd projects/llm-council' ||
-      cmdLower === 'cd projects/llm_council' ||
-      cmdLower === 'cd /projects/llm-council'
-    ) {
-      response = 'navigating to ~/projects/llm-council...\n[LLM Council: Multi-agent reasoning and orchestration system]';
+      smoothScrollTo('project-prometheus');
+      response = 'focusing project: Prometheus (Prompt Detection)';
+    } else if (cmdLower.includes('council')) {
       setCurrentPath('~/projects/llm-council');
-      setTimeout(() => smoothScrollTo('project-llm-council'), 240);
-    } else if (
-      cmdLower === 'cd solarflare' ||
-      cmdLower === 'cd solar-flare' ||
-      cmdLower === 'cd projects/solarflare' ||
-      cmdLower === 'cd projects/solar-flare' ||
-      cmdLower === 'cd /projects/solarflare'
-    ) {
-      response = 'navigating to ~/projects/solarflare...\n[Solar Flare Prediction: Vision Transformer spatiotemporal forecasting]';
+      smoothScrollTo('project-llm-council');
+      response = 'focusing project: LLM-Council (Multi-Agent Consensus)';
+    } else if (cmdLower.includes('solarflare')) {
       setCurrentPath('~/projects/solarflare');
-      setTimeout(() => smoothScrollTo('project-solar-flare'), 240);
-    } else if (
-      cmdLower === 'cd fieldsight' ||
-      cmdLower === 'cd fieldsight-lite' ||
-      cmdLower === 'cd projects/fieldsight' ||
-      cmdLower === 'cd projects/fieldsight-lite' ||
-      cmdLower === 'cd /projects/fieldsight'
-    ) {
-      response = 'navigating to ~/projects/fieldsight...\n[FieldSight Lite: Unsupervised training-free edge vision pipeline]';
+      smoothScrollTo('project-solar-flare');
+      response = 'focusing project: Solar Flare (Vision Transformer)';
+    } else if (cmdLower.includes('fieldsight')) {
       setCurrentPath('~/projects/fieldsight');
-      setTimeout(() => smoothScrollTo('project-fieldsight-lite'), 240);
-    } else if (
-      cmdLower === 'cd firsefile' ||
-      cmdLower === 'cd projects/firsefile' ||
-      cmdLower === 'cd /projects/firsefile'
-    ) {
-      response = 'navigating to ~/projects/firsefile...\n[FirSeFile: ML digital forensics with Swin Transformer V2 & Rust]';
+      smoothScrollTo('project-fieldsight-lite');
+      response = 'focusing project: FieldSight Lite (Edge Defect Detection)';
+    } else if (cmdLower.includes('firsefile')) {
       setCurrentPath('~/projects/firsefile');
-      setTimeout(() => smoothScrollTo('project-firsefile'), 240);
+      smoothScrollTo('project-firsefile');
+      response = 'focusing project: FirSeFile (Forensic Carving Platform)';
     }
 
-    // Invalid CD
-    else if (cmdLower.startsWith('cd ')) {
-      const targetDir = trimmed.slice(3).trim();
-      response = `bash: cd: ${targetDir}: no such portfolio directory\nType 'ls' to view available directories, or 'help' for guide.`;
+    // THEME COMMANDS
+    else if (cmdLower === 'sudo light-mode' || cmdLower === 'theme light' || cmdLower === 'light') {
+      if (theme !== 'light') toggleTheme();
+      response = '[sudo] environment display switched to light theme.';
+    } else if (cmdLower === 'sudo dark-mode' || cmdLower === 'theme dark' || cmdLower === 'dark') {
+      if (theme !== 'dark') toggleTheme();
+      response = '[sudo] environment display switched to dark theme.';
     }
 
-    // Default Unknown Command
+    // SUDO GENERAL
+    else if (cmdLower.startsWith('sudo ')) {
+      response = `[sudo] user 'kushal' authorized for execution of '${cmdLower.replace('sudo ', '')}'.`;
+    }
+
+    // UNKNOWN
     else {
-      response = `bash: command not found: ${trimmed}\nTry 'help' or 'cd projects'`;
+      response = `zsh: command not found: ${trimmed}\nType 'help' for available commands.`;
     }
 
-    setHistory((prev) => [
-      ...prev,
-      userCmdEntry,
-      {
-        id: `res-${Date.now()}`,
-        type: 'output',
-        text: response,
-      },
-    ]);
+    const outputEntry: TerminalLine = {
+      id: `res-${Date.now()}`,
+      type: 'output',
+      text: response,
+    };
 
+    setHistory((prev) => [...prev, userCmdEntry, outputEntry]);
     setInputVal('');
   };
 
@@ -381,283 +397,814 @@ export default function PortfolioTerminal() {
       const current = inputVal.trim().toLowerCase();
       if (!current) return;
 
-      // Match commands
       const match = KNOWN_COMMANDS.find((cmd) => cmd.startsWith(current));
       if (match) {
         setInputVal(match);
-      } else if (currentPath === '~/projects') {
-        const sub = ['solarflare', 'fieldsight', 'firsefile'].find((p) =>
-          `cd ${p}`.startsWith(current) || p.startsWith(current)
-        );
-        if (sub) {
-          setInputVal(current.startsWith('cd ') ? `cd ${sub}` : sub);
-        }
       }
       return;
     }
 
-    // 2. Submit on Enter
+    // 2. History Navigation Up
+    if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      if (commandHistory.length === 0) return;
+      const nextIdx = historyIdx === -1 ? commandHistory.length - 1 : Math.max(0, historyIdx - 1);
+      setHistoryIdx(nextIdx);
+      setInputVal(commandHistory[nextIdx]);
+      return;
+    }
+
+    // 3. History Navigation Down
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      if (historyIdx === -1) return;
+      if (historyIdx < commandHistory.length - 1) {
+        const nextIdx = historyIdx + 1;
+        setHistoryIdx(nextIdx);
+        setInputVal(commandHistory[nextIdx]);
+      } else {
+        setHistoryIdx(-1);
+        setInputVal('');
+      }
+      return;
+    }
+
+    // 4. Enter Submission
     if (e.key === 'Enter') {
       e.preventDefault();
       handleCommand(inputVal);
       return;
     }
 
-    // 3. Arrow Up History
-    if (e.key === 'ArrowUp') {
-      e.preventDefault();
-      if (commandHistory.length === 0) return;
-
-      const nextIdx =
-        historyIdx === -1 ? commandHistory.length - 1 : Math.max(0, historyIdx - 1);
-      setHistoryIdx(nextIdx);
-      setInputVal(commandHistory[nextIdx]);
-      return;
-    }
-
-    // 4. Arrow Down History
-    if (e.key === 'ArrowDown') {
-      e.preventDefault();
-      if (historyIdx === -1) return;
-
-      const nextIdx = historyIdx + 1;
-      if (nextIdx >= commandHistory.length) {
-        setHistoryIdx(-1);
-        setInputVal('');
-      } else {
-        setHistoryIdx(nextIdx);
-        setInputVal(commandHistory[nextIdx]);
-      }
-      return;
-    }
-
-    // 5. Escape closes terminal
+    // 5. Escape Closes Terminal
     if (e.key === 'Escape') {
       e.preventDefault();
       closeTerminal();
-      return;
     }
   };
 
-  const isLight = theme === 'light';
+  // ==========================================
+  // DRAG LOGIC (Pointer Events with Capture)
+  // ==========================================
+  const handleHeaderPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    // Only drag from primary button and on non-mobile
+    if (e.button !== 0 || isMobile) return;
 
-  return (
-    <aside
-      className="vscode-integrated-terminal-panel"
-      aria-label="Integrated Terminal"
-      style={{
+    // Don't drag if clicking buttons, controls, or inputs
+    const target = e.target as HTMLElement;
+    if (
+      target.tagName === 'BUTTON' ||
+      target.closest('button') ||
+      target.tagName === 'INPUT' ||
+      target.getAttribute('role') === 'button'
+    ) {
+      return;
+    }
+
+    e.currentTarget.setPointerCapture(e.pointerId);
+
+    dragRef.current = {
+      startX: e.clientX,
+      startY: e.clientY,
+      initialX: floatingPos.x,
+      initialY: floatingPos.y,
+      initialDock: dock,
+      active: true,
+    };
+
+    setIsDragging(true);
+  };
+
+  const handleHeaderPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!dragRef.current.active) return;
+
+    const dx = e.clientX - dragRef.current.startX;
+    const dy = e.clientY - dragRef.current.startY;
+
+    // If starting drag while docked, break away to floating at pointer
+    if (dragRef.current.initialDock !== 'floating') {
+      const newFloatingW = floatingPos.width || 720;
+      const newFloatingH = floatingPos.height || 420;
+      const newX = Math.max(20, Math.min(window.innerWidth - newFloatingW - 20, e.clientX - newFloatingW / 2));
+      const newY = Math.max(20, Math.min(window.innerHeight - newFloatingH - 20, e.clientY - 20));
+
+      setFloatingPos((prev) => ({
+        ...prev,
+        x: newX,
+        y: newY,
+      }));
+      setDock('floating');
+      dragRef.current.initialDock = 'floating';
+      dragRef.current.startX = e.clientX;
+      dragRef.current.startY = e.clientY;
+      dragRef.current.initialX = newX;
+      dragRef.current.initialY = newY;
+    } else {
+      const maxX = Math.max(20, window.innerWidth - (floatingPos.width || 420) - 20);
+      const maxY = Math.max(20, window.innerHeight - 80);
+      const newX = Math.min(Math.max(20, dragRef.current.initialX + dx), maxX);
+      const newY = Math.min(Math.max(20, dragRef.current.initialY + dy), maxY);
+
+      setFloatingPos((prev) => ({
+        ...prev,
+        x: newX,
+        y: newY,
+      }));
+    }
+
+    // Edge Snap Detection (~60px threshold)
+    const threshold = 65;
+    if (e.clientX <= threshold) {
+      setGhostDock('left');
+    } else if (e.clientX >= window.innerWidth - threshold) {
+      setGhostDock('right');
+    } else if (e.clientY <= threshold) {
+      setGhostDock('top');
+    } else if (e.clientY >= window.innerHeight - threshold) {
+      setGhostDock('bottom');
+    } else {
+      setGhostDock(null);
+    }
+  };
+
+  const handleHeaderPointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!dragRef.current.active) return;
+
+    try {
+      e.currentTarget.releasePointerCapture(e.pointerId);
+    } catch {
+      // Ignore
+    }
+
+    dragRef.current.active = false;
+    setIsDragging(false);
+
+    if (ghostDock) {
+      setDock(ghostDock);
+      setGhostDock(null);
+    }
+  };
+
+  // ==========================================
+  // RESIZE LOGIC (Floating handles & Dock dividers)
+  // ==========================================
+  const startResize = useCallback(
+    (e: React.PointerEvent, handle: string) => {
+      if (e.button !== 0 || isMobile) return;
+      e.preventDefault();
+      e.stopPropagation();
+
+      (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+
+      resizeRef.current = {
+        active: true,
+        handle,
+        startX: e.clientX,
+        startY: e.clientY,
+        startW: dock === 'floating' ? floatingPos.width : dockWidth,
+        startH: dock === 'floating' ? floatingPos.height : dockHeight,
+        startPosX: floatingPos.x,
+        startPosY: floatingPos.y,
+      };
+
+      setIsDragging(true);
+    },
+    [dock, floatingPos, dockWidth, dockHeight, isMobile, setIsDragging]
+  );
+
+  const onResizeMove = useCallback(
+    (e: React.PointerEvent) => {
+      if (!resizeRef.current.active) return;
+
+      const { handle, startX, startY, startW, startH, startPosX, startPosY } = resizeRef.current;
+      const dx = e.clientX - startX;
+      const dy = e.clientY - startY;
+
+      // Resizing while docked
+      if (dock === 'right') {
+        // Dragging left edge: moving left increases width
+        const newW = Math.max(360, Math.min(Math.round(window.innerWidth * 0.75), startW - dx));
+        setDockWidth(newW);
+        return;
+      }
+      if (dock === 'left') {
+        // Dragging right edge: moving right increases width
+        const newW = Math.max(360, Math.min(Math.round(window.innerWidth * 0.75), startW + dx));
+        setDockWidth(newW);
+        return;
+      }
+      if (dock === 'bottom') {
+        // Dragging top edge: moving up increases height
+        const newH = Math.max(220, Math.min(Math.round(window.innerHeight * 0.75), startH - dy));
+        setDockHeight(newH);
+        return;
+      }
+      if (dock === 'top') {
+        // Dragging bottom edge: moving down increases height
+        const newH = Math.max(220, Math.min(Math.round(window.innerHeight * 0.75), startH + dy));
+        setDockHeight(newH);
+        return;
+      }
+
+      // Resizing while floating
+      if (dock === 'floating') {
+        let newW = startW;
+        let newH = startH;
+        let newX = startPosX;
+        let newY = startPosY;
+
+        const minW = 420;
+        const minH = 260;
+        const maxW = window.innerWidth - 40;
+        const maxH = window.innerHeight - 40;
+
+        if (handle.includes('e')) {
+          newW = Math.max(minW, Math.min(maxW, startW + dx));
+        }
+        if (handle.includes('s')) {
+          newH = Math.max(minH, Math.min(maxH, startH + dy));
+        }
+        if (handle.includes('w')) {
+          const potW = startW - dx;
+          if (potW >= minW && potW <= maxW) {
+            newW = potW;
+            newX = startPosX + dx;
+          }
+        }
+        if (handle.includes('n')) {
+          const potH = startH - dy;
+          if (potH >= minH && potH <= maxH) {
+            newH = potH;
+            newY = startPosY + dy;
+          }
+        }
+
+        setFloatingPos({
+          x: Math.max(10, Math.min(window.innerWidth - newW - 10, newX)),
+          y: Math.max(10, Math.min(window.innerHeight - newH - 10, newY)),
+          width: newW,
+          height: newH,
+        });
+      }
+    },
+    [dock, setDockWidth, setDockHeight, setFloatingPos]
+  );
+
+  const onResizeUp = useCallback(
+    (e: React.PointerEvent) => {
+      if (!resizeRef.current.active) return;
+      try {
+        (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId);
+      } catch {
+        // Ignore
+      }
+      resizeRef.current.active = false;
+      setIsDragging(false);
+    },
+    [setIsDragging]
+  );
+
+  // Determine current window style based on dock position
+  const getContainerStyle = (): React.CSSProperties => {
+    if (!isOpen) {
+      return {
+        display: 'none',
+      };
+    }
+
+    if (isMobile) {
+      // Mobile bottom-sheet layout
+      return {
         position: 'fixed',
-        bottom: 0,
         left: 0,
         right: 0,
+        bottom: 0,
         width: '100vw',
-        height: 'clamp(260px, 32vh, 380px)',
-        backgroundColor: isLight ? '#FAFAF8' : '#080808',
-        borderTop: isLight ? '1px solid #D4D4CD' : '1px solid #1C1C1C',
-        boxShadow: isOpen
-          ? (isLight ? '0 -10px 40px rgba(0, 0, 0, 0.12)' : '0 -10px 40px rgba(0, 0, 0, 0.75)')
-          : 'none',
+        height: 'clamp(280px, 50vh, 440px)',
         zIndex: 1000,
+        backgroundColor: colors.bgBase,
+        borderTop: `1px solid ${colors.border}`,
+        boxShadow: '0 -10px 40px rgba(0, 0, 0, 0.45)',
         display: 'flex',
         flexDirection: 'column',
-        transform: isOpen ? 'translateY(0)' : 'translateY(100%)',
-        transition: 'transform 260ms cubic-bezier(0.16, 1, 0.3, 1), background-color 0.25s ease, border-color 0.25s ease',
-        pointerEvents: isOpen ? 'auto' : 'none',
-        userSelect: 'text',
-      }}
-    >
-      {/* VS Code Panel Tab Bar */}
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          height: '36px',
-          backgroundColor: isLight ? '#EAEAE6' : '#0D0D0D',
-          borderBottom: isLight ? '1px solid #D4D4CD' : '1px solid #1C1C1C',
-          padding: '0 clamp(16px, 2.5vw, 28px)',
-          userSelect: 'none',
-          transition: 'background-color 0.25s ease, border-color 0.25s ease',
-        }}
+      };
+    }
+
+    // Desktop Docked: Right
+    if (dock === 'right') {
+      return {
+        position: 'fixed',
+        top: 0,
+        right: 0,
+        bottom: 0,
+        width: `${dockWidth}px`,
+        height: '100vh',
+        zIndex: 1000,
+        backgroundColor: colors.bgBase,
+        borderLeft: `1px solid ${colors.border}`,
+        boxShadow: isLight
+          ? '-6px 0 24px rgba(0, 0, 0, 0.06)'
+          : '-8px 0 32px rgba(0, 0, 0, 0.65)',
+        display: 'flex',
+        flexDirection: 'column',
+        transition: isDragging ? 'none' : 'width 280ms cubic-bezier(0.22, 1, 0.36, 1)',
+      };
+    }
+
+    // Desktop Docked: Left
+    if (dock === 'left') {
+      return {
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        bottom: 0,
+        width: `${dockWidth}px`,
+        height: '100vh',
+        zIndex: 1000,
+        backgroundColor: colors.bgBase,
+        borderRight: `1px solid ${colors.border}`,
+        boxShadow: isLight
+          ? '6px 0 24px rgba(0, 0, 0, 0.06)'
+          : '8px 0 32px rgba(0, 0, 0, 0.65)',
+        display: 'flex',
+        flexDirection: 'column',
+        transition: isDragging ? 'none' : 'width 280ms cubic-bezier(0.22, 1, 0.36, 1)',
+      };
+    }
+
+    // Desktop Docked: Bottom
+    if (dock === 'bottom') {
+      return {
+        position: 'fixed',
+        left: 0,
+        right: 0,
+        bottom: 0,
+        width: '100vw',
+        height: `${dockHeight}px`,
+        zIndex: 1000,
+        backgroundColor: colors.bgBase,
+        borderTop: `1px solid ${colors.border}`,
+        boxShadow: isLight
+          ? '0 -8px 28px rgba(0, 0, 0, 0.08)'
+          : '0 -10px 36px rgba(0, 0, 0, 0.75)',
+        display: 'flex',
+        flexDirection: 'column',
+        transition: isDragging ? 'none' : 'height 280ms cubic-bezier(0.22, 1, 0.36, 1)',
+      };
+    }
+
+    // Desktop Docked: Top
+    if (dock === 'top') {
+      return {
+        position: 'fixed',
+        left: 0,
+        right: 0,
+        top: 0,
+        width: '100vw',
+        height: `${dockHeight}px`,
+        zIndex: 1000,
+        backgroundColor: colors.bgBase,
+        borderBottom: `1px solid ${colors.border}`,
+        boxShadow: isLight
+          ? '0 8px 28px rgba(0, 0, 0, 0.08)'
+          : '0 10px 36px rgba(0, 0, 0, 0.75)',
+        display: 'flex',
+        flexDirection: 'column',
+        transition: isDragging ? 'none' : 'height 280ms cubic-bezier(0.22, 1, 0.36, 1)',
+      };
+    }
+
+    // Floating Window
+    return {
+      position: 'fixed',
+      left: `${floatingPos.x}px`,
+      top: `${floatingPos.y}px`,
+      width: `${floatingPos.width}px`,
+      height: `${floatingPos.height}px`,
+      zIndex: 1000,
+      backgroundColor: colors.bgBase,
+      borderRadius: '8px',
+      border: `1px solid ${colors.border}`,
+      boxShadow: isLight
+        ? '0 16px 48px rgba(0, 0, 0, 0.16)'
+        : '0 20px 60px rgba(0, 0, 0, 0.85)',
+      display: 'flex',
+      flexDirection: 'column',
+      overflow: 'hidden',
+      transition: isDragging ? 'none' : 'border-color 0.2s ease, box-shadow 0.2s ease',
+    };
+  };
+
+  return (
+    <>
+      {/* Subtle Ghost Dock Preview Area (Active when dragging near an edge) */}
+      {isDragging && ghostDock && (
+        <div
+          aria-hidden="true"
+          style={{
+            position: 'fixed',
+            zIndex: 999,
+            pointerEvents: 'none',
+            backgroundColor: isLight ? 'rgba(62, 114, 236, 0.06)' : 'rgba(91, 140, 255, 0.06)',
+            border: isLight ? '1.5px dashed rgba(62, 114, 236, 0.40)' : '1.5px dashed rgba(91, 140, 255, 0.35)',
+            borderRadius: '6px',
+            transition: 'all 0.14s ease-out',
+            ...(ghostDock === 'right' && {
+              top: 0,
+              right: 0,
+              bottom: 0,
+              width: `${dockWidth}px`,
+            }),
+            ...(ghostDock === 'left' && {
+              top: 0,
+              left: 0,
+              bottom: 0,
+              width: `${dockWidth}px`,
+            }),
+            ...(ghostDock === 'bottom' && {
+              left: 0,
+              right: 0,
+              bottom: 0,
+              height: `${dockHeight}px`,
+            }),
+            ...(ghostDock === 'top' && {
+              left: 0,
+              right: 0,
+              top: 0,
+              height: `${dockHeight}px`,
+            }),
+          }}
+        />
+      )}
+
+      {/* Main Terminal Window */}
+      <aside
+        ref={terminalRef}
+        aria-label="Interactive Workspace Terminal"
+        style={getContainerStyle()}
       >
-        {/* Left: Tabs */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem', height: '100%' }}>
-          <button
-            onClick={() => setActiveTab('terminal')}
-            className="font-mono"
+        {/* RESIZE DIVIDER (When docked to edges) */}
+        {!isMobile && dock === 'right' && (
+          <div
+            onPointerDown={(e) => startResize(e, 'w')}
+            onPointerMove={onResizeMove}
+            onPointerUp={onResizeUp}
+            title="Drag to resize dock width"
             style={{
-              background: 'transparent',
-              border: 'none',
-              borderBottom: activeTab === 'terminal'
-                ? '2px solid var(--accent)'
-                : '2px solid transparent',
-              color: activeTab === 'terminal'
-                ? (isLight ? '#161616' : '#E5E5E5')
-                : (isLight ? '#777770' : '#777777'),
-              fontSize: '0.72rem',
-              fontWeight: 600,
-              letterSpacing: '0.04em',
-              padding: '0 0.2rem',
-              height: '100%',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.4rem',
-              transition: 'color 0.15s ease',
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              bottom: 0,
+              width: '6px',
+              cursor: 'col-resize',
+              zIndex: 100,
+              backgroundColor: 'transparent',
             }}
-          >
-            <span>TERMINAL</span>
+          />
+        )}
+        {!isMobile && dock === 'left' && (
+          <div
+            onPointerDown={(e) => startResize(e, 'e')}
+            onPointerMove={onResizeMove}
+            onPointerUp={onResizeUp}
+            title="Drag to resize dock width"
+            style={{
+              position: 'absolute',
+              top: 0,
+              right: 0,
+              bottom: 0,
+              width: '6px',
+              cursor: 'col-resize',
+              zIndex: 100,
+              backgroundColor: 'transparent',
+            }}
+          />
+        )}
+        {!isMobile && dock === 'bottom' && (
+          <div
+            onPointerDown={(e) => startResize(e, 'n')}
+            onPointerMove={onResizeMove}
+            onPointerUp={onResizeUp}
+            title="Drag to resize dock height"
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              height: '6px',
+              cursor: 'row-resize',
+              zIndex: 100,
+              backgroundColor: 'transparent',
+            }}
+          />
+        )}
+        {!isMobile && dock === 'top' && (
+          <div
+            onPointerDown={(e) => startResize(e, 's')}
+            onPointerMove={onResizeMove}
+            onPointerUp={onResizeUp}
+            title="Drag to resize dock height"
+            style={{
+              position: 'absolute',
+              bottom: 0,
+              left: 0,
+              right: 0,
+              height: '6px',
+              cursor: 'row-resize',
+              zIndex: 100,
+              backgroundColor: 'transparent',
+            }}
+          />
+        )}
+
+        {/* FLOATING RESIZE HANDLES (All 8 edges & corners) */}
+        {!isMobile && dock === 'floating' && (
+          <>
+            <div
+              onPointerDown={(e) => startResize(e, 'e')}
+              onPointerMove={onResizeMove}
+              onPointerUp={onResizeUp}
+              style={{ position: 'absolute', right: 0, top: 0, bottom: 0, width: '6px', cursor: 'e-resize', zIndex: 100 }}
+            />
+            <div
+              onPointerDown={(e) => startResize(e, 'w')}
+              onPointerMove={onResizeMove}
+              onPointerUp={onResizeUp}
+              style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: '6px', cursor: 'w-resize', zIndex: 100 }}
+            />
+            <div
+              onPointerDown={(e) => startResize(e, 's')}
+              onPointerMove={onResizeMove}
+              onPointerUp={onResizeUp}
+              style={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: '6px', cursor: 's-resize', zIndex: 100 }}
+            />
+            <div
+              onPointerDown={(e) => startResize(e, 'n')}
+              onPointerMove={onResizeMove}
+              onPointerUp={onResizeUp}
+              style={{ position: 'absolute', left: 0, right: 0, top: 0, height: '6px', cursor: 'n-resize', zIndex: 100 }}
+            />
+            <div
+              onPointerDown={(e) => startResize(e, 'se')}
+              onPointerMove={onResizeMove}
+              onPointerUp={onResizeUp}
+              style={{ position: 'absolute', right: 0, bottom: 0, width: '12px', height: '12px', cursor: 'se-resize', zIndex: 101 }}
+            />
+            <div
+              onPointerDown={(e) => startResize(e, 'sw')}
+              onPointerMove={onResizeMove}
+              onPointerUp={onResizeUp}
+              style={{ position: 'absolute', left: 0, bottom: 0, width: '12px', height: '12px', cursor: 'sw-resize', zIndex: 101 }}
+            />
+            <div
+              onPointerDown={(e) => startResize(e, 'ne')}
+              onPointerMove={onResizeMove}
+              onPointerUp={onResizeUp}
+              style={{ position: 'absolute', right: 0, top: 0, width: '12px', height: '12px', cursor: 'ne-resize', zIndex: 101 }}
+            />
+            <div
+              onPointerDown={(e) => startResize(e, 'nw')}
+              onPointerMove={onResizeMove}
+              onPointerUp={onResizeUp}
+              style={{ position: 'absolute', left: 0, top: 0, width: '12px', height: '12px', cursor: 'nw-resize', zIndex: 101 }}
+            />
+          </>
+        )}
+
+        {/* Minimal Terminal Title Bar & Drag Handle */}
+        <div
+          onPointerDown={handleHeaderPointerDown}
+          onPointerMove={handleHeaderPointerMove}
+          onPointerUp={handleHeaderPointerUp}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            height: '36px',
+            backgroundColor: colors.bgHeader,
+            borderBottom: `1px solid ${colors.borderSubtle}`,
+            padding: '0 0.85rem',
+            userSelect: 'none',
+            flexShrink: 0,
+            cursor: isMobile ? 'default' : 'grab',
+          }}
+        >
+          {/* Left: Window Dots + Host / Directory Identity */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+              <span
+                style={{
+                  width: '7.5px',
+                  height: '7.5px',
+                  borderRadius: '50%',
+                  backgroundColor: isLight ? '#D1D5DB' : '#2A2D35',
+                  border: isLight ? '1px solid #9CA3AF' : '1px solid #3F4450',
+                  display: 'inline-block',
+                }}
+              />
+              <span
+                style={{
+                  width: '7.5px',
+                  height: '7.5px',
+                  borderRadius: '50%',
+                  backgroundColor: isLight ? '#D1D5DB' : '#2A2D35',
+                  border: isLight ? '1px solid #9CA3AF' : '1px solid #3F4450',
+                  display: 'inline-block',
+                }}
+              />
+              <span
+                style={{
+                  width: '7.5px',
+                  height: '7.5px',
+                  borderRadius: '50%',
+                  backgroundColor: isLight ? '#D1D5DB' : '#2A2D35',
+                  border: isLight ? '1px solid #9CA3AF' : '1px solid #3F4450',
+                  display: 'inline-block',
+                }}
+              />
+            </div>
+
             <span
+              className="font-mono"
               style={{
-                fontSize: '0.62rem',
-                color: isLight ? '#444440' : '#888888',
-                backgroundColor: isLight ? '#DCDCD6' : '#151515',
-                padding: '0.1rem 0.35rem',
-                borderRadius: '3px',
+                fontSize: '0.72rem',
+                color: colors.textSecondary,
+                letterSpacing: '0.01em',
+                fontWeight: 500,
               }}
             >
-              1
+              kushal@portfolio:{currentPath}
             </span>
-          </button>
+          </div>
 
-          <button
-            onClick={() => setActiveTab('output')}
-            className="font-mono"
-            style={{
-              background: 'transparent',
-              border: 'none',
-              borderBottom: activeTab === 'output'
-                ? '2px solid var(--accent)'
-                : '2px solid transparent',
-              color: activeTab === 'output'
-                ? (isLight ? '#161616' : '#E5E5E5')
-                : (isLight ? '#777770' : '#777777'),
-              fontSize: '0.72rem',
-              fontWeight: 600,
-              letterSpacing: '0.04em',
-              padding: '0 0.2rem',
-              height: '100%',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.4rem',
-              transition: 'color 0.15s ease',
-            }}
-          >
-            <span>OUTPUT</span>
-          </button>
+          {/* Right: Dock Controls + Clear + Close */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+            {/* Desktop Dock Mode Switcher */}
+            {!isMobile && (
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.2rem', marginRight: '0.3rem' }}>
+                <button
+                  onClick={() => setDock('floating')}
+                  title="Float window"
+                  aria-label="Float window"
+                  className="font-mono"
+                  style={{
+                    background: dock === 'floating' ? (isLight ? '#D1D5DB' : '#2A2E38') : 'transparent',
+                    border: 'none',
+                    color: dock === 'floating' ? colors.textPrimary : colors.textMuted,
+                    fontSize: '0.72rem',
+                    padding: '0.15rem 0.35rem',
+                    borderRadius: '3px',
+                    cursor: 'pointer',
+                    transition: 'all 0.15s ease',
+                  }}
+                >
+                  ⬚
+                </button>
 
-          <span
-            className="font-mono"
-            style={{
-              color: isLight ? '#888880' : '#555555',
-              fontSize: '0.72rem',
-              letterSpacing: '0.04em',
-              cursor: 'default',
-            }}
-          >
-            PROBLEMS (0)
-          </span>
+                <button
+                  onClick={() => setDock('left')}
+                  title="Dock left"
+                  aria-label="Dock left"
+                  className="font-mono"
+                  style={{
+                    background: dock === 'left' ? (isLight ? '#D1D5DB' : '#2A2E38') : 'transparent',
+                    border: 'none',
+                    color: dock === 'left' ? colors.textPrimary : colors.textMuted,
+                    fontSize: '0.72rem',
+                    padding: '0.15rem 0.35rem',
+                    borderRadius: '3px',
+                    cursor: 'pointer',
+                    transition: 'all 0.15s ease',
+                  }}
+                >
+                  ◧
+                </button>
+
+                <button
+                  onClick={() => setDock('right')}
+                  title="Dock right"
+                  aria-label="Dock right"
+                  className="font-mono"
+                  style={{
+                    background: dock === 'right' ? (isLight ? '#D1D5DB' : '#2A2E38') : 'transparent',
+                    border: 'none',
+                    color: dock === 'right' ? colors.textPrimary : colors.textMuted,
+                    fontSize: '0.72rem',
+                    padding: '0.15rem 0.35rem',
+                    borderRadius: '3px',
+                    cursor: 'pointer',
+                    transition: 'all 0.15s ease',
+                  }}
+                >
+                  ◨
+                </button>
+
+                <button
+                  onClick={() => setDock('bottom')}
+                  title="Dock bottom"
+                  aria-label="Dock bottom"
+                  className="font-mono"
+                  style={{
+                    background: dock === 'bottom' ? (isLight ? '#D1D5DB' : '#2A2E38') : 'transparent',
+                    border: 'none',
+                    color: dock === 'bottom' ? colors.textPrimary : colors.textMuted,
+                    fontSize: '0.72rem',
+                    padding: '0.15rem 0.35rem',
+                    borderRadius: '3px',
+                    cursor: 'pointer',
+                    transition: 'all 0.15s ease',
+                  }}
+                >
+                  ⬒
+                </button>
+              </div>
+            )}
+
+            {/* Clear Button */}
+            <button
+              onClick={() => setHistory([])}
+              aria-label="Clear terminal buffer"
+              title="Clear buffer"
+              className="font-mono"
+              style={{
+                background: 'transparent',
+                border: 'none',
+                color: colors.textSecondary,
+                fontSize: '0.68rem',
+                cursor: 'pointer',
+                padding: '0.15rem 0.3rem',
+                borderRadius: '3px',
+                transition: 'color 0.15s ease',
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.color = colors.textPrimary)}
+              onMouseLeave={(e) => (e.currentTarget.style.color = colors.textSecondary)}
+            >
+              clear
+            </button>
+
+            {/* Close Button */}
+            <button
+              onClick={closeTerminal}
+              aria-label="Close terminal panel"
+              title="Close terminal (Esc)"
+              style={{
+                background: 'transparent',
+                border: 'none',
+                color: colors.textSecondary,
+                fontSize: '0.82rem',
+                lineHeight: 1,
+                cursor: 'pointer',
+                padding: '0.15rem 0.35rem',
+                borderRadius: '4px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                transition: 'all 0.15s ease',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.color = colors.textPrimary;
+                e.currentTarget.style.backgroundColor = isLight ? '#DCDCD6' : '#22252D';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.color = colors.textSecondary;
+                e.currentTarget.style.backgroundColor = 'transparent';
+              }}
+            >
+              ✕
+            </button>
+          </div>
         </div>
 
-        {/* Right: Path Status + Action Controls */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
-          <span
-            className="font-mono"
-            style={{
-              fontSize: '0.68rem',
-              color: isLight ? '#666660' : '#666666',
-            }}
-          >
-            bash · {currentPath}
-          </span>
-
-          <span style={{ color: isLight ? '#D0D0CA' : '#252525' }}>|</span>
-
-          {/* Clear Button */}
-          <button
-            onClick={() => setHistory([])}
-            aria-label="Clear terminal"
-            title="Clear terminal buffer"
-            className="font-mono"
-            style={{
-              background: 'transparent',
-              border: 'none',
-              color: isLight ? '#666660' : '#777777',
-              fontSize: '0.72rem',
-              cursor: 'pointer',
-              padding: '0.2rem 0.35rem',
-              borderRadius: '3px',
-              transition: 'color 0.15s ease',
-            }}
-            onMouseEnter={(e) => (e.currentTarget.style.color = isLight ? '#111111' : '#E5E5E5')}
-            onMouseLeave={(e) => (e.currentTarget.style.color = isLight ? '#666660' : '#777777')}
-          >
-            clear
-          </button>
-
-          {/* Close Panel Button */}
-          <button
-            onClick={closeTerminal}
-            aria-label="Close terminal panel"
-            title="Close terminal (Esc or Ctrl+`)"
-            style={{
-              background: 'transparent',
-              border: 'none',
-              color: isLight ? '#666660' : '#888888',
-              fontSize: '1rem',
-              lineHeight: 1,
-              cursor: 'pointer',
-              padding: '0.2rem 0.4rem',
-              borderRadius: '4px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              transition: 'all 0.15s ease',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.color = isLight ? '#111111' : '#FFFFFF';
-              e.currentTarget.style.backgroundColor = isLight ? '#DCDCD6' : '#1C1C1C';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.color = isLight ? '#666660' : '#888888';
-              e.currentTarget.style.backgroundColor = 'transparent';
-            }}
-          >
-            ✕
-          </button>
-        </div>
-      </div>
-
-      {/* Terminal Screen Body */}
-      {activeTab === 'terminal' ? (
+        {/* Terminal Screen Body */}
         <div
           ref={scrollRef}
           onClick={() => inputRef.current?.focus()}
           style={{
             flex: 1,
             overflowY: 'auto',
-            padding: '0.75rem clamp(16px, 2.5vw, 28px)',
+            padding: '0.85rem clamp(12px, 2vw, 20px)',
             fontFamily: 'var(--font-mono)',
-            fontSize: '0.82rem',
-            lineHeight: 1.5,
-            color: isLight ? '#1A1A18' : '#E5E5E5',
-            backgroundColor: isLight ? '#FAFAF8' : '#080808',
+            fontSize: '0.78rem',
+            lineHeight: 1.52,
+            color: colors.textPrimary,
+            backgroundColor: colors.bgBase,
             display: 'flex',
             flexDirection: 'column',
-            gap: '0.35rem',
+            gap: '0.55rem',
             cursor: 'text',
           }}
         >
           {history.map((item) => (
-            <div key={item.id}>
+            <div key={item.id} style={{ display: 'flex', flexDirection: 'column', gap: '0.2rem' }}>
               {item.type === 'command' && (
-                <div style={{ color: isLight ? '#0A0A0A' : '#FFFFFF', fontWeight: 500 }}>
-                  {item.text}
-                </div>
+                <TerminalPromptBlock
+                  path={item.path || currentPath}
+                  user="kushal@portfolio"
+                  commandText={item.cmdText}
+                />
               )}
               {item.type === 'info' && (
-                <div style={{ color: isLight ? '#666660' : '#888888', fontSize: '0.78rem' }}>
+                <div style={{ color: colors.textSecondary, fontSize: '0.74rem', whiteSpace: 'pre-wrap' }}>
                   {item.text}
                 </div>
               )}
@@ -666,10 +1213,10 @@ export default function PortfolioTerminal() {
                   style={{
                     fontFamily: 'inherit',
                     fontSize: 'inherit',
-                    color: isLight ? '#282824' : '#B5B5B5',
+                    color: colors.textPrimary,
                     whiteSpace: 'pre-wrap',
                     margin: 0,
-                    lineHeight: 1.45,
+                    lineHeight: 1.48,
                   }}
                 >
                   {item.text}
@@ -678,94 +1225,44 @@ export default function PortfolioTerminal() {
             </div>
           ))}
 
-          {/* Active Command Input Line */}
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.5rem',
-              marginTop: '0.2rem',
-            }}
-          >
-            <span style={{ flexShrink: 0, userSelect: 'none' }}>
-              <span style={{ color: isLight ? '#777770' : '#888888' }}>kushal@portfolio:</span>
-              <span style={{ color: 'var(--accent)' }}>{currentPath}$ </span>
-            </span>
-            <div style={{ position: 'relative', flex: 1, display: 'flex', alignItems: 'center' }}>
-              <input
-                ref={inputRef}
-                type="text"
-                value={inputVal}
-                onChange={(e) => setInputVal(e.target.value)}
-                onKeyDown={handleKeyDown}
-                autoComplete="off"
-                autoCorrect="off"
-                autoCapitalize="off"
-                spellCheck="false"
-                aria-label="Portfolio shell input line"
-                style={{
-                  width: '100%',
-                  background: 'transparent',
-                  border: 'none',
-                  outline: 'none',
-                  color: isLight ? '#0A0A0A' : '#FFFFFF',
-                  fontFamily: 'inherit',
-                  fontSize: '0.82rem',
-                  padding: 0,
-                  margin: 0,
-                }}
-              />
-            </div>
+          {/* Active Two-Line Shell Prompt Block inspired directly by reference */}
+          <div style={{ marginTop: '0.25rem' }}>
+            <TerminalPromptBlock
+              path={currentPath}
+              user="kushal@portfolio"
+              isInput={true}
+            >
+              <div style={{ position: 'relative', width: '100%', display: 'flex', alignItems: 'center' }}>
+                <input
+                  ref={inputRef}
+                  type="text"
+                  value={inputVal}
+                  onChange={(e) => setInputVal(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                  autoComplete="off"
+                  autoCorrect="off"
+                  autoCapitalize="off"
+                  spellCheck="false"
+                  aria-label="Workspace shell input"
+                  style={{
+                    width: '100%',
+                    background: 'transparent',
+                    border: 'none',
+                    outline: 'none',
+                    color: colors.textPrimary,
+                    fontFamily: 'inherit',
+                    fontSize: '0.76rem',
+                    padding: 0,
+                    margin: 0,
+                    caretColor: colors.accent,
+                    fontWeight: 500,
+                  }}
+                />
+              </div>
+            </TerminalPromptBlock>
           </div>
         </div>
-      ) : (
-        /* OUTPUT Tab */
-        <div
-          style={{
-            flex: 1,
-            overflowY: 'auto',
-            padding: '0.75rem clamp(16px, 2.5vw, 28px)',
-            fontFamily: 'var(--font-mono)',
-            fontSize: '0.8rem',
-            color: isLight ? '#555550' : '#888888',
-            backgroundColor: isLight ? '#FAFAF8' : '#080808',
-            lineHeight: 1.6,
-          }}
-        >
-          <div>[Portfolio Runtime]: Next.js 14 · Static Prerendering Active</div>
-          <div>[Environment]: Production Build (Client Navigation Engine)</div>
-          <div>[Active Theme]: {theme} mode</div>
-          <div>[Session Navigation]: Verified portfolio sections: Hero, About, Education, Projects, Skills, Contact</div>
-          <div style={{ marginTop: '0.5rem', color: isLight ? '#888880' : '#555555' }}>
-            // All systems operating nominally. Type commands in TERMINAL tab.
-          </div>
-        </div>
-      )}
-
-      {/* Micro Status Bar / Shortcuts Hint */}
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          height: '24px',
-          backgroundColor: isLight ? '#EAEAE6' : '#0A0A0A',
-          borderTop: isLight ? '1px solid #D4D4CD' : '1px solid #161616',
-          padding: '0 clamp(16px, 2.5vw, 28px)',
-          fontFamily: 'var(--font-mono)',
-          fontSize: '0.62rem',
-          color: isLight ? '#666660' : '#666666',
-        }}
-      >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-          <span>Ctrl+` or T to toggle</span>
-          <span>Tab for autocomplete</span>
-          <span>↑/↓ for history</span>
-        </div>
-        <div>
-          <span>utf-8 · LF</span>
-        </div>
-      </div>
-    </aside>
+      </aside>
+    </>
   );
 }

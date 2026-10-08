@@ -4,6 +4,29 @@ export interface ProjectResult {
   detail: string;
 }
 
+export interface SystemFlowStep {
+  step: string;
+  label: string;
+  detail: string;
+}
+
+export interface ExecutionTraceStep {
+  phase: string;
+  action: string;
+  status: string;
+  duration?: string;
+}
+
+export interface ProjectSpecItem {
+  label: string;
+  value: string;
+}
+
+export interface TechnicalSnapshotItem {
+  label: string;
+  value: string;
+}
+
 export interface Project {
   id: string;
   number: string;
@@ -13,7 +36,8 @@ export interface Project {
   category: 'AI / ML' | 'Computer Vision' | 'Systems';
   period: string;
   image?: string;
-  githubUrl: string;
+  githubUrl?: string;
+  isPrivate?: boolean;
   demoUrl?: string;
   overview: string;
   problem: string;
@@ -22,6 +46,10 @@ export interface Project {
   architecture: string[];
   results: ProjectResult[];
   highlights: string[];
+  systemFlow?: SystemFlowStep[];
+  specGrid?: ProjectSpecItem[];
+  executionTrace?: ExecutionTraceStep[];
+  technicalSnapshot?: TechnicalSnapshotItem[];
 }
 
 export interface SkillCategory {
@@ -63,3 +91,18 @@ export interface Achievement {
   resultSummary: string;
   resultBullets?: string[];
 }
+
+export interface Experience {
+  id: string;
+  number?: string;
+  company: string;
+  role: string;
+  period: string;
+  description: string;
+  tags: string[];
+  current: boolean;
+  statusText?: string;
+  focus?: string[];
+  department?: string;
+}
+

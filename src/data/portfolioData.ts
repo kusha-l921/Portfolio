@@ -1,4 +1,4 @@
-import { Project, SkillCategory, Achievement } from '../types';
+import { Project, SkillCategory, Achievement, Experience } from '../types';
 
 export const PERSONAL_DATA = {
   name: 'Kushal',
@@ -90,6 +90,22 @@ export const EDUCATION_DATA = {
     'Deep learning block classification for forensic data recovery',
   ],
 };
+
+export const EXPERIENCE_DATA: Experience[] = [
+  {
+    id: 'ipolygon',
+    number: '01',
+    company: 'iPolygon',
+    role: 'AI/ML & Product Development Intern',
+    period: 'October 2026 – Present',
+    description:
+      'Contributing to the development of a product focused on Go-to-Market (GTM), working within a product-development environment while applying AI/ML and engineering skills.',
+    tags: ['AI/ML', 'Product Development', 'GTM'],
+    current: true,
+    statusText: 'Currently working',
+    focus: ['AI/ML', 'Product Development', 'Go-to-Market'],
+  },
+];
 
 export const ACHIEVEMENTS_DATA: Achievement[] = [
   {
@@ -297,6 +313,28 @@ export const PROJECTS_DATA: Project[] = [
       'Implemented requirement extraction, constraint detection, importance scoring, and deduplication locally without server latency.',
       'Built a resilient Chrome Extension architecture with Content Scripts, Shadow DOM styling isolation, and platform-specific adapters.',
     ],
+    systemFlow: [
+      { step: '01', label: 'INPUT', detail: 'Raw User Prompt' },
+      { step: '02', label: 'DETECT', detail: 'Intent & Constraints' },
+      { step: '03', label: 'EXTRACT', detail: 'Core Requirements' },
+      { step: '04', label: 'SCORE', detail: 'Constraint Priority' },
+      { step: '05', label: 'RECONSTRUCT', detail: 'Structured Prompt' },
+    ],
+    technicalSnapshot: [
+      { label: 'ARCHITECTURE', value: 'Browser-Side Pipeline' },
+      { label: 'PROCESSING', value: 'Local / Client-Side' },
+      { label: 'RUNTIME', value: 'Vite + TypeScript' },
+      { label: 'INTERFACE', value: 'Chrome Ext + Shadow DOM' },
+      { label: 'DOMAIN', value: 'NLP / Prompt Intelligence' },
+      { label: 'EXECUTION', value: 'Dual-Mode Reconstruction' },
+    ],
+    executionTrace: [
+      { phase: '[01]', action: 'parse input prompt', status: 'OK', duration: '1.2ms' },
+      { phase: '[02]', action: 'extract intent & requirements', status: 'OK', duration: '2.8ms' },
+      { phase: '[03]', action: 'score constraints & rules', status: 'OK', duration: '1.5ms' },
+      { phase: '[04]', action: 'deduplicate redundancy', status: 'OK', duration: '0.9ms' },
+      { phase: '[05]', action: 'reconstruct structured prompt', status: 'OK', duration: '1.8ms' },
+    ],
   },
   {
     id: 'llm-council',
@@ -306,7 +344,7 @@ export const PROJECTS_DATA: Project[] = [
     tags: ['Python', 'LangGraph', 'Groq', 'Pydantic', 'Streamlit'],
     category: 'AI / ML',
     period: '2026',
-    githubUrl: 'https://github.com/kusha-l921/llm-council',
+    githubUrl: 'https://github.com/kusha-l921/lllm-council',
     overview:
       'A multi-agent reasoning system that uses specialized agents to generate, challenge, refine, and evaluate solutions before producing a final verified response.',
     problem:
@@ -328,6 +366,28 @@ export const PROJECTS_DATA: Project[] = [
       'Orchestrated a 5-stage pipeline: Proponent generation, Adversarial critique, Refiner reconciliation, Robustness evaluation, and Judge arbitration.',
       'Configured conditional routing, shared state propagation, and early termination on high-confidence solutions with Pydantic validation.',
     ],
+    systemFlow: [
+      { step: '01', label: 'PROPONENT', detail: 'Candidate Solution' },
+      { step: '02', label: 'ADVERSARY', detail: 'Adversarial Critique' },
+      { step: '03', label: 'REFINER', detail: 'Counter-Reconciliation' },
+      { step: '04', label: 'EVALUATOR', detail: 'Robustness Scoring' },
+      { step: '05', label: 'JUDGE', detail: 'Arbitrated Consensus' },
+    ],
+    technicalSnapshot: [
+      { label: 'ARCHITECTURE', value: 'Stateful Multi-Agent DAG' },
+      { label: 'ORCHESTRATION', value: 'LangGraph Framework' },
+      { label: 'INFERENCE', value: 'Groq LPU Accelerator' },
+      { label: 'VALIDATION', value: 'Pydantic Strict Schemas' },
+      { label: 'CONSENSUS', value: '5-Agent Iterative Loop' },
+      { label: 'ROUTING', value: 'Conditional State Graph' },
+    ],
+    executionTrace: [
+      { phase: '[01]', action: 'spawn proponent hypothesis', status: 'OK', duration: '142ms' },
+      { phase: '[02]', action: 'dispatch adversarial critique', status: 'OK', duration: '188ms' },
+      { phase: '[03]', action: 'synthesize refiner counter', status: 'OK', duration: '165ms' },
+      { phase: '[04]', action: 'score robustness convergence', status: 'OK', duration: '95ms' },
+      { phase: '[05]', action: 'arbitrate judge consensus', status: 'OK', duration: '110ms' },
+    ],
   },
   {
     id: 'solar-flare',
@@ -338,7 +398,7 @@ export const PROJECTS_DATA: Project[] = [
     category: 'AI / ML',
     period: 'Ongoing',
     image: '/images/solar_flare.jpg',
-    githubUrl: 'https://github.com/kusha-l921/solar-flare-forecasting',
+    isPrivate: true,
     overview:
       'A deep learning framework engineered to predict severe solar flares 24 to 48 hours prior to eruption using extreme ultraviolet magnetogram feeds from the NASA SDO satellite.',
     problem:
@@ -362,6 +422,28 @@ export const PROJECTS_DATA: Project[] = [
       'Curated and preprocessed an extensive time-series dataset consisting of 87,600 solar images spanning over a decade of historical events.',
       'Integrated visual attention maps into the inference pipeline for explainability, utilizing spatial focus regions to detect model drift.',
     ],
+    systemFlow: [
+      { step: '01', label: 'INGESTION', detail: 'SDO Satellite EUV' },
+      { step: '02', label: 'SPATIOTEMPORAL', detail: 'ViT Sequential Patches' },
+      { step: '03', label: 'ATTENTION', detail: 'Cross-Frame Attention' },
+      { step: '04', label: 'XAI MAP', detail: 'Spatial Drift Saliency' },
+      { step: '05', label: 'FORECAST', detail: '24-48h Flare Probability' },
+    ],
+    technicalSnapshot: [
+      { label: 'ARCHITECTURE', value: 'Spatiotemporal ViT' },
+      { label: 'DATASET', value: '87,600 Frames (10+ Years)' },
+      { label: 'SATELLITE', value: 'NASA SDO / AIA Feed' },
+      { label: 'ATTENTION', value: 'Cross-Frame Sequence' },
+      { label: 'EXPLAINABILITY', value: 'XAI Saliency Drift Maps' },
+      { label: 'HORIZON', value: '24–48h Early Warning' },
+    ],
+    executionTrace: [
+      { phase: '[01]', action: 'ingest SDO AIA magnetograms', status: 'OK', duration: '12ms' },
+      { phase: '[02]', action: 'extract spatiotemporal cubes', status: 'OK', duration: '28ms' },
+      { phase: '[03]', action: 'compute cross-frame attention', status: 'OK', duration: '34ms' },
+      { phase: '[04]', action: 'generate XAI saliency map', status: 'OK', duration: '19ms' },
+      { phase: '[05]', action: 'predict ≥M-Class probability', status: 'OK', duration: '8ms' },
+    ],
   },
   {
     id: 'fieldsight-lite',
@@ -371,7 +453,7 @@ export const PROJECTS_DATA: Project[] = [
     tags: ['Computer Vision', 'Edge Computing', 'CIELAB', 'Statistical Modeling'],
     category: 'Computer Vision',
     period: 'September 2026',
-    githubUrl: 'https://github.com/kusha-l921/fieldsight-lite',
+    githubUrl: 'https://github.com/kusha-l921/FieldSight',
     overview:
       'Engineered an unsupervised, training-free vision pipeline on low-power CPUs for real-time agricultural crop lesion detection on embedded devices.',
     problem:
@@ -395,6 +477,28 @@ export const PROJECTS_DATA: Project[] = [
       'Implemented CIELAB color modeling and MAD outlier detection, outperforming classical baselines with an 83.35% Foliage IoU and +71% relative gain in lesion detection.',
       'Built an optical stress harness across 5 lighting regimes, maintaining a 62.3% LRS and bounding severity drift to just 3.07% MASD.',
     ],
+    systemFlow: [
+      { step: '01', label: 'CAPTURE', detail: 'Raw Edge RGB Stream' },
+      { step: '02', label: 'CIELAB', detail: 'L*a*b* Illumination Norm' },
+      { step: '03', label: 'MAD OUTLIER', detail: 'Statistical Estimator' },
+      { step: '04', label: 'CALIBRATION', detail: 'Optical Stress Filter' },
+      { step: '05', label: 'DETECTION', detail: 'Lesion Segmentation' },
+    ],
+    technicalSnapshot: [
+      { label: 'ARCHITECTURE', value: 'Training-Free Edge Vision' },
+      { label: 'HARDWARE', value: 'Low-Power CPU (No GPU)' },
+      { label: 'LATENCY', value: '35.8ms / 27.9 FPS' },
+      { label: 'FOOTPRINT', value: '68 MB RAM Memory' },
+      { label: 'COLOR SPACE', value: 'CIELAB Perceptual Norm' },
+      { label: 'BENCHMARK', value: '83.35% Foliage IoU (+71%)' },
+    ],
+    executionTrace: [
+      { phase: '[01]', action: 'acquire RGB camera frame', status: 'OK', duration: '3.2ms' },
+      { phase: '[02]', action: 'transform CIELAB color space', status: 'OK', duration: '8.4ms' },
+      { phase: '[03]', action: 'compute MAD outlier matrix', status: 'OK', duration: '11.6ms' },
+      { phase: '[04]', action: 'calibrate optical stress filter', status: 'OK', duration: '6.1ms' },
+      { phase: '[05]', action: 'segment lesion mask (IoU 83%)', status: 'OK', duration: '6.5ms' },
+    ],
   },
   {
     id: 'firsefile',
@@ -404,7 +508,7 @@ export const PROJECTS_DATA: Project[] = [
     tags: ['Python', 'Swin Transformer', 'PyTorch', 'ONNX Runtime', 'Rust'],
     category: 'Systems',
     period: 'September 2026',
-    githubUrl: 'https://github.com/kusha-l921/firsefile',
+    githubUrl: 'https://github.com/kusha-l921/SIH-FirSeFile',
     overview:
       'Digital forensic recovery platform integrating deep learning carving into a high-performance Rust backend to reconstruct non-contiguous disk files.',
     problem:
@@ -428,6 +532,28 @@ export const PROJECTS_DATA: Project[] = [
       'Collaborated on a forensic recovery platform, integrating an ML carving pipeline into a Rust backend to process raw disk images.',
       'Built a Swin Transformer V2 model achieving ~93% accuracy in classifying orphaned, headerless 4KB blocks across 10+ file formats.',
       'Exported to ONNX Runtime to achieve <8ms inference per block and used probabilistic graph reassembly to reconstruct non-contiguous fragments.',
+    ],
+    systemFlow: [
+      { step: '01', label: 'SCAN', detail: 'Raw 4KB Disk Sectors' },
+      { step: '02', label: 'EMBEDDING', detail: 'Swin Transformer V2' },
+      { step: '03', label: 'INFERENCE', detail: 'ONNX Runtime (<8ms)' },
+      { step: '04', label: 'GRAPH DAG', detail: 'Fragment Reassembly' },
+      { step: '05', label: 'RECOVERY', detail: 'Forensic File Artifact' },
+    ],
+    technicalSnapshot: [
+      { label: 'ARCHITECTURE', value: 'Deep Learning Disk Carving' },
+      { label: 'BACKBONE', value: 'Swin Transformer V2' },
+      { label: 'BACKEND', value: 'Rust Zero-Copy Reader' },
+      { label: 'RUNTIME', value: 'ONNX Runtime Engine' },
+      { label: 'LATENCY', value: '<8ms per 4KB Sector' },
+      { label: 'ACCURACY', value: '~93% Across 10+ Types' },
+    ],
+    executionTrace: [
+      { phase: '[01]', action: 'zero-copy read 4KB raw sector', status: 'OK', duration: '0.8ms' },
+      { phase: '[02]', action: 'generate hex n-gram vectors', status: 'OK', duration: '2.1ms' },
+      { phase: '[03]', action: 'Swin-V2 ONNX inference', status: 'OK', duration: '4.3ms' },
+      { phase: '[04]', action: 'evaluate probabilistic DAG', status: 'OK', duration: '1.2ms' },
+      { phase: '[05]', action: 'assemble verified file artifact', status: 'OK', duration: '1.5ms' },
     ],
   },
 ];
@@ -475,18 +601,24 @@ export const QUICK_NAV_CARDS = [
   },
   {
     number: '03',
+    title: 'EXPERIENCE',
+    description: 'Current industry internship and product development.',
+    target: '#experience',
+  },
+  {
+    number: '04',
     title: 'PROJECTS',
     description: 'Explore my featured work and systems.',
     target: '#projects',
   },
   {
-    number: '04',
+    number: '05',
     title: 'SKILLS',
     description: 'Tools and technologies I work with.',
     target: '#skills',
   },
   {
-    number: '05',
+    number: '06',
     title: 'CONTACT',
     description: "Let's build something amazing together.",
     target: '#contact',

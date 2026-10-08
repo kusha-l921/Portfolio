@@ -322,15 +322,31 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
               marginTop: '0.5rem',
             }}
           >
-            <a
-              href={project.githubUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn btn-primary"
-            >
-              <span>View Source on GitHub</span>
-              <span style={{ fontSize: '0.9rem', lineHeight: 1 }}>↗</span>
-            </a>
+            {project.githubUrl ? (
+              <a
+                href={project.githubUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn btn-primary"
+              >
+                <span>View Source on GitHub</span>
+                <span style={{ fontSize: '0.9rem', lineHeight: 1 }}>↗</span>
+              </a>
+            ) : (
+              <span
+                className="font-mono"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.45rem',
+                  fontSize: '0.85rem',
+                  color: 'var(--text-muted)',
+                }}
+              >
+                <span>Private Repository (Research in progress)</span>
+                <span>🔒</span>
+              </span>
+            )}
 
             <button onClick={onClose} className="btn btn-secondary">
               <span>Close</span>
