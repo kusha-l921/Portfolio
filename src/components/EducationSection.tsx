@@ -45,7 +45,8 @@ export default function EducationSection() {
                   display: 'flex',
                   alignItems: 'flex-start',
                   justifyContent: 'space-between',
-                  gap: '1rem',
+                  gap: '0.75rem',
+                  flexWrap: 'wrap',
                   marginBottom: '1rem',
                 }}
               >
@@ -149,6 +150,8 @@ export default function EducationSection() {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
+                flexWrap: 'wrap',
+                gap: '0.5rem',
                 borderTop: '1px solid var(--border-subtle)',
                 paddingTop: '1.25rem',
                 marginTop: '1.75rem',
@@ -297,6 +300,10 @@ export default function EducationSection() {
         @media (max-width: 860px) {
           .education-grid {
             grid-template-columns: 1fr !important;
+            gap: 1.25rem !important;
+          }
+          .education-card-item {
+            padding: 1.25rem !important;
           }
         }
       `}</style>

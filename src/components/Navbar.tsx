@@ -58,6 +58,7 @@ export default function Navbar() {
 
   return (
     <header
+      className="navbar-header"
       style={{
         position: 'sticky',
         top: '12px',
@@ -66,6 +67,7 @@ export default function Navbar() {
         maxWidth: '1560px',
         margin: '0 auto',
         padding: '0 clamp(10px, 2vw, 24px)',
+        boxSizing: 'border-box',
       }}
     >
       <nav
@@ -220,37 +222,90 @@ export default function Navbar() {
           style={{
             display: 'flex',
             alignItems: 'center',
-            gap: '0.55rem',
+            gap: '0.45rem',
           }}
         >
-          {/* Subtle Terminal Trigger Button with Light Sweep */}
-          <button
-            onClick={toggleTerminal}
-            aria-label="Toggle VS Code terminal"
-            className="font-mono navbar-terminal-btn"
-            title="Toggle Terminal (Ctrl + ` or T)"
+          {/* Desktop-Only Utilities */}
+          <div
+            className="desktop-utilities"
             style={{
-              display: 'inline-flex',
+              display: 'flex',
               alignItems: 'center',
-              gap: '0.35rem',
-              fontSize: '0.72rem',
-              padding: '0.28rem 0.65rem',
-              borderRadius: '9999px',
-              backgroundColor: isTerminalOpen ? 'var(--bg-pill-hover)' : 'var(--bg-card)',
-              color: isTerminalOpen ? 'var(--text-white)' : 'var(--text-dim)',
-              border: '1px solid',
-              borderColor: isTerminalOpen ? 'var(--accent-blue-border)' : 'var(--border-subtle)',
-              cursor: 'pointer',
-              transition: 'all 0.18s ease',
-              position: 'relative',
-              overflow: 'hidden',
+              gap: '0.55rem',
             }}
           >
-            <span style={{ color: 'var(--accent-blue)' }}>&gt;_</span>
-            <span>terminal</span>
-          </button>
+            {/* Subtle Terminal Trigger Button with Light Sweep */}
+            <button
+              onClick={toggleTerminal}
+              aria-label="Toggle VS Code terminal"
+              className="font-mono navbar-terminal-btn"
+              title="Toggle Terminal (Ctrl + ` or T)"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.35rem',
+                fontSize: '0.72rem',
+                padding: '0.28rem 0.65rem',
+                borderRadius: '9999px',
+                backgroundColor: isTerminalOpen ? 'var(--bg-pill-hover)' : 'var(--bg-card)',
+                color: isTerminalOpen ? 'var(--text-white)' : 'var(--text-dim)',
+                border: '1px solid',
+                borderColor: isTerminalOpen ? 'var(--accent-blue-border)' : 'var(--border-subtle)',
+                cursor: 'pointer',
+                transition: 'all 0.18s ease',
+                position: 'relative',
+                overflow: 'hidden',
+              }}
+            >
+              <span style={{ color: 'var(--accent-blue)' }}>&gt;_</span>
+              <span>terminal</span>
+            </button>
 
-          {/* Subtle Theme Toggle Button */}
+            {/* Online status indicator with Soft Green */}
+            <div
+              className="font-mono navbar-online-pill"
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.45rem',
+                fontSize: '0.72rem',
+                color: 'var(--text-dim)',
+                padding: '0.25rem 0.55rem',
+                borderRadius: '9999px',
+                backgroundColor: 'var(--bg-card)',
+                border: '1px solid var(--border-subtle)',
+              }}
+            >
+              <span className="status-dot-pulse" />
+              <span style={{ color: 'var(--text-secondary)' }}>online</span>
+            </div>
+
+            {/* Resume PDF link */}
+            <a
+              href={PERSONAL_DATA.resumeUrl}
+              download="Kushal_Patel_Resume.pdf"
+              className="font-mono navbar-resume-btn"
+              title="Download Kushal Patel's Resume (PDF)"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.35rem',
+                fontSize: '0.75rem',
+                padding: '0.32rem 0.75rem',
+                borderRadius: '9999px',
+                color: 'var(--text-white)',
+                backgroundColor: 'var(--bg-pill)',
+                border: '1px solid var(--border-card)',
+                textDecoration: 'none',
+                transition: 'all 0.18s ease',
+              }}
+            >
+              <span>resume.pdf</span>
+              <span style={{ fontSize: '0.85rem', lineHeight: 1 }}>↓</span>
+            </a>
+          </div>
+
+          {/* Theme Toggle Button (Accessible on both Desktop & Mobile) */}
           <button
             onClick={toggleTheme}
             aria-label="Toggle dark/light theme"
@@ -268,68 +323,32 @@ export default function Navbar() {
               cursor: 'pointer',
               fontSize: '0.75rem',
               transition: 'all 0.2s ease',
+              flexShrink: 0,
             }}
             title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
           >
             {theme === 'dark' ? '☀' : '☾'}
           </button>
 
-          {/* Online status indicator with Soft Green */}
-          <div
-            className="font-mono"
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.45rem',
-              fontSize: '0.72rem',
-              color: 'var(--text-dim)',
-              padding: '0.25rem 0.55rem',
-              borderRadius: '9999px',
-              backgroundColor: 'var(--bg-card)',
-              border: '1px solid var(--border-subtle)',
-            }}
-          >
-            <span className="status-dot-pulse" />
-            <span style={{ color: 'var(--text-secondary)' }}>online</span>
-          </div>
-
-          {/* Resume PDF link */}
-          <a
-            href={PERSONAL_DATA.resumeUrl}
-            download="Kushal_Patel_Resume.pdf"
-            className="font-mono navbar-resume-btn"
-            title="Download Kushal Patel's Resume (PDF)"
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '0.35rem',
-              fontSize: '0.75rem',
-              padding: '0.32rem 0.75rem',
-              borderRadius: '9999px',
-              color: 'var(--text-white)',
-              backgroundColor: 'var(--bg-pill)',
-              border: '1px solid var(--border-card)',
-              textDecoration: 'none',
-              transition: 'all 0.18s ease',
-            }}
-          >
-            <span>resume.pdf</span>
-            <span style={{ fontSize: '0.85rem', lineHeight: 1 }}>↓</span>
-          </a>
-
           {/* Mobile hamburger toggle */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="mobile-nav-toggle"
             aria-label="Toggle navigation menu"
+            aria-expanded={mobileMenuOpen}
             style={{
               display: 'none',
+              alignItems: 'center',
+              justifyContent: 'center',
               background: 'transparent',
               border: '1px solid var(--border-card)',
               borderRadius: '6px',
               padding: '0.35rem',
               color: 'var(--text-primary)',
               cursor: 'pointer',
+              width: '32px',
+              height: '32px',
+              flexShrink: 0,
             }}
           >
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -346,36 +365,156 @@ export default function Navbar() {
       {/* Mobile Drawer */}
       {mobileMenuOpen && (
         <div
+          className="mobile-nav-drawer"
           style={{
             marginTop: '0.5rem',
-            backgroundColor: 'var(--bg-card)',
+            backgroundColor: theme === 'light' ? 'rgba(255, 255, 255, 0.98)' : 'rgba(12, 12, 12, 0.96)',
+            backdropFilter: 'blur(16px)',
+            WebkitBackdropFilter: 'blur(16px)',
             border: '1px solid var(--border-card)',
-            borderRadius: '12px',
-            padding: '0.75rem',
+            borderRadius: '14px',
+            padding: '0.85rem',
             display: 'flex',
             flexDirection: 'column',
-            gap: '0.35rem',
-            boxShadow: '0 12px 30px rgba(0, 0, 0, 0.7)',
+            gap: '0.4rem',
+            boxShadow: '0 16px 36px rgba(0, 0, 0, 0.75)',
+            maxHeight: 'calc(100vh - 80px)',
+            overflowY: 'auto',
           }}
         >
-          {NAV_LINKS.map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
-              onClick={() => setMobileMenuOpen(false)}
-              className="font-mono"
+          {/* Navigation Links */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
+            {NAV_LINKS.map((link) => {
+              const isActive = activeSection === link.href.replace('#', '');
+              return (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  onClick={(e) => {
+                    setMobileMenuOpen(false);
+                    const targetId = link.href.replace('#', '');
+                    const el = document.getElementById(targetId);
+                    if (el) {
+                      e.preventDefault();
+                      const navOffset = 68;
+                      const bodyRect = document.body.getBoundingClientRect().top;
+                      const elementRect = el.getBoundingClientRect().top;
+                      const elementPosition = elementRect - bodyRect;
+                      const offsetPosition = elementPosition - navOffset;
+                      window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth',
+                      });
+                    }
+                  }}
+                  className="font-mono mobile-nav-link"
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    padding: '0.55rem 0.85rem',
+                    borderRadius: '8px',
+                    color: isActive ? 'var(--text-white)' : 'var(--text-secondary)',
+                    backgroundColor: isActive ? 'var(--bg-pill)' : 'transparent',
+                    border: '1px solid',
+                    borderColor: isActive ? 'var(--accent-blue-border)' : 'transparent',
+                    textDecoration: 'none',
+                    fontSize: '0.86rem',
+                    transition: 'all 0.18s ease',
+                  }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    {isActive && (
+                      <span
+                        style={{
+                          width: '5px',
+                          height: '5px',
+                          borderRadius: '50%',
+                          backgroundColor: 'var(--accent-blue)',
+                          display: 'inline-block',
+                        }}
+                      />
+                    )}
+                    <span>{link.label}</span>
+                  </div>
+                  <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>→</span>
+                </a>
+              );
+            })}
+          </div>
+
+          {/* Drawer Utilities Divider */}
+          <div
+            style={{
+              height: '1px',
+              backgroundColor: 'var(--border-subtle)',
+              margin: '0.4rem 0',
+            }}
+          />
+
+          {/* Drawer Utilities: Terminal, Resume, Online */}
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              gap: '0.5rem',
+              flexWrap: 'wrap',
+              padding: '0.35rem 0.25rem',
+            }}
+          >
+            <button
+              onClick={() => {
+                toggleTerminal();
+                setMobileMenuOpen(false);
+              }}
+              className="font-mono btn btn-secondary"
               style={{
-                padding: '0.5rem 0.75rem',
+                flex: 1,
+                fontSize: '0.75rem',
+                padding: '0.45rem 0.75rem',
                 borderRadius: '6px',
-                color: activeSection === link.href.replace('#', '') ? 'var(--text-white)' : 'var(--text-dim)',
-                backgroundColor: activeSection === link.href.replace('#', '') ? 'var(--bg-pill)' : 'transparent',
-                textDecoration: 'none',
-                fontSize: '0.85rem',
+                minWidth: '110px',
               }}
             >
-              {link.label}
+              <span style={{ color: 'var(--accent-blue)' }}>&gt;_</span>
+              <span>terminal</span>
+            </button>
+
+            <a
+              href={PERSONAL_DATA.resumeUrl}
+              download="Kushal_Patel_Resume.pdf"
+              onClick={() => setMobileMenuOpen(false)}
+              className="font-mono btn btn-primary"
+              title="Download Kushal Patel's Resume (PDF)"
+              style={{
+                flex: 1,
+                fontSize: '0.75rem',
+                padding: '0.45rem 0.75rem',
+                borderRadius: '6px',
+                minWidth: '110px',
+              }}
+            >
+              <span>resume.pdf</span>
+              <span style={{ fontSize: '0.8rem' }}>↓</span>
             </a>
-          ))}
+          </div>
+
+          <div
+            className="font-mono"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '0.45rem',
+              fontSize: '0.72rem',
+              color: 'var(--text-dim)',
+              paddingTop: '0.2rem',
+            }}
+          >
+            <span className="status-dot-pulse" />
+            <span>systems online · responsive workspace</span>
+          </div>
         </div>
       )}
 
@@ -394,7 +533,19 @@ export default function Navbar() {
           border-color: var(--accent-blue-border) !important;
         }
         @media (max-width: 768px) {
+          .navbar-header {
+            width: 100% !important;
+            max-width: 100% !important;
+            margin-left: 0 !important;
+            margin-right: 0 !important;
+            padding-left: 16px !important;
+            padding-right: 16px !important;
+            box-sizing: border-box !important;
+          }
           .desktop-nav-links {
+            display: none !important;
+          }
+          .desktop-utilities {
             display: none !important;
           }
           .mobile-nav-toggle {

@@ -335,6 +335,11 @@ export const PROJECTS_DATA: Project[] = [
       { phase: '[04]', action: 'deduplicate redundancy', status: 'OK', duration: '0.9ms' },
       { phase: '[05]', action: 'reconstruct structured prompt', status: 'OK', duration: '1.8ms' },
     ],
+    runSummary: [
+      { label: 'output', value: 'Structured prompt payload reconstructed (dual-mode analytical / caveman)' },
+      { label: 'latency', value: '<8ms local client processing · zero server overhead' },
+      { label: 'session', value: '5/5 stages verified · Content script & Shadow DOM active' },
+    ],
   },
   {
     id: 'llm-council',
@@ -387,6 +392,11 @@ export const PROJECTS_DATA: Project[] = [
       { phase: '[03]', action: 'synthesize refiner counter', status: 'OK', duration: '165ms' },
       { phase: '[04]', action: 'score robustness convergence', status: 'OK', duration: '95ms' },
       { phase: '[05]', action: 'arbitrate judge consensus', status: 'OK', duration: '110ms' },
+    ],
+    runSummary: [
+      { label: 'output', value: 'Arbitrated consensus synthesized from 5-agent deliberation' },
+      { label: 'latency', value: '700ms total reasoning convergence on Groq LPU accelerator' },
+      { label: 'session', value: '5/5 stages verified · Stateful LangGraph DAG terminated' },
     ],
   },
   {
@@ -444,6 +454,11 @@ export const PROJECTS_DATA: Project[] = [
       { phase: '[04]', action: 'generate XAI saliency map', status: 'OK', duration: '19ms' },
       { phase: '[05]', action: 'predict ≥M-Class probability', status: 'OK', duration: '8ms' },
     ],
+    runSummary: [
+      { label: 'output', value: '≥M-Class eruption probability forecast (24–48h horizon)' },
+      { label: 'saliency', value: 'XAI spatial attention map generated for model drift audit' },
+      { label: 'session', value: '5/5 stages verified · NASA SDO EUV magnetogram stream' },
+    ],
   },
   {
     id: 'fieldsight-lite',
@@ -498,6 +513,11 @@ export const PROJECTS_DATA: Project[] = [
       { phase: '[03]', action: 'compute MAD outlier matrix', status: 'OK', duration: '11.6ms' },
       { phase: '[04]', action: 'calibrate optical stress filter', status: 'OK', duration: '6.1ms' },
       { phase: '[05]', action: 'segment lesion mask (IoU 83%)', status: 'OK', duration: '6.5ms' },
+    ],
+    runSummary: [
+      { label: 'output', value: 'Lesion boundary segmentation mask (83.35% Foliage IoU)' },
+      { label: 'runtime', value: '35.8ms / 27.9 FPS on low-power edge CPU · 68 MB RAM' },
+      { label: 'session', value: '5/5 stages verified · Optical stress calibration locked' },
     ],
   },
   {
@@ -554,6 +574,11 @@ export const PROJECTS_DATA: Project[] = [
       { phase: '[03]', action: 'Swin-V2 ONNX inference', status: 'OK', duration: '4.3ms' },
       { phase: '[04]', action: 'evaluate probabilistic DAG', status: 'OK', duration: '1.2ms' },
       { phase: '[05]', action: 'assemble verified file artifact', status: 'OK', duration: '1.5ms' },
+    ],
+    runSummary: [
+      { label: 'output', value: 'Reconstructed forensic file artifact (~93% classification)' },
+      { label: 'runtime', value: '<8ms per 4KB sector via Swin-V2 ONNX Runtime engine' },
+      { label: 'session', value: '5/5 stages verified · Rust zero-copy reader clean' },
     ],
   },
 ];

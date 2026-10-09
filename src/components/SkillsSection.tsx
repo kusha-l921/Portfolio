@@ -156,7 +156,8 @@ export default function SkillsSection() {
         @media (max-width: 768px) {
           .skill-category-row {
             grid-template-columns: 1fr !important;
-            gap: 1rem !important;
+            gap: 0.85rem !important;
+            padding: 1rem !important;
           }
         }
       `}</style>

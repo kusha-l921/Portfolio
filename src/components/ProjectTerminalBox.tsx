@@ -69,8 +69,8 @@ export default function ProjectTerminalBox({ project, className = '', onClick }:
         }}
       >
         {/* Left: Window Controls + Script File */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', minWidth: 0, overflow: 'hidden' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', flexShrink: 0 }}>
             <span
               style={{
                 width: '7.5px',
@@ -110,6 +110,9 @@ export default function ProjectTerminalBox({ project, className = '', onClick }:
               color: colors.textSecondary,
               letterSpacing: '0.02em',
               fontWeight: 500,
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
             }}
           >
             {scriptName}
@@ -149,14 +152,16 @@ export default function ProjectTerminalBox({ project, className = '', onClick }:
           padding: '0.75rem 0.95rem',
           display: 'flex',
           flexDirection: 'column',
-          justifyContent: 'space-between',
           color: colors.textPrimary,
           overflowY: 'auto',
+          overflowX: 'hidden',
           backgroundColor: colors.bgBase,
+          minHeight: 0,
         }}
       >
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.45rem' }}>
-          {/* Shell Prompt Block inspired by reference */}
+        {/* TOP SECTION: Command and Context */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem', flexShrink: 0 }}>
+          {/* Shell Prompt Block */}
           <TerminalPromptBlock
             path={`~/projects/${project.id}`}
             user="kushal@portfolio"
@@ -185,7 +190,7 @@ export default function ProjectTerminalBox({ project, className = '', onClick }:
 
           {/* Verified Results Output Line 1 */}
           {project.results.length > 0 && (
-            <div style={{ display: 'flex', gap: '0.45rem', marginTop: '0.08rem' }}>
+            <div style={{ display: 'flex', gap: '0.45rem', marginTop: '0.04rem' }}>
               <span style={{ color: colors.textMuted, flexShrink: 0 }}>[eval]</span>
               <span style={{ color: colors.textPrimary }}>
                 <span style={{ color: colors.textSecondary }}>{project.results[0].metric}:</span>{' '}
@@ -223,50 +228,84 @@ export default function ProjectTerminalBox({ project, className = '', onClick }:
             </span>
           </div>
 
-          {/* Divider between architecture context and execution trace */}
-          {project.executionTrace && project.executionTrace.length > 0 && (
+          {/* Subtle divider before execution trace */}
+          <div
+            style={{
+              height: '1px',
+              backgroundColor: colors.borderSubtle,
+              margin: '0.25rem 0 0.1rem 0',
+            }}
+          />
+        </div>
+
+        {/* MIDDLE SECTION: Execution Trace Timeline */}
+        {project.executionTrace && project.executionTrace.length > 0 && (
+          <div
+            className="execution-trace"
+            style={{
+              display: 'flex',
+              flex: 1,
+              minHeight: '180px',
+              flexDirection: 'column',
+              position: 'relative',
+              margin: '0.25rem 0',
+            }}
+          >
+            {/* Trace Header */}
             <div
               style={{
-                height: '1px',
-                backgroundColor: colors.borderSubtle,
-                margin: '0.35rem 0',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                paddingBottom: '0.2rem',
+                flexShrink: 0,
               }}
-            />
-          )}
-
-          {/* Execution Trace Block */}
-          {project.executionTrace && project.executionTrace.length > 0 && (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.22rem' }}>
-              <div
+            >
+              <span
                 style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  marginBottom: '0.15rem',
+                  fontSize: '0.62rem',
+                  color: colors.textMuted,
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.06em',
+                  fontWeight: 600,
                 }}
               >
-                <span
-                  style={{
-                    fontSize: '0.62rem',
-                    color: colors.textMuted,
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.06em',
-                    fontWeight: 600,
-                  }}
-                >
-                  execution trace
-                </span>
-                <span
-                  style={{
-                    fontSize: '0.6rem',
-                    color: '#10B981',
-                    fontWeight: 500,
-                    letterSpacing: '0.03em',
-                  }}
-                >
-                  ● active session
-                </span>
-              </div>
+                execution trace
+              </span>
+              <span
+                style={{
+                  fontSize: '0.6rem',
+                  color: '#10B981',
+                  fontWeight: 500,
+                  letterSpacing: '0.03em',
+                }}
+              >
+                ● active session
+              </span>
+            </div>
+
+            {/* Vertically distributed steps with connecting rail */}
+            <div
+              style={{
+                display: 'flex',
+                flex: 1,
+                flexDirection: 'column',
+                justifyContent: 'space-evenly',
+                position: 'relative',
+                paddingLeft: '14px',
+              }}
+            >
+              {/* Connecting rail */}
+              <div
+                style={{
+                  position: 'absolute',
+                  left: '4px',
+                  top: '10px',
+                  bottom: '10px',
+                  width: '1px',
+                  backgroundColor: isLight ? 'rgba(0, 0, 0, 0.12)' : 'rgba(91, 140, 255, 0.22)',
+                }}
+              />
 
               {project.executionTrace.map((trace) => (
                 <div
@@ -277,9 +316,26 @@ export default function ProjectTerminalBox({ project, className = '', onClick }:
                     justifyContent: 'space-between',
                     gap: '0.45rem',
                     fontSize: '0.67rem',
-                    lineHeight: 1.45,
+                    lineHeight: 1.4,
+                    position: 'relative',
                   }}
                 >
+                  {/* Cyan node indicator */}
+                  <span
+                    style={{
+                      position: 'absolute',
+                      left: '-10px',
+                      top: '50%',
+                      transform: 'translateY(-50%)',
+                      width: '5px',
+                      height: '5px',
+                      borderRadius: '50%',
+                      backgroundColor: colors.accent,
+                      boxShadow: isLight ? 'none' : `0 0 5px ${colors.accent}`,
+                      display: 'inline-block',
+                    }}
+                  />
+
                   <div
                     style={{
                       display: 'flex',
@@ -339,19 +395,103 @@ export default function ProjectTerminalBox({ project, className = '', onClick }:
                 </div>
               ))}
             </div>
+          </div>
+        )}
+
+        {/* LOWER SECTION: Run Summary / Output */}
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '0.22rem',
+            padding: '0.45rem 0.65rem',
+            borderRadius: '4px',
+            backgroundColor: isLight ? 'rgba(0, 0, 0, 0.03)' : 'rgba(255, 255, 255, 0.02)',
+            border: `1px solid ${colors.borderSubtle}`,
+            fontSize: '0.66rem',
+            lineHeight: 1.45,
+            marginTop: '0.25rem',
+            flexShrink: 0,
+          }}
+        >
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              marginBottom: '0.08rem',
+            }}
+          >
+            <span
+              style={{
+                fontSize: '0.6rem',
+                color: colors.textMuted,
+                textTransform: 'uppercase',
+                letterSpacing: '0.06em',
+                fontWeight: 600,
+              }}
+            >
+              run summary
+            </span>
+            <span
+              style={{
+                fontSize: '0.58rem',
+                color: '#10B981',
+                fontWeight: 500,
+                letterSpacing: '0.04em',
+              }}
+            >
+              status: complete
+            </span>
+          </div>
+
+          {project.runSummary && project.runSummary.length > 0 ? (
+            project.runSummary.map((item, idx) => (
+              <div key={idx} style={{ display: 'flex', gap: '0.4rem', minWidth: 0 }}>
+                <span style={{ color: colors.textMuted, flexShrink: 0 }}>[{item.label}]</span>
+                <span
+                  style={{
+                    color: isLight ? '#2D3139' : '#D0D3DA',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap',
+                  }}
+                  title={item.value}
+                >
+                  {item.value}
+                </span>
+              </div>
+            ))
+          ) : (
+            project.results.slice(0, 2).map((res, idx) => (
+              <div key={idx} style={{ display: 'flex', gap: '0.4rem', minWidth: 0 }}>
+                <span style={{ color: colors.textMuted, flexShrink: 0 }}>[output]</span>
+                <span
+                  style={{
+                    color: isLight ? '#2D3139' : '#D0D3DA',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap',
+                  }}
+                >
+                  {res.metric}: {res.value} ({res.detail})
+                </span>
+              </div>
+            ))
           )}
         </div>
 
-        {/* Bottom Linux Prompt Line & Card Interaction Hint */}
+        {/* BOTTOM SECTION: Shell Prompt Line & Card Interaction Hint */}
         <div
           style={{
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            marginTop: '0.5rem',
+            marginTop: '0.45rem',
             paddingTop: '0.4rem',
             borderTop: `1px solid ${colors.borderSubtle}`,
             fontSize: '0.68rem',
+            flexShrink: 0,
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>

@@ -285,6 +285,11 @@ export default function ExperienceSection() {
           color: var(--text-white) !important;
           background-color: var(--bg-surface-hover) !important;
         }
+        @media (max-width: 768px) {
+          .experience-card-item {
+            padding: 1.25rem !important;
+          }
+        }
       `}</style>
     </section>
   );

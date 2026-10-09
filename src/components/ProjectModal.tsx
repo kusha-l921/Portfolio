@@ -87,7 +87,7 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
         </div>
 
         {/* Body */}
-        <div style={{ padding: '1.75rem', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+        <div style={{ padding: 'clamp(1rem, 3.5vw, 1.75rem)', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
           {/* Title & Tagline */}
           <div>
             <div
@@ -317,6 +317,8 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
+              flexWrap: 'wrap',
+              gap: '0.85rem',
               borderTop: '1px solid var(--border-subtle)',
               paddingTop: '1.25rem',
               marginTop: '0.5rem',

@@ -29,12 +29,14 @@ export default function Hero() {
           {/* Kushal Patel (Primary visual focus, 64-80px desktop) */}
           <div>
             <h1
+              className="hero-title"
               style={{
-                fontSize: 'clamp(2.8rem, 5.8vw, 5rem)',
+                fontSize: 'clamp(2.35rem, 5.8vw, 5rem)',
                 fontWeight: 800,
                 letterSpacing: '-0.035em',
                 color: 'var(--text-white)',
                 lineHeight: 1.05,
+                wordBreak: 'break-word',
               }}
             >
               {PERSONAL_DATA.fullName}
@@ -42,7 +44,7 @@ export default function Hero() {
             </h1>
             <p
               style={{
-                fontSize: 'clamp(1rem, 1.4vw, 1.25rem)',
+                fontSize: 'clamp(0.95rem, 1.4vw, 1.25rem)',
                 color: 'var(--text-dim)',
                 marginTop: '0.6rem',
                 fontWeight: 400,
@@ -55,8 +57,9 @@ export default function Hero() {
 
           {/* Strong statement */}
           <h2
+            className="hero-statement"
             style={{
-              fontSize: 'clamp(1.45rem, 2.7vw, 2.25rem)',
+              fontSize: 'clamp(1.3rem, 2.7vw, 2.25rem)',
               fontWeight: 600,
               color: 'var(--text-primary)',
               letterSpacing: '-0.02em',
@@ -81,8 +84,9 @@ export default function Hero() {
 
           {/* Supporting paragraph */}
           <p
+            className="hero-paragraph"
             style={{
-              fontSize: 'clamp(1.02rem, 1.25vw, 1.15rem)',
+              fontSize: 'clamp(0.95rem, 1.25vw, 1.15rem)',
               color: 'var(--text-secondary)',
               lineHeight: 1.75,
               marginTop: '1.25rem',
@@ -94,6 +98,7 @@ export default function Hero() {
 
           {/* Metadata pills */}
           <div
+            className="hero-pills"
             style={{
               display: 'flex',
               flexWrap: 'wrap',
@@ -117,6 +122,7 @@ export default function Hero() {
 
           {/* Primary Action Buttons */}
           <div
+            className="hero-actions"
             style={{
               display: 'flex',
               alignItems: 'center',
@@ -125,14 +131,14 @@ export default function Hero() {
               marginTop: '1.85rem',
             }}
           >
-            <a href="#projects" className="btn btn-primary">
+            <a href="#projects" className="btn btn-primary hero-btn">
               <span>View Projects</span>
               <span style={{ fontSize: '1rem', lineHeight: 1 }}>↓</span>
             </a>
             <a
               href={PERSONAL_DATA.resumeUrl}
               download="Kushal_Patel_Resume.pdf"
-              className="btn btn-secondary"
+              className="btn btn-secondary hero-btn"
               title="Download Kushal Patel's Resume (PDF)"
             >
               <span>Download Resume</span>
@@ -146,6 +152,7 @@ export default function Hero() {
             style={{
               display: 'flex',
               alignItems: 'center',
+              flexWrap: 'wrap',
               gap: '1.35rem',
               fontSize: '0.85rem',
               color: 'var(--text-muted)',
@@ -207,6 +214,22 @@ export default function Hero() {
         .hero-social-link:hover .social-arrow {
           transform: translate(2px, -2px);
           color: var(--accent-blue);
+        }
+
+        @media (max-width: 480px) {
+          .hero-actions {
+            flex-direction: column !important;
+            align-items: stretch !important;
+            gap: 0.65rem !important;
+          }
+          .hero-btn {
+            width: 100% !important;
+            justify-content: center !important;
+            min-height: 44px !important;
+          }
+          .hero-social-links {
+            gap: 0.85rem !important;
+          }
         }
       `}</style>
     </section>

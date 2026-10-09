@@ -43,26 +43,27 @@ export default function ContactSection() {
         >
           {/* Email Action Bar */}
           <div
+            className="contact-email-bar"
             style={{
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
               flexWrap: 'wrap',
               gap: '1.25rem',
-              padding: 'clamp(1rem, 2vw, 1.5rem) clamp(1.25rem, 2.5vw, 2rem)',
+              padding: 'clamp(1rem, 2vw, 1.5rem) clamp(1rem, 2.5vw, 2rem)',
               backgroundColor: 'var(--bg-surface)',
               border: '1px solid var(--border-subtle)',
               borderRadius: '8px',
             }}
           >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem', minWidth: 0 }}>
               <span
                 style={{
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  width: '40px',
-                  height: '40px',
+                  width: '38px',
+                  height: '38px',
                   borderRadius: '6px',
                   backgroundColor: 'var(--bg-pill)',
                   border: '1px solid var(--border-subtle)',
@@ -73,7 +74,7 @@ export default function ContactSection() {
               >
                 ✉
               </span>
-              <div>
+              <div style={{ minWidth: 0 }}>
                 <span
                   className="font-mono"
                   style={{ fontSize: '0.72rem', color: 'var(--text-muted)', display: 'block' }}
@@ -81,11 +82,12 @@ export default function ContactSection() {
                   direct_email
                 </span>
                 <span
-                  className="font-mono"
+                  className="font-mono contact-email-text"
                   style={{
-                    fontSize: 'clamp(0.95rem, 1.4vw, 1.15rem)',
+                    fontSize: 'clamp(0.85rem, 3.2vw, 1.15rem)',
                     color: 'var(--text-primary)',
                     fontWeight: 600,
+                    wordBreak: 'break-all',
                   }}
                 >
                   {PERSONAL_DATA.email}
@@ -93,7 +95,7 @@ export default function ContactSection() {
               </div>
             </div>
 
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+            <div className="contact-email-actions" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
               <button
                 onClick={copyEmail}
                 className="font-mono"
@@ -252,6 +254,17 @@ export default function ContactSection() {
         .contact-card-interactive:hover .contact-card-arrow {
           transform: translate(3px, -3px);
           color: var(--accent-blue) !important;
+        }
+        @media (max-width: 640px) {
+          .contact-email-bar {
+            flex-direction: column !important;
+            align-items: stretch !important;
+            gap: 1rem !important;
+          }
+          .contact-email-actions {
+            width: 100% !important;
+            justify-content: flex-start !important;
+          }
         }
       `}</style>
     </section>

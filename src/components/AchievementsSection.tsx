@@ -286,6 +286,12 @@ export default function AchievementsSection() {
         @media (max-width: 900px) {
           .achievements-floating-grid {
             grid-template-columns: 1fr !important;
+            gap: 1.25rem !important;
+          }
+        }
+        @media (max-width: 768px) {
+          .achievement-card-item {
+            padding: 1.25rem !important;
           }
         }
       `}</style>

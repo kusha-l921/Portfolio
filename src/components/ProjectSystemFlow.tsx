@@ -212,25 +212,18 @@ export default function ProjectSystemFlow({ project }: ProjectSystemFlowProps) {
         @media (max-width: 1024px) {
           .system-flow-pipeline {
             flex-wrap: wrap !important;
-            gap: 0.5rem !important;
+            gap: 0.4rem !important;
           }
           .system-flow-arrow {
             display: none !important;
           }
           .system-flow-step {
-            flex: 1 1 calc(50% - 0.5rem) !important;
-            min-width: 130px !important;
+            flex: 1 1 calc(50% - 0.35rem) !important;
+            min-width: 110px !important;
+            padding: 0.35rem 0.45rem !important;
           }
           .system-flow-specs-grid {
             grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-          }
-        }
-        @media (max-width: 640px) {
-          .system-flow-step {
-            flex: 1 1 100% !important;
-          }
-          .system-flow-specs-grid {
-            grid-template-columns: 1fr !important;
           }
         }
       `}</style>

@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { motion, MotionValue } from 'framer-motion';
 import { Project } from '../types';
 import ProjectTerminalBox from './ProjectTerminalBox';
 import ProjectSystemFlow from './ProjectSystemFlow';
@@ -10,11 +11,13 @@ interface ProjectStackItemProps {
   project: Project;
   index?: number;
   total?: number;
+  overlayOpacity?: MotionValue<number>;
   onSelectProject: (project: Project) => void;
 }
 
 export default function ProjectStackItem({
   project,
+  overlayOpacity,
   onSelectProject,
 }: ProjectStackItemProps) {
   const [isMobile, setIsMobile] = useState(false);
@@ -45,16 +48,19 @@ export default function ProjectStackItem({
         style={{
           position: 'relative',
           width: '100%',
-          height: isMobile ? 'auto' : 'clamp(560px, 72vh, 820px)',
-          minHeight: isMobile ? 'auto' : '560px',
+          height: isMobile ? 'calc(100svh - 86px)' : 'clamp(560px, 72vh, 820px)',
+          maxHeight: isMobile ? 'calc(100svh - 86px)' : 'none',
+          minHeight: isMobile ? '460px' : '560px',
           borderRadius: '12px',
           backgroundColor: 'var(--bg-card)',
           border: '1px solid var(--border-card)',
-          overflow: 'hidden',
+          overflowY: isMobile ? 'auto' : 'hidden',
+          overflowX: 'hidden',
+          WebkitOverflowScrolling: 'touch',
           boxSizing: 'border-box',
           scrollMarginTop: '100px',
           boxShadow:
-            '0 -8px 30px rgba(0, 0, 0, 0.65), 0 24px 60px rgba(0, 0, 0, 0.85)',
+            '0 -8px 30px rgba(0, 0, 0, 0.65), -14px 0 45px rgba(0, 0, 0, 0.75), 0 24px 60px rgba(0, 0, 0, 0.85)',
         }}
       >
         {/* Internal Card Grid Layout */}
@@ -62,9 +68,9 @@ export default function ProjectStackItem({
           style={{
             display: 'grid',
             gridTemplateColumns: isMobile ? '1fr' : 'minmax(0, 1.35fr) minmax(0, 1.15fr)',
-            gap: 'clamp(1.75rem, 3.2vw, 3.2rem)',
-            padding: isMobile ? '1.5rem' : 'clamp(2.2rem, 3.2vw, 3.2rem)',
-            height: '100%',
+            gap: isMobile ? '1.35rem' : 'clamp(1.75rem, 3.2vw, 3.2rem)',
+            padding: isMobile ? '1.15rem' : 'clamp(2.2rem, 3.2vw, 3.2rem)',
+            height: isMobile ? 'auto' : '100%',
             alignItems: 'stretch',
             position: 'relative',
             zIndex: 1,
@@ -301,6 +307,22 @@ export default function ProjectStackItem({
             />
           </div>
         </div>
+
+        {/* Subtle Darkening Overlay when subsequent card slides on top */}
+        {overlayOpacity && (
+          <motion.div
+            aria-hidden="true"
+            style={{
+              position: 'absolute',
+              inset: 0,
+              borderRadius: '12px',
+              backgroundColor: '#000000',
+              opacity: overlayOpacity,
+              pointerEvents: 'none',
+              zIndex: 20,
+            }}
+          />
+        )}
       </div>
     </div>
   );

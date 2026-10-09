@@ -120,11 +120,7 @@ export default function ProjectTechnicalSnapshot({ project }: ProjectTechnicalSn
         @media (max-width: 1024px) {
           .technical-snapshot-grid {
             grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-          }
-        }
-        @media (max-width: 640px) {
-          .technical-snapshot-grid {
-            grid-template-columns: 1fr !important;
+            gap: 0.35rem !important;
           }
         }
       `}</style>

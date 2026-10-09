@@ -84,12 +84,12 @@ export default function AboutSection() {
 
           {/* Right Column: Focus & Profile Details */}
           <div
-            className="card"
+            className="card about-details-card"
             style={{
               backgroundColor: 'var(--bg-card)',
               border: '1px solid var(--border-card)',
               borderRadius: '8px',
-              padding: 'clamp(1.5rem, 2.5vw, 2.25rem)',
+              padding: 'clamp(1.25rem, 2.5vw, 2.25rem)',
               display: 'flex',
               flexDirection: 'column',
               gap: '1.5rem',
@@ -217,7 +217,10 @@ export default function AboutSection() {
         @media (max-width: 840px) {
           .about-grid {
             grid-template-columns: 1fr !important;
-            gap: 2rem !important;
+            gap: 1.75rem !important;
+          }
+          .about-details-card {
+            padding: 1.25rem !important;
           }
         }
       `}</style>

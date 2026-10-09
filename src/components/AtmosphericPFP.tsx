@@ -68,50 +68,88 @@ export default function AtmosphericPFP() {
   }, []);
 
   return (
-    <div
-      ref={containerRef}
-      className="atmospheric-pfp-container"
-      aria-hidden="true"
-      style={{
-        position: 'absolute',
-        top: 'clamp(1rem, 4vw, 4.5rem)',
-        right: 'clamp(6%, 11vw, 15%)',
-        width: 'clamp(440px, 46vw, 720px)',
-        height: 'clamp(460px, 46vw, 760px)',
-        pointerEvents: 'none',
-        userSelect: 'none',
-        zIndex: 1,
-        overflow: 'hidden',
-        willChange: 'transform',
-      }}
-    >
+    <>
       <div
+        ref={containerRef}
+        className="atmospheric-pfp-container"
+        aria-hidden="true"
         style={{
-          position: 'relative',
-          width: '100%',
-          height: '100%',
-          maskImage:
-            'radial-gradient(ellipse 68% 68% at 50% 50%, rgba(0,0,0,1) 36%, rgba(0,0,0,0.85) 58%, rgba(0,0,0,0.3) 80%, transparent 96%)',
-          WebkitMaskImage:
-            'radial-gradient(ellipse 68% 68% at 50% 50%, rgba(0,0,0,1) 36%, rgba(0,0,0,0.85) 58%, rgba(0,0,0,0.3) 80%, transparent 96%)',
+          position: 'absolute',
+          pointerEvents: 'none',
+          userSelect: 'none',
+          zIndex: 0,
+          overflow: 'hidden',
+          willChange: 'transform',
         }}
       >
-        <Image
-          src={imageSrc}
-          alt=""
-          fill
-          priority
-          sizes="(max-width: 900px) 90vw, 48vw"
+        <div
+          className="atmospheric-pfp-inner"
           style={{
-            objectFit: 'contain',
-            objectPosition: 'center center',
-            mixBlendMode: isLight ? 'multiply' : 'screen',
-            opacity: isLight ? 0.32 : 0.38,
-            filter: isLight ? 'contrast(1.16) brightness(0.98)' : 'contrast(1.22) brightness(1.08)',
-            transition: 'opacity 0.3s ease, filter 0.3s ease',
+            position: 'relative',
+            width: '100%',
+            height: '100%',
+            maskImage:
+              'radial-gradient(ellipse 68% 68% at 50% 50%, rgba(0,0,0,1) 36%, rgba(0,0,0,0.85) 58%, rgba(0,0,0,0.3) 80%, transparent 96%)',
+            WebkitMaskImage:
+              'radial-gradient(ellipse 68% 68% at 50% 50%, rgba(0,0,0,1) 36%, rgba(0,0,0,0.85) 58%, rgba(0,0,0,0.3) 80%, transparent 96%)',
           }}
-        />
+        >
+          <Image
+            src={imageSrc}
+            alt=""
+            fill
+            priority
+            sizes="(max-width: 900px) 75vw, 48vw"
+            className="atmospheric-pfp-image"
+            style={{
+              objectFit: 'contain',
+              objectPosition: 'center center',
+              mixBlendMode: isLight ? 'multiply' : 'screen',
+              filter: isLight ? 'contrast(1.16) brightness(0.98)' : 'contrast(1.22) brightness(1.08)',
+              transition: 'opacity 0.3s ease, filter 0.3s ease',
+            }}
+          />
+        </div>
       </div>
-    </div>
+
+      <style jsx>{`
+        /* Desktop Default (Preserved Exactly) */
+        .atmospheric-pfp-container {
+          top: clamp(1rem, 4vw, 4.5rem);
+          right: clamp(6%, 11vw, 15%);
+          width: clamp(440px, 46vw, 720px);
+          height: clamp(460px, 46vw, 760px);
+        }
+        :global(.atmospheric-pfp-image) {
+          opacity: ${isLight ? 0.32 : 0.38} !important;
+        }
+
+        /* Tablet Responsive (<= 860px) */
+        @media (max-width: 860px) {
+          .atmospheric-pfp-container {
+            top: 1rem !important;
+            right: 0 !important;
+            width: min(72vw, 360px) !important;
+            height: min(72vw, 360px) !important;
+          }
+          :global(.atmospheric-pfp-image) {
+            opacity: ${isLight ? 0.18 : 0.22} !important;
+          }
+        }
+
+        /* Compact & Small Mobile (<= 480px) */
+        @media (max-width: 480px) {
+          .atmospheric-pfp-container {
+            top: 1.5rem !important;
+            right: 0 !important;
+            width: min(68vw, 280px) !important;
+            height: min(68vw, 280px) !important;
+          }
+          :global(.atmospheric-pfp-image) {
+            opacity: ${isLight ? 0.12 : 0.15} !important;
+          }
+        }
+      `}</style>
+    </>
   );
 }

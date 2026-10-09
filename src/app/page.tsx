@@ -16,7 +16,17 @@ import AppWorkspaceShell from '../components/AppWorkspaceShell';
 
 export default function HomePage() {
   return (
-    <main style={{ minHeight: '100vh', position: 'relative' }}>
+    <main
+      className="app-main"
+      style={{
+        minHeight: '100vh',
+        position: 'relative',
+        width: '100%',
+        maxWidth: '100%',
+        minWidth: 0,
+        boxSizing: 'border-box',
+      }}
+    >
       <AppWorkspaceShell>
         {/* Global Card Cursor-Following Lighting Effect */}
         <CardPointerLighting />

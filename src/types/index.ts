@@ -27,6 +27,11 @@ export interface TechnicalSnapshotItem {
   value: string;
 }
 
+export interface RunSummaryItem {
+  label: string;
+  value: string;
+}
+
 export interface Project {
   id: string;
   number: string;
@@ -50,6 +55,7 @@ export interface Project {
   specGrid?: ProjectSpecItem[];
   executionTrace?: ExecutionTraceStep[];
   technicalSnapshot?: TechnicalSnapshotItem[];
+  runSummary?: RunSummaryItem[];
 }
 
 export interface SkillCategory {

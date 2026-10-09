@@ -9,7 +9,7 @@ interface AppWorkspaceShellProps {
 
 export default function AppWorkspaceShell({ children }: AppWorkspaceShellProps) {
   const { isOpen, dock, dockWidth, dockHeight, isDragging } = useTerminal();
-  const [isDesktop, setIsDesktop] = useState(true);
+  const [isDesktop, setIsDesktop] = useState(false);
 
   useEffect(() => {
     const checkWidth = () => {
@@ -20,9 +20,9 @@ export default function AppWorkspaceShell({ children }: AppWorkspaceShellProps) 
     return () => window.removeEventListener('resize', checkWidth);
   }, []);
 
-  const shouldReflowSide = isOpen && isDesktop && (dock === 'left' || dock === 'right');
-  const shouldReflowBottom = isOpen && dock === 'bottom';
-  const shouldReflowTop = isOpen && dock === 'top';
+  const shouldReflowSide = isDesktop && isOpen && (dock === 'left' || dock === 'right');
+  const shouldReflowBottom = isDesktop && isOpen && dock === 'bottom';
+  const shouldReflowTop = isDesktop && isOpen && dock === 'top';
 
   const shellStyle: React.CSSProperties = {
     minHeight: '100vh',
@@ -30,6 +30,8 @@ export default function AppWorkspaceShell({ children }: AppWorkspaceShellProps) 
     flexDirection: 'column',
     position: 'relative',
     width: shouldReflowSide ? `calc(100vw - ${dockWidth}px)` : '100%',
+    maxWidth: '100%',
+    minWidth: 0,
     marginLeft: shouldReflowSide && dock === 'left' ? `${dockWidth}px` : 0,
     marginRight: shouldReflowSide && dock === 'right' ? `${dockWidth}px` : 0,
     paddingBottom: shouldReflowBottom ? `${dockHeight}px` : 0,
